@@ -14,11 +14,11 @@ com.eyekabob.geoLocationSuccessHandler = function(position) {
 
 // Handles a failure to get the geographical location from phonegap.
 com.eyekabob.geoLocationFailureHandler = function() {
-    //TODO: workaround/mock for the browser.
-    //$.mobile.hidePageLoadingMsg();
-    //alert("Failed to get geolocation. You may need to turn on your device's GPS.");
-
     console.warn("geo location failed! creating mock data for development");
+
+    $.mobile.hidePageLoadingMsg();
+    alert("Failed to get geolocation. You may need to turn on your device's GPS.");
+
 
     var position = {
         coords: {
@@ -26,7 +26,8 @@ com.eyekabob.geoLocationFailureHandler = function() {
             longitude: -91.4087871
         }
     };
-    com.eyekabob.geoLocationSuccessHandler(position);
+    //TODO: workaround/mock for the browser.
+    //com.eyekabob.geoLocationSuccessHandler(position);
 };
 
 fm = {};
@@ -45,7 +46,20 @@ fm.last.auth = {
 // Handles successful response from last.fm for events in the area.
 fm.last.nearbyEventsSuccessHandler = function(xml, successStr, response) {
     $.mobile.hidePageLoadingMsg();
-    alert("SUCCESS! Now need to handle the nearby events response");
+
+    var events = xml.getElementsByTagName("event");
+    var i = 0;
+    for (; i < events.length; i++) {
+        var anEvent = events[i];
+        var title = anEvent.getElementsByTagName("title")[0].firstChild.data;
+        var venue = anEvent.getElementsByTagName("venue")[0];
+        var venueName = venue.getElementsByTagName("name")[0].firstChild.data;
+        var venueUrl = venue.getElementsByTagName("url")[0].firstChild.data;
+        var startDate = anEvent.getElementsByTagName("startDate")[0].firstChild.data;
+        $("#nearbyList").append("<li><a href='" + venueUrl + "'>" + title + "<br/>" + venueName + "<br/>" + startDate + "</a></li>");
+    }
+
+    $.mobile.changePage("#nearbyEvents");
 };
 
 // Get nearby events from last.fm and display them in a list.
