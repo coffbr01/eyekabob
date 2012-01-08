@@ -11,27 +11,27 @@
 </head>
 <body>
     <div data-role="page" id="page1">
-        <div data-role="header">
+        <div data-role="header" data-position="fixed">
             <h1>a header</h1>
         </div>
         <div data-role="content">
             <p>some content for the page</p>
             <p><a href="#page2">page 2</a></p>
         </div>
-        <div data-role="footer">
+        <div data-role="footer" data-position="fixed">
             <h4>a footer</h4>
         </div>
     </div>
 
     <div data-role="page" id="page2">
-        <div data-role="header">
+        <div data-role="header" data-position="fixed">
             <h1>a page 2 header</h1>
         </div>
         <div data-role="content">
             <p>some content for page 2</p>
             <p><a href="#page1" data-direction="reverse">page 1</a></p>
         </div>
-        <div data-role="footer">
+        <div data-role="footer" data-position="fixed">
             <h4>a page 2 footer</h4>
         </div>
     </div>
