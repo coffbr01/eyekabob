@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Eyekabob</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="jquery.css"/>
+<link rel="stylesheet" href="main.css"/>
+<script src="jquery.js"></script>
+<script src="jquery-mobile.js"></script>
+<script src="main.js"></script>
+</head>
+<body>
+    <div data-role="page" id="page1">
+        <div data-role="header">
+            <h1>a header</h1>
+        </div>
+        <div data-role="content">
+            <p>some content for the page</p>
+            <p><a href="#page2">page 2</a></p>
+        </div>
+        <div data-role="footer">
+            <h4>a footer</h4>
+        </div>
+    </div>
+
+    <div data-role="page" id="page2">
+        <div data-role="header">
+            <h1>a page 2 header</h1>
+        </div>
+        <div data-role="content">
+            <p>some content for page 2</p>
+            <p><a href="#page1" data-direction="reverse">page 1</a></p>
+        </div>
+        <div data-role="footer">
+            <h4>a page 2 footer</h4>
+        </div>
+    </div>
+</body>
+</html>
