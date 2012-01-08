@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="jquery.css"/>
 <link rel="stylesheet" href="main.css"/>
+<script src="phonegap.js"></script>
 <script src="jquery.js"></script>
 <script src="jquery-mobile.js"></script>
 <script src="main.js"></script>
@@ -15,7 +16,15 @@
             <h1>Eyekabob</h1>
         </div>
         <div data-role="content">
-            <p>stuff will go here</p>
+            <a href="javascript:nearbyEvents()" data-role="button">Nearby Events</a>
+        </div>
+    </div>
+    <div data-role="page" id="nearbyEvents">
+        <div data-role="header">
+            <h1>Eyekabob</h1>
+        </div>
+        <div data-role="content">
+            <ul id="nearbyList" data-role="listview"></ul>
         </div>
     </div>
 </body>
