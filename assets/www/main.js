@@ -1,12 +1,12 @@
 com = {};
 com.eyekabob = {};
 
-com.eyekabob.cameraSuccessHandler = function() {
-    notification.alert("camera success");
+com.eyekabob.cameraSuccessHandler = function(imageURI) {
+    document.getElementById("cameraPreview").src = imageURI;
 };
 
 com.eyekabob.cameraFailureHandler = function() {
-    notification.alert("camera fail");
+    alert("camera fail");
 };
 
 com.eyekabob.camera = function() {
@@ -33,7 +33,7 @@ com.eyekabob.geoLocationFailureHandler = function() {
     console.warn("geo location failed! creating mock data for development");
 
     $.mobile.hidePageLoadingMsg();
-    notification.alert("Failed to get geolocation. You may need to turn on your device's GPS.");
+    alert("Failed to get geolocation. You may need to turn on your device's GPS.");
 
 
     var position = {
