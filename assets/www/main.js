@@ -46,6 +46,8 @@ fm.last.auth = {
 // Handles successful response from last.fm for events in the area.
 fm.last.nearbyEventsSuccessHandler = function(xml, successStr, response) {
     $.mobile.hidePageLoadingMsg();
+    var nearbyList = $("#nearbyList");
+    nearbyList.children().remove("li");
 
     var events = xml.getElementsByTagName("event");
     var i = 0;
@@ -56,10 +58,11 @@ fm.last.nearbyEventsSuccessHandler = function(xml, successStr, response) {
         var venueName = venue.getElementsByTagName("name")[0].firstChild.data;
         var venueUrl = venue.getElementsByTagName("url")[0].firstChild.data;
         var startDate = anEvent.getElementsByTagName("startDate")[0].firstChild.data;
-        $("#nearbyList").append("<li><a href='" + venueUrl + "'>" + title + "<br/>" + venueName + "<br/>" + startDate + "</a></li>");
+        nearbyList.append("<li><a href='" + venueUrl + "'>" + title + "<br/>" + venueName + "<br/>" + startDate + "</a></li>");
     }
 
     $.mobile.changePage("#nearbyEvents");
+    nearbyList.listview("refresh");
 };
 
 // Get nearby events from last.fm and display them in a list.
