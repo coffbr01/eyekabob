@@ -1,6 +1,22 @@
 com = {};
 com.eyekabob = {};
 
+com.eyekabob.cameraSuccessHandler = function() {
+    notification.alert("camera success");
+};
+
+com.eyekabob.cameraFailureHandler = function() {
+    notification.alert("camera fail");
+};
+
+com.eyekabob.camera = function() {
+    var opts = {
+        destinationType: Camera.DestinationType.FILE_URI,
+        sourceType: Camera.PictureSourceType.PHOTOLIBRARY
+    };
+    navigator.camera.getPicture(com.eyekabob.cameraSuccessHandler, com.eyekabob.cameraFailureHandler, opts);
+};
+
 // Handles successful geographical location from phonegap.
 com.eyekabob.geoLocationSuccessHandler = function(position) {
     var lat = position.coords.latitude;
@@ -17,7 +33,7 @@ com.eyekabob.geoLocationFailureHandler = function() {
     console.warn("geo location failed! creating mock data for development");
 
     $.mobile.hidePageLoadingMsg();
-    alert("Failed to get geolocation. You may need to turn on your device's GPS.");
+    notification.alert("Failed to get geolocation. You may need to turn on your device's GPS.");
 
 
     var position = {
@@ -66,7 +82,7 @@ fm.last.nearbyEventsSuccessHandler = function(xml, successStr, response) {
 };
 
 // Get nearby events from last.fm and display them in a list.
-nearbyEvents = function() {
+com.eyekabob.nearbyEvents = function() {
     $.mobile.showPageLoadingMsg();
     navigator.geolocation.getCurrentPosition(com.eyekabob.geoLocationSuccessHandler, com.eyekabob.geoLocationFailureHandler);
 };
