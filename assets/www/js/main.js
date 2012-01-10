@@ -53,15 +53,15 @@ com.eyekabob.nearbyEventsSuccessHandler = function(xml, successStr, response) {
     var nearbyList = $("#nearbyList");
     nearbyList.children().remove("li");
 
-    com.eyekabob.nearbyResponseJson = com.eyekabob.util.xmlToJson(xml.documentElement);
+    com.eyekabob.nearbyResponseJson = com.eyekabob.util.xmlToJson(xml);
     var i = 0;
-    for (; i < com.eyekabob.something.length; i++) {
-        var anEvent = events[i];
-        var title = anEvent.title;
+    for (; i < com.eyekabob.nearbyResponseJson.lfm.events.event.length; i++) {
+        var anEvent = com.eyekabob.nearbyResponseJson.lfm.events.event[i];
+        var title = anEvent.title.data;
+        var startDate = anEvent.startDate.data;
         var venue = anEvent.venue;
-        var startDate = anEvent.startDate;
-        var venueName = venue.name;
-        var venueUrl = venue.url;
+        var venueName = venue.name.data;
+        var venueUrl = venue.url.data;
         nearbyList.append("<li><a href='" + venueUrl + "'>" + title + "<br/>" + venueName + "<br/>" + startDate + "</a></li>");
     }
 
