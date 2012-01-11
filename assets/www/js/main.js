@@ -18,7 +18,7 @@ com.eyekabob.nearbyEvents = function() {
 
 com.eyekabob.camera = function() {
     // TODO: no need for desktop check when development is over.
-    if (platform.Desktop) {
+    if (com.eyekabob.platform.Desktop) {
         com.eyekabob.cameraSuccessHandler("images/4800test.jpg");
         return;
     }
