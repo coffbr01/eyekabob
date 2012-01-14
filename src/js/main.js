@@ -32,12 +32,12 @@ com.eyekabob.camera = function() {
     navigator.camera.getPicture(com.eyekabob.cameraSuccessHandler, com.eyekabob.cameraFailureHandler, opts);
 };
 
+// Success handlers.
+
 com.eyekabob.cameraSuccessHandler = function(imageURI) {
     console.log("camara success");
     document.getElementById("cameraPreview").src = imageURI;
 };
-
-// Success handlers.
 
 // Handles successful geographical location from phonegap.
 com.eyekabob.geoLocationSuccessHandler = function(position) {

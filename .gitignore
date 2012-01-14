@@ -1,4 +1,7 @@
-bin
-gen
-local.properties
 eyekabob.git
+Android/bin
+Android/gen
+Android/local.properties
+Android/assets/www
+iOS/Eyekabob/www
+iOS/Eyekabob/build

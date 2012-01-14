@@ -1,0 +1,46 @@
+<project name="Eyekabob" default="all" basedir=".">
+    <description>
+        Copy the Eyekabob src files in the respective platform directories
+    </description>
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+
+    <target name="init" depends="android-init, ios-init">
+    </target>
+
+    <target name="all" depends="init, android-copy-files, ios-copy-files">
+    </target>
+
+    <target name="clean" description="clean up" depends="android-clean, ios-clean">
+    </target>
+
+    <target name="android-init">
+        <mkdir dir="Android/assets/www"/>
+    </target>
+
+    <target name="android-copy-files">
+        <copy todir="Android/assets/www">
+            <fileset dir="${src}">
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="android-clean">
+        <delete dir="Android/assets/www"/>
+    </target>
+
+    <target name="ios-init">
+        <mkdir dir="iOS/Eyekabob/www"/>
+    </target>
+
+    <target name="ios-copy-files">
+        <copy todir="iOS/Eyekabob/www">
+            <fileset dir="${src}">
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="ios-clean">
+        <delete dir="iOS/Eyekabob/www"/>
+    </target>
+</project>
