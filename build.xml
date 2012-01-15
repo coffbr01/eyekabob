@@ -5,20 +5,29 @@
     <!-- set global properties for this build -->
     <property name="src" location="src"/>
 
+    <!-- Extraneous target, calls copy-files. -->
+    <target name="all" depends="copy-files">
+    </target>
+
     <target name="init" depends="android-init, ios-init">
     </target>
 
-    <target name="all" depends="init, android-copy-files, ios-copy-files">
+    <target name="copy-files" depends="android-copy-files, ios-copy-files">
     </target>
 
-    <target name="clean" description="clean up" depends="android-clean, ios-clean">
+    <target name="android" depends="android-copy-files">
+        <ant antfile="Android/build.xml" target="clean" inheritall="false"/>
+        <ant antfile="Android/build.xml" target="debug" inheritall="false"/>
     </target>
 
-    <target name="android-init">
+    <target name="clean" depends="android-clean, ios-clean">
+    </target>
+
+    <target name="android-init" depends="android-clean">
         <mkdir dir="Android/assets/www"/>
     </target>
 
-    <target name="android-copy-files">
+    <target name="android-copy-files" depends="android-init">
         <copy todir="Android/assets/www">
             <fileset dir="${src}">
             </fileset>
@@ -29,11 +38,11 @@
         <delete dir="Android/assets/www"/>
     </target>
 
-    <target name="ios-init">
+    <target name="ios-init" depends="ios-clean">
         <mkdir dir="iOS/Eyekabob/www"/>
     </target>
 
-    <target name="ios-copy-files">
+    <target name="ios-copy-files" depends="ios-init">
         <copy todir="iOS/Eyekabob/www">
             <fileset dir="${src}">
             </fileset>
