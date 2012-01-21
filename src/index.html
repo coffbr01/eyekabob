@@ -3,12 +3,13 @@
 <head>
 <title>Eyekabob</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/jquery.css"/>
-<script src="js/phonegap.js"></script>
-<script src="js/jquery.js"></script>
-<script src="js/jquery-mobile.js"></script>
+<link rel="stylesheet" href="lib/jquery/jquery.mobile-1.0.min.css"/>
+<script src="lib/phonegap/phonegap-1.3.0.js"></script>
+<script src="lib/jquery/jquery-1.7.1.min.js"></script>
+<script src="lib/jquery/jquery.mobile-1.0.min.js"></script>
 <script src="js/util.js"></script>
 <script src="js/lastfm.js"></script>
+<script src="js/facebook.js"></script>
 <script src="js/platform.js"></script>
 <script src="js/main.js"></script>
 </head>
@@ -20,6 +21,7 @@
         <div data-role="content">
             <a href="javascript:com.eyekabob.nearbyEvents()" data-role="button">Nearby Events</a>
             <a href="javascript:com.eyekabob.camera()" data-role="button">Upload Photo</a><br/>
+            <a href="javascript:com.eyekabob.facebook()" data-role="button">Colorado Rock Forum</a>
             <img style="width:100%;" id="cameraPreview" src=""/>
         </div>
     </div>
@@ -29,6 +31,14 @@
         </div>
         <div data-role="content">
             <ul id="nearbyList" data-role="listview"></ul>
+        </div>
+    </div>
+    <div data-role="page" id="facebook">
+        <div data-role="header">
+            <h1>Eyekabob</h1>
+        </div>
+        <div data-role="content">
+            <ul id="facebookList" data-role="listview"></ul>
         </div>
     </div>
 </body>
