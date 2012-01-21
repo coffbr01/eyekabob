@@ -18,12 +18,7 @@ com.eyekabob.nearbyEvents = function() {
 };
 
 com.eyekabob.camera = function() {
-    // TODO: no need for desktop check when development is over.
     console.log("starting camera");
-    if (com.eyekabob.platform.Desktop) {
-        com.eyekabob.cameraSuccessHandler("images/4800test.jpg");
-        return;
-    }
 
     var opts = {
         destinationType: Camera.DestinationType.FILE_URI,
