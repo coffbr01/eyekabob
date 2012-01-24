@@ -26,8 +26,9 @@
 
     <target name="android-init" depends="android-clean">
         <mkdir dir="Android/assets/www"/>
-        <mkdir dir="Android/assets/www/jquery"/>
-        <mkdir dir="Android/assets/www/phonegap"/>
+        <mkdir dir="Android/assets/www/lib"/>
+        <mkdir dir="Android/assets/www/lib/jquery"/>
+        <mkdir dir="Android/assets/www/lib/phonegap"/>
     </target>
 
     <target name="android-copy-files" depends="android-init">
@@ -35,11 +36,11 @@
             <fileset dir="${src}">
             </fileset>
         </copy>
-        <copy todir="Android/assets/www/jquery">
+        <copy todir="Android/assets/www/lib/jquery">
             <fileset dir="${lib}/jquery" excludes="**/demos/*">
             </fileset>
         </copy>
-        <copy todir="Android/assets/www/phonegap">
+        <copy todir="Android/assets/www/lib/phonegap">
             <fileset dir="${lib}/phonegap/Android">
                 <exclude name="**/Sample/*"/>
                 <exclude name="**/xml/*"/>
