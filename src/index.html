@@ -9,36 +9,25 @@
 <script src="lib/jquery/jquery.mobile-1.0.js"></script>
 <script src="js/util.js"></script>
 <script src="js/lastfm.js"></script>
-<script src="js/facebook.js"></script>
 <script src="js/platform.js"></script>
 <script src="js/main.js"></script>
 </head>
 <body>
     <div data-role="page" id="homepage">
-        <div data-role="header">
-            <h1>Eyekabob</h1>
-        </div>
         <div data-role="content">
-            <a href="javascript:com.eyekabob.nearbyEvents()" data-role="button">Nearby Events</a>
-            <a href="javascript:com.eyekabob.camera()" data-role="button">Upload Photo</a><br/>
-            <a href="javascript:com.eyekabob.facebook()" data-role="button">Colorado Rock Forum</a>
-            <img style="width:100%;" id="cameraPreview" src=""/>
+            <a href="javascript:com.eyekabob.dispatchToLiveMusicForm()" data-role="button">find live music</a>
+        </div>
+    </div>
+    <div data-role="page" id="liveMusicForm">
+        <div data-role="content">
+            <form>
+                TODO: search for live music in this form
+            </form>
         </div>
     </div>
     <div data-role="page" id="nearbyEvents">
-        <div data-role="header">
-            <h1>Eyekabob</h1>
-        </div>
         <div data-role="content">
             <ul id="nearbyList" data-role="listview"></ul>
-        </div>
-    </div>
-    <div data-role="page" id="facebook">
-        <div data-role="header">
-            <h1>Eyekabob</h1>
-        </div>
-        <div data-role="content">
-            <ul id="facebookList" data-role="listview"></ul>
         </div>
     </div>
 </body>

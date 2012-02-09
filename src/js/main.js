@@ -17,33 +17,11 @@ com.eyekabob.nearbyEvents = function() {
     navigator.geolocation.getCurrentPosition(com.eyekabob.geoLocationSuccessHandler, com.eyekabob.geoLocationFailureHandler);
 };
 
-com.eyekabob.camera = function() {
-    console.log("starting camera");
-
-    var opts = {
-        destinationType: Camera.DestinationType.FILE_URI,
-        sourceType: Camera.PictureSourceType.PHOTOLIBRARY
-    };
-    navigator.camera.getPicture(com.eyekabob.cameraSuccessHandler, com.eyekabob.cameraFailureHandler, opts);
-};
-
-com.eyekabob.facebook = function() {
-    $.mobile.showPageLoadingMsg();
-    console.log("starting facebook");
-    var url = "https://graph.facebook.com/184360934953928/feed?access_token=" + com.facebook.auth.APP_ID + "|" + com.facebook.auth.APP_SECRET;
-    $.ajax({
-        url: url,
-        success: com.eyekabob.facebookSuccessHandler,
-        failure: com.eyekabob.facebookFailureHandler
-    });
+com.eyekabob.dispatchToLiveMusicForm = function() {
+    $.mobile.changePage("#liveMusicForm");
 };
 
 // Success handlers.
-
-com.eyekabob.cameraSuccessHandler = function(imageURI) {
-    console.log("camara success");
-    document.getElementById("cameraPreview").src = imageURI;
-};
 
 // Handles successful geographical location from phonegap.
 com.eyekabob.geoLocationSuccessHandler = function(position) {
@@ -56,13 +34,6 @@ com.eyekabob.geoLocationSuccessHandler = function(position) {
         success: com.eyekabob.nearbyEventsSuccessHandler,
         failure: com.eyekabob.nearbyEventsFailureHandler
     });
-};
-
-com.eyekabob.facebookSuccessHandler = function(response) {
-    console.log("facebook success");
-    $.mobile.hidePageLoadingMsg();
-    var facebookList = $("#facebookList");
-    facebookList.children().remove("li");
 };
 
 // Handles successful response from last.fm for events in the area.
@@ -90,10 +61,6 @@ com.eyekabob.nearbyEventsSuccessHandler = function(xml, successStr, response) {
 
 // Failure handlers.
 
-com.eyekabob.cameraFailureHandler = function() {
-    console.log("camera fail");
-};
-
 // Handles a failure to get the geographical location from phonegap.
 com.eyekabob.geoLocationFailureHandler = function() {
     console.log("geo location failed! creating mock data for development");
@@ -102,10 +69,5 @@ com.eyekabob.geoLocationFailureHandler = function() {
 
 com.eyekabob.nearbyEventsFailureHandler = function() {
     console.log("nearby events failed");
-    $.mobile.hidePageLoadingMsg();
-};
-
-com.eyekabob.facebookFailureHandler = function() {
-    console.log("facebook failed");
     $.mobile.hidePageLoadingMsg();
 };
