@@ -34,7 +34,36 @@ com.eyekabob.findLiveMusicByBand = function() {
 };
 
 com.eyekabob.findLiveMusicByVenue = function() {
-    alert("NOT YET IMPLEMENTED");
+    var venue = $("#findByVenueInput")[0].value;
+    var url = fm.last.SERVICE_URL + "?method=venue.search&api_key=" + fm.last.auth.api_key + "&venue=" + venue;
+    $.ajax({
+        url: url,
+        success: com.eyekabob.venueSearchSuccessHandler,
+        failure: com.eyekabob.eventsFailureHandler
+    });
+    $.mobile.showPageLoadingMsg();
+};
+
+com.eyekabob.venueSearchSuccessHandler = function(xml, successStr, response) {
+    var json = com.eyekabob.util.xmlToJson(xml);
+    var matches = json.lfm.results.venuematches;
+    if (!matches.venue) {
+        alert("No venues matched your search");
+        return;
+    }
+    if (typeof(matches.venue) === "array" && matches.venue.length > 1) {
+        // TODO: go to the venues page so they can choose which one they want.
+        return;
+    }
+
+    var id = matches.venue.id.data;
+    var url = fm.last.SERVICE_URL + "?method=venue.getEvents&api_key=" + fm.last.auth.api_key + "&venue=" + id;
+    $.ajax({
+        url: url,
+        success: com.eyekabob.eventsSuccessHandler,
+        failure: com.eyekabob.eventsFailureHandler
+    });
+    $.mobile.changePage("#eventsPage");
 };
 
 com.eyekabob.findLiveMusicByLocation = function() {
@@ -60,10 +89,10 @@ com.eyekabob.eventsSuccessHandler = function(xml, successStr, response) {
     var eventsList = $("#eventsList");
     eventsList.children().remove("li");
 
-    com.eyekabob.eventsResponseJson = com.eyekabob.util.xmlToJson(xml);
+    var json = com.eyekabob.util.xmlToJson(xml);
     var i = 0;
-    for (; i < com.eyekabob.eventsResponseJson.lfm.events.event.length; i++) {
-        var anEvent = com.eyekabob.eventsResponseJson.lfm.events.event[i];
+    for (; i < json.lfm.events.event.length; i++) {
+        var anEvent = json.lfm.events.event[i];
         var title = anEvent.title.data;
         var startDate = anEvent.startDate.data;
         var venue = anEvent.venue;
