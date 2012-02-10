@@ -22,8 +22,18 @@
     <div data-role="page" id="liveMusicForm">
         <div data-role="content">
             <form>
-                TODO: search for live music in this form
+                <input type="text" id="findByBandInput" placeholder="Find by band"/>
+                <input type="button" value="Find by band" onclick="com.eyekabob.findLiveMusicByBand()"/>
+                <input type="text" id="findByVenueInput" placeholder="Find by venue"/>
+                <input type="button" value="Find by venue" onclick="com.eyekabob.findLiveMusicByVenue()"/>
+                <input type="text" id="findByLocationInput" placeholder="Find by location"/>
+                <input type="button" value="Find by location" onclick="com.eyekabob.findLiveMusicByLocation()"/>
             </form>
+        </div>
+    </div>
+    <div data-role="page" id="eventsPage">
+        <div data-role="content">
+            <ul id="eventsList" data-role="listview"></ul>
         </div>
     </div>
     <div data-role="page" id="nearbyEvents">

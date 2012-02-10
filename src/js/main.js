@@ -21,6 +21,26 @@ com.eyekabob.dispatchToLiveMusicForm = function() {
     $.mobile.changePage("#liveMusicForm");
 };
 
+com.eyekabob.findLiveMusicByBand = function() {
+    var band = $("#findByBandInput")[0].value;
+    var url = fm.last.SERVICE_URL + "?method=artist.getEvents&api_key=" + fm.last.auth.api_key + "&artist=" + band;
+    $.ajax({
+        url: url,
+        success: com.eyekabob.eventsSuccessHandler,
+        failure: com.eyekabob.eventsFailureHandler
+    });
+    $.mobile.changePage("#eventsPage");
+    $.mobile.showPageLoadingMsg();
+};
+
+com.eyekabob.findLiveMusicByVenue = function() {
+    alert("NOT YET IMPLEMENTED");
+};
+
+com.eyekabob.findLiveMusicByLocation = function() {
+    alert("NOT YET IMPLEMENTED");
+};
+
 // Success handlers.
 
 // Handles successful geographical location from phonegap.
@@ -31,32 +51,29 @@ com.eyekabob.geoLocationSuccessHandler = function(position) {
     var url = fm.last.SERVICE_URL + "?method=geo.getevents&api_key=" + fm.last.auth.api_key + "&lat=" + lat + "&long=" + lon + "&limit=50";
     $.ajax({
         url: url,
-        success: com.eyekabob.nearbyEventsSuccessHandler,
-        failure: com.eyekabob.nearbyEventsFailureHandler
+        success: com.eyekabob.eventsSuccessHandler,
+        failure: com.eyekabob.eventsFailureHandler
     });
 };
 
-// Handles successful response from last.fm for events in the area.
-com.eyekabob.nearbyEventsSuccessHandler = function(xml, successStr, response) {
-    console.log("nearby success");
-    $.mobile.hidePageLoadingMsg();
-    var nearbyList = $("#nearbyList");
-    nearbyList.children().remove("li");
+com.eyekabob.eventsSuccessHandler = function(xml, successStr, response) {
+    var eventsList = $("#eventsList");
+    eventsList.children().remove("li");
 
-    com.eyekabob.nearbyResponseJson = com.eyekabob.util.xmlToJson(xml);
+    com.eyekabob.eventsResponseJson = com.eyekabob.util.xmlToJson(xml);
     var i = 0;
-    for (; i < com.eyekabob.nearbyResponseJson.lfm.events.event.length; i++) {
-        var anEvent = com.eyekabob.nearbyResponseJson.lfm.events.event[i];
+    for (; i < com.eyekabob.eventsResponseJson.lfm.events.event.length; i++) {
+        var anEvent = com.eyekabob.eventsResponseJson.lfm.events.event[i];
         var title = anEvent.title.data;
         var startDate = anEvent.startDate.data;
         var venue = anEvent.venue;
         var venueName = venue.name.data;
         var venueUrl = venue.url.data;
-        nearbyList.append("<li><a href='" + venueUrl + "'>" + title + "<br/>" + venueName + "<br/>" + startDate + "</a></li>");
+        eventsList.append("<li><a href='" + venueUrl + "'>" + title + "<br/>" + venueName + "<br/>" + startDate + "</a></li>");
     }
 
-    $.mobile.changePage("#nearbyEvents");
-    nearbyList.listview("refresh");
+    eventsList.listview("refresh");
+    $.mobile.hidePageLoadingMsg();
 };
 
 // Failure handlers.
@@ -67,7 +84,7 @@ com.eyekabob.geoLocationFailureHandler = function() {
     $.mobile.hidePageLoadingMsg();
 };
 
-com.eyekabob.nearbyEventsFailureHandler = function() {
-    console.log("nearby events failed");
+com.eyekabob.eventsFailureHandler = function() {
+    console.log("events failed");
     $.mobile.hidePageLoadingMsg();
 };
