@@ -2,3 +2,7 @@ body>div[data-role="page"].ui-page {
     background-color: black !important;
     background-image: none !important;
 }
+
+img.find-live-music {
+    width: 100%;
+}
