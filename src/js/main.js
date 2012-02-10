@@ -53,6 +53,7 @@ com.eyekabob.venueSearchSuccessHandler = function(xml, successStr, response) {
     }
     if (typeof(matches.venue) === "array" && matches.venue.length > 1) {
         // TODO: go to the venues page so they can choose which one they want.
+        alert("More than one venue matched your search. The venue chooser isn't implemented yet!!");
         return;
     }
 
