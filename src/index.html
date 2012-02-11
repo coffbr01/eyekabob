@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="lib/jquery/jquery.mobile-1.0.css"/>
 <link rel="stylesheet" href="css/main.css"/>
+<link rel="stylesheet" href="css/home.css"/>
 <script src="lib/phonegap/phonegap-1.3.0.js"></script>
 <script src="lib/jquery/jquery-1.7.1.min.js"></script>
 <script src="lib/jquery/jquery.mobile-1.0.js"></script>
 <script src="js/util.js"></script>
 <script src="js/lastfm.js"></script>
 <script src="js/platform.js"></script>
+<script src="js/home.js"></script>
 <script src="js/main.js"></script>
 </head>
 <body>
-    <div data-role="page" id="homepage">
+    <div data-role="page" id="home">
         <div data-role="content">
-            <a href="javascript:com.eyekabob.dispatchToLiveMusicForm()"><img src="images/eye_find_btn.png" class="find-live-music"/></a>
+            <a href="javascript:com.eyekabob.dispatchToLiveMusicForm()"><img src="images/eye_find_btn.png" id="find-live-music"/></a>
         </div>
     </div>
     <div data-role="page" id="liveMusicForm">
