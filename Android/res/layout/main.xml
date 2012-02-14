@@ -2,12 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/webview"
-        android:layout_width="fill_parent"
+    android:orientation="vertical">
+	<ImageButton android:src="@drawable/eye_find_on_btn"
+	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
-    />
-
+	    android:background="#00000000">
+	</ImageButton>
 </LinearLayout>
