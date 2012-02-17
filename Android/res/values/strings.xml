@@ -2,5 +2,6 @@
 <resources>
 
     <string name="app_name">Eyekabob</string>
-
+    <string name="find_by_artist">Find by artist</string>
+    <string name="find_music">Find music</string>
 </resources>
