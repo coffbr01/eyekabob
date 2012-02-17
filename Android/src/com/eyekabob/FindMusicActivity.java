@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -30,26 +31,37 @@ public class FindMusicActivity extends Activity {
 			e.printStackTrace();
 		}
 
-        HttpURLConnection urlConnection = null;
-		try {
-			urlConnection = (HttpURLConnection) url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            String result = getStringResponse(in);
-            Toast.makeText(v.getContext(), result, 8000).show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        finally {
-            urlConnection.disconnect();
-        }
+		new ArtistTask().execute(url);
+
     }
 
-    public String getStringResponse(InputStream is) throws IOException {
-        StringBuffer out = new StringBuffer();
-        byte[] b = new byte[4096];
-        for (int n; (n = is.read(b)) != -1;) {
-            out.append(new String(b, 0, n));
+    private class ArtistTask extends AsyncTask<URL, Void, String> {
+    	protected String doInBackground(URL... urls) {
+    		return doRequest(urls[0]);
+    	}
+
+    	protected void onPostExecute(String result) {
+    		Toast.makeText(getApplicationContext(), result, 50000).show();
+    	}
+        public String doRequest(URL url) {
+        	HttpURLConnection urlConnection = null;
+        	StringBuffer out = null;
+    		try {
+    			urlConnection = (HttpURLConnection) url.openConnection();
+                InputStream is = new BufferedInputStream(urlConnection.getInputStream());
+                out = new StringBuffer();
+                byte[] b = new byte[4096];
+                for (int n; (n = is.read(b)) != -1;) {
+                    out.append(new String(b, 0, n));
+                }
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+            finally {
+                urlConnection.disconnect();
+            }
+
+            return out.toString();
         }
-        return out.toString();
     }
 }
