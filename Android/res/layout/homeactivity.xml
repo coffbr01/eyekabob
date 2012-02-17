@@ -11,7 +11,7 @@
 	    android:layout_gravity="top"
 	    android:layout_marginTop="5dp"
 	    android:background="#00000000"
-	    android:src="@drawable/eye_find_btn"
+	    android:src="@drawable/find_music_button"
         android:onClick="findMusicHandler">
 	</ImageButton>
 </LinearLayout>
