@@ -31,8 +31,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FindMusicActivity"
+            android:name=".FindMusic"
             android:label="@string/find_music"
+            android:configChanges="orientation|keyboardHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ArtistResults"
+            android:label="@string/artist_list"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

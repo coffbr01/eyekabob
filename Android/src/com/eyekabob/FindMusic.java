@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class FindMusicActivity extends Activity {
+public class FindMusic extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +35,7 @@ public class FindMusicActivity extends Activity {
         String artist = findByArtist.getText().toString();
         Map<String, String> params = new HashMap<String, String>();
         params.put("artist", artist);
-        EyekabobHelper.LastFM.makeRequest(this, "artist.getEvents", params);
+        EyekabobHelper.LastFM.makeRequest(this, ArtistResults.class, "artist.getEvents", params);
     }
 
 }

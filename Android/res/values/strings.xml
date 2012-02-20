@@ -6,4 +6,5 @@
     <string name="find_music">Find music</string>
     <string name="find_music_button_desc">Find music button</string>
     <string name="searching">Searching &#8230;</string>
+    <string name="artist_list">Artists</string>
 </resources>

@@ -14,7 +14,7 @@ public class Eyekabob extends Activity {
     }
 
     public void findMusicHandler(View v) {
-        Intent findMusicIntent = new Intent(this, FindMusicActivity.class);
+        Intent findMusicIntent = new Intent(this, FindMusic.class);
         startActivity(findMusicIntent);
     }
 }
