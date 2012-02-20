@@ -13,6 +13,6 @@
 	    android:background="#00000000"
 	    android:src="@drawable/find_music_button"
         android:onClick="findMusicHandler"
-        android:contentDescription="@string/findMusicButtonDesc">
+        android:contentDescription="@string/find_music_button_desc">
 	</ImageButton>
 </LinearLayout>
