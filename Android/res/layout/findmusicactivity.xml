@@ -7,7 +7,8 @@
             android:id="@+id/findByArtistInput"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:hint="@string/find_by_artist" >
+            android:hint="@string/find_by_artist"
+            android:singleLine="true" >
             <requestFocus />
         </EditText>
 

@@ -7,6 +7,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -20,7 +24,7 @@ public class EyekabobHelper {
 		public static final String AUTH_TOKEN = "167550e2be8e2989ab56e63b03dd1db6";
 		public static final String SERVICE_URL = "http://ws.audioscrobbler.com/2.0/";
 
-		public static void makeRequest(Context context, String method, Map<String, String> params) {
+		public static void makeRequest(Activity activity, String method, Map<String, String> params) {
 			String url = SERVICE_URL;
 			url += "?method=" + method;
 			url += "&api_key=" + API_KEY;
@@ -28,7 +32,7 @@ public class EyekabobHelper {
 				url += "&" + param + "=" + params.get(param);
 			}
 
-			new EyekabobHelper.RequestTask(context).execute(url);
+			new EyekabobHelper.RequestTask(activity).execute(url);
 		}
 
 	}
@@ -36,23 +40,24 @@ public class EyekabobHelper {
     // Handles the asynchronous request, away from the UI thread.
     public static class RequestTask extends AsyncTask<String, Void, String> {
     	private Context context;
-    	private Toast searching;
-    	public RequestTask(Context context) {
-    		this.context = context;
-    	    searching = Toast.makeText(context, R.string.searching, Integer.MAX_VALUE);
-    	}
-    	public Context getContext() {
-    		return context;
+    	private Dialog alertDialog;
+    	public RequestTask(Activity activity) {
+    		this.context = activity;
+    	    Builder builder = new AlertDialog.Builder(context);
+    	    builder.setMessage(R.string.searching);
+    	    builder.setCancelable(false);
+    	    alertDialog = builder.create();
+    	    alertDialog.setOwnerActivity(activity);
     	}
     	protected void onPreExecute() {
-    		searching.show();
+    		alertDialog.show();
     	}
     	protected String doInBackground(String... urls) {
     		return doRequest(urls[0]);
     	}
     	protected void onPostExecute(String result) {
-    		searching.cancel();
-    		Toast.makeText(context, result, 50000).show();
+    		alertDialog.dismiss();
+    		Toast.makeText(context, result, Toast.LENGTH_LONG).show();
     	}
         public String doRequest(String urlStr) {
         	HttpURLConnection urlConnection = null;
