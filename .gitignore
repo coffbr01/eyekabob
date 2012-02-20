@@ -5,3 +5,4 @@ Android/local.properties
 Android/assets/www/*
 iOS/Eyekabob/www
 iOS/Eyekabob/build
+.DS_Store
