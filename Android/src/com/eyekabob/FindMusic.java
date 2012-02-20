@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,7 +37,10 @@ public class FindMusic extends Activity {
         String artist = findByArtist.getText().toString();
         Map<String, String> params = new HashMap<String, String>();
         params.put("artist", artist);
-        EyekabobHelper.LastFM.makeRequest(this, ArtistResults.class, "artist.getEvents", params);
+        Uri uri = EyekabobHelper.LastFM.getUri("artist.getEvents", params);
+        Intent intent = new Intent(v.getContext(), ArtistResults.class);
+        intent.setData(uri);
+        startActivity(intent);
     }
 
 }
