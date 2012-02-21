@@ -37,7 +37,7 @@ public class FindMusic extends Activity {
         String artist = findByArtist.getText().toString();
         Map<String, String> params = new HashMap<String, String>();
         params.put("artist", artist);
-        Uri uri = EyekabobHelper.LastFM.getUri("artist.getEvents", params);
+        Uri uri = EyekabobHelper.LastFM.getUri("artist.search", params);
         Intent intent = new Intent(v.getContext(), ArtistResults.class);
         intent.setData(uri);
         startActivity(intent);

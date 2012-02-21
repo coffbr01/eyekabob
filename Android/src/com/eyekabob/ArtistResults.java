@@ -7,40 +7,58 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.app.ListActivity;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
 
-public class ArtistResults extends Activity {
+public class ArtistResults extends ListActivity {
+	private Dialog alertDialog;
+	ArrayAdapter<String> adapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.artistresultsactivity);
+        adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item);
+        setListAdapter(adapter);
         Uri uri = this.getIntent().getData();
-        new RequestTask(this).execute(uri.toString());
-        
+        new RequestTask().execute(uri.toString());
     }
+
+    // TODO: use dialogfragment to show dialog
+    protected void createDialog() {
+	    Builder builder = new AlertDialog.Builder(this);
+	    builder.setMessage(R.string.searching);
+	    builder.setCancelable(false);
+	    alertDialog = builder.create();
+	    alertDialog.setOwnerActivity(this);
+    }
+    
+    protected void loadArtists(Document doc) {
+    	NodeList artists = doc.getElementsByTagName("artist");
+    	for (int i = 0; i < artists.getLength(); i++) {
+    		Node artistNode = artists.item(i);
+    		NodeList artistChildren = artistNode.getChildNodes();
+    		for (int j = 0; j < artistChildren.getLength(); j++) {
+    		    Node artistChildNode = artistChildren.item(j);
+    		    if ("name".equals(artistChildNode.getNodeName())) {
+    		    	adapter.add(artistChildNode.getTextContent());
+    		    }
+    		}
+    	}
+    }
+
     // Handles the asynchronous request, away from the UI thread.
     private class RequestTask extends AsyncTask<String, Void, Document> {
-    	private Activity activity;
-    	private Dialog alertDialog;
-    	public RequestTask(Activity activity) {
-    		this.activity = activity;
-    		// TODO: use dialogfragment to show dialog
-    	    Builder builder = new AlertDialog.Builder(activity);
-    	    builder.setMessage(R.string.searching);
-    	    builder.setCancelable(false);
-    	    alertDialog = builder.create();
-    	    alertDialog.setOwnerActivity(activity);
-    	}
     	protected void onPreExecute() {
+    		ArtistResults.this.createDialog();
     		alertDialog.show();
     	}
     	protected Document doInBackground(String... uris) {
@@ -48,7 +66,7 @@ public class ArtistResults extends Activity {
     	}
     	protected void onPostExecute(Document result) {
     		alertDialog.dismiss();
-    		Toast.makeText(activity, result.toString(), Toast.LENGTH_LONG).show();
+    		ArtistResults.this.loadArtists(result);
     	}
         public Document doRequest(String uri) {
         	Document result = null;
