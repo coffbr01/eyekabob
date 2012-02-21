@@ -1,6 +1,7 @@
 package com.eyekabob;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class ArtistResults extends ListActivity {
 			String artist = ((TextView) view).getText().toString();
 			Intent intent = new Intent(getApplicationContext(), EventResults.class);
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("artist", artist);
+			params.put("artist", URLEncoder.encode(artist));
 			intent.setData(EyekabobHelper.LastFM.getUri("artist.getEvents", params));
 			startActivity(intent);
 		}

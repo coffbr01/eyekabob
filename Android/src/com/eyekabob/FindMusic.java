@@ -1,5 +1,6 @@
 package com.eyekabob;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class FindMusic extends Activity {
         EditText findByArtist = (EditText)findViewById(R.id.findByArtistInput);
         String artist = findByArtist.getText().toString();
         Map<String, String> params = new HashMap<String, String>();
-        params.put("artist", artist);
+        params.put("artist", URLEncoder.encode(artist));
         Uri uri = EyekabobHelper.LastFM.getUri("artist.search", params);
         Intent intent = new Intent(v.getContext(), ArtistResults.class);
         intent.setData(uri);
