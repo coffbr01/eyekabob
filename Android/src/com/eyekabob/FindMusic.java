@@ -36,6 +36,9 @@ public class FindMusic extends Activity {
     public void findByArtistHandler(View v) {
         EditText findByArtist = (EditText)findViewById(R.id.findByArtistInput);
         String artist = findByArtist.getText().toString();
+        if ("".equals(artist)) {
+        	return;
+        }
         Map<String, String> params = new HashMap<String, String>();
         params.put("artist", URLEncoder.encode(artist));
         Uri uri = EyekabobHelper.LastFM.getUri("artist.search", params);
@@ -44,10 +47,13 @@ public class FindMusic extends Activity {
         startActivity(intent);
     }
     public void findByVenueHandler(View v) {
-        EditText findByArtist = (EditText)findViewById(R.id.findByVenueInput);
-        String artist = findByArtist.getText().toString();
+        EditText findByVenue = (EditText)findViewById(R.id.findByVenueInput);
+        String venue = findByVenue.getText().toString();
+        if ("".equals(venue)) {
+        	return;
+        }
         Map<String, String> params = new HashMap<String, String>();
-        params.put("venue", URLEncoder.encode(artist));
+        params.put("venue", URLEncoder.encode(venue));
         Uri uri = EyekabobHelper.LastFM.getUri("venue.search", params);
         Intent intent = new Intent(v.getContext(), VenueResults.class);
         intent.setData(uri);

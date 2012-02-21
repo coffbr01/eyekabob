@@ -63,7 +63,7 @@ public class ArtistResults extends ListActivity {
 	    alertDialog = builder.create();
 	    alertDialog.setOwnerActivity(this);
     }
-    
+
     protected void loadArtists(Document doc) {
     	NodeList artists = doc.getElementsByTagName("artist");
     	if (artists.getLength() == 0) {
