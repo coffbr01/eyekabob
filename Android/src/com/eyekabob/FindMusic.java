@@ -43,5 +43,14 @@ public class FindMusic extends Activity {
         intent.setData(uri);
         startActivity(intent);
     }
-
+    public void findByVenueHandler(View v) {
+        EditText findByArtist = (EditText)findViewById(R.id.findByVenueInput);
+        String artist = findByArtist.getText().toString();
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("venue", URLEncoder.encode(artist));
+        Uri uri = EyekabobHelper.LastFM.getUri("venue.search", params);
+        Intent intent = new Intent(v.getContext(), VenueResults.class);
+        intent.setData(uri);
+        startActivity(intent);
+    }
 }

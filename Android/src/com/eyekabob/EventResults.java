@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class EventResults extends ListActivity {
 	private Dialog alertDialog;
@@ -45,22 +46,26 @@ public class EventResults extends ListActivity {
     }
     
     protected void loadEvents(Document doc) {
-    	NodeList artists = doc.getElementsByTagName("event");
-    	for (int i = 0; i < artists.getLength(); i++) {
+    	NodeList events = doc.getElementsByTagName("event");
+    	if (events.getLength() == 0) {
+    		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
+    		return;
+    	}
+    	for (int i = 0; i < events.getLength(); i++) {
     		String title = "";
     		String venue = "";
     		String startDate = "";
     		String startTime = "";
-    		Node artistNode = artists.item(i);
-    		NodeList artistChildren = artistNode.getChildNodes();
-    		for (int j = 0; j < artistChildren.getLength(); j++) {
-    		    Node artistChildNode = artistChildren.item(j);
-    		    String nodeName = artistChildNode.getNodeName();
+    		Node eventNode = events.item(i);
+    		NodeList eventChildren = eventNode.getChildNodes();
+    		for (int j = 0; j < eventChildren.getLength(); j++) {
+    		    Node eventChildNode = eventChildren.item(j);
+    		    String nodeName = eventChildNode.getNodeName();
     		    if ("title".equals(nodeName)) {
-    		    	title = artistChildNode.getTextContent();
+    		    	title = eventChildNode.getTextContent();
     		    }
     		    else if ("venue".equals(nodeName)) {
-    		    	NodeList venueChildren = artistChildNode.getChildNodes();
+    		    	NodeList venueChildren = eventChildNode.getChildNodes();
     		    	for (int k = 0; k < venueChildren.getLength(); k++) {
     		    		if ("name".equals(venueChildren.item(k).getNodeName())) {
     		    			venue = venueChildren.item(k).getTextContent();
@@ -68,10 +73,10 @@ public class EventResults extends ListActivity {
     		    	}
     		    }
     		    else if ("startDate".equals(nodeName)) {
-    		    	startDate = artistChildNode.getTextContent();
+    		    	startDate = eventChildNode.getTextContent();
     		    }
     		    else if ("startTime".equals(nodeName)) {
-    		    	startTime = artistChildNode.getTextContent();
+    		    	startTime = eventChildNode.getTextContent();
     		    }
     		}
 		    adapter.add(title + "\n" + venue + "\n" + startDate + " " + startTime);

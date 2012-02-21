@@ -1,7 +1,6 @@
 package com.eyekabob;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,19 +29,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ArtistResults extends ListActivity {
+public class VenueResults extends ListActivity {
 	private Dialog alertDialog;
-	ArrayAdapter<String> adapter;
+	private ArrayAdapter<String> adapter;
+	private Map<String, String> venueMap;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			String artist = ((TextView) view).getText().toString();
+			String key = ((TextView) view).getText().toString();
 			Intent intent = new Intent(getApplicationContext(), EventResults.class);
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("artist", URLEncoder.encode(artist));
-			intent.setData(EyekabobHelper.LastFM.getUri("artist.getEvents", params));
+			params.put("venue", venueMap.get(key));
+			intent.setData(EyekabobHelper.LastFM.getUri("venue.getEvents", params));
 			startActivity(intent);
 		}
 	};
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,28 +65,45 @@ public class ArtistResults extends ListActivity {
 	    alertDialog.setOwnerActivity(this);
     }
     
-    protected void loadArtists(Document doc) {
-    	NodeList artists = doc.getElementsByTagName("artist");
-    	if (artists.getLength() == 0) {
+    protected void loadVenues(Document doc) {
+    	NodeList venues = doc.getElementsByTagName("venue");
+    	if (venues.getLength() == 0) {
     		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
     		return;
     	}
-    	for (int i = 0; i < artists.getLength(); i++) {
-    		Node artistNode = artists.item(i);
-    		NodeList artistChildren = artistNode.getChildNodes();
-    		for (int j = 0; j < artistChildren.getLength(); j++) {
-    		    Node artistChildNode = artistChildren.item(j);
-    		    if ("name".equals(artistChildNode.getNodeName())) {
-    		    	adapter.add(artistChildNode.getTextContent());
+    	venueMap = new HashMap<String, String>();
+    	for (int i = 0; i < venues.getLength(); i++) {
+    		Node artistNode = venues.item(i);
+    		NodeList venueChildren = artistNode.getChildNodes();
+    		String name = "";
+    		String city = "";
+    		String id = "";
+    		for (int j = 0; j < venueChildren.getLength(); j++) {
+    		    Node venueChildNode = venueChildren.item(j);
+    		    if ("name".equals(venueChildNode.getNodeName())) {
+    		    	name = venueChildNode.getTextContent();
+    		    }
+    		    else if ("id".equals(venueChildNode.getNodeName())) {
+    		    	id = venueChildNode.getTextContent();
+    		    }
+    		    else if ("location".equals(venueChildNode.getNodeName())) {
+    		    	NodeList locationChildren = venueChildNode.getChildNodes();
+    		    	for (int k = 0; k < locationChildren.getLength(); k++) {
+    		    		if ("city".equals(locationChildren.item(k).getNodeName())) {
+    		    			city = locationChildren.item(k).getTextContent();
+    		    		}
+    		    	}
     		    }
     		}
+    		adapter.add(name + "\n" + city);
+    		venueMap.put(name + "\n" + city, id);
     	}
     }
 
     // Handles the asynchronous request, away from the UI thread.
     private class RequestTask extends AsyncTask<String, Void, Document> {
     	protected void onPreExecute() {
-    		ArtistResults.this.createDialog();
+    		VenueResults.this.createDialog();
     		alertDialog.show();
     	}
     	protected Document doInBackground(String... uris) {
@@ -93,7 +111,7 @@ public class ArtistResults extends ListActivity {
     	}
     	protected void onPostExecute(Document result) {
     		alertDialog.dismiss();
-    		ArtistResults.this.loadArtists(result);
+    		VenueResults.this.loadVenues(result);
     	}
         public Document doRequest(String uri) {
         	Document result = null;

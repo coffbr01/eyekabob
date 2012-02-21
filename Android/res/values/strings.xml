@@ -3,9 +3,12 @@
 
     <string name="app_name">Eyekabob</string>
     <string name="find_by_artist">Find by artist</string>
+    <string name="find_by_venue">Find by venue</string>
     <string name="find_music">Find music</string>
     <string name="find_music_button_desc">Find music button</string>
     <string name="searching">Searching &#8230;</string>
     <string name="artist_list">Artists</string>
     <string name="event_list">Events</string>
+    <string name="venue_list">Venues</string>
+    <string name="no_results">No results found!</string>
 </resources>
