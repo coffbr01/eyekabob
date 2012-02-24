@@ -1,17 +1,11 @@
 package com.eyekabob;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -19,7 +13,6 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +21,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.eyekabob.util.LastFMTask;
 
 public class VenueResults extends ListActivity {
 	private Dialog alertDialog;
@@ -101,35 +96,14 @@ public class VenueResults extends ListActivity {
     }
 
     // Handles the asynchronous request, away from the UI thread.
-    private class RequestTask extends AsyncTask<String, Void, Document> {
+    private class RequestTask extends LastFMTask {
     	protected void onPreExecute() {
     		VenueResults.this.createDialog();
     		alertDialog.show();
-    	}
-    	protected Document doInBackground(String... uris) {
-    		return doRequest(uris[0]);
     	}
     	protected void onPostExecute(Document result) {
     		alertDialog.dismiss();
     		VenueResults.this.loadVenues(result);
     	}
-        public Document doRequest(String uri) {
-        	Document result = null;
-    		try {
-    			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    			result = builder.parse(uri);
-    		}
-    		catch (IOException e) {
-    			e.printStackTrace();
-    		}
-    		catch (ParserConfigurationException e) {
-    			e.printStackTrace();
-    		}
-    		catch (SAXException e) {
-    			e.printStackTrace();
-    		}
-
-            return result;
-        }
     }
 }
