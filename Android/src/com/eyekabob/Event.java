@@ -14,7 +14,7 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.eyekabob.util.LastFMTask;
 
@@ -85,7 +85,8 @@ public class Event extends Activity {
 		    }
 		}
 
-		Toast.makeText(getApplicationContext(), "TODO: show event data", Toast.LENGTH_LONG).show();
+		TextView tv = (TextView)findViewById(R.id.eventText);
+		tv.append(title + "\n" + venue + "\n" + startDate + "\n" + startTime + "\n" + description + "\n" + imageUrl);
     }
 
     // TODO: use dialogfragment to show dialog
