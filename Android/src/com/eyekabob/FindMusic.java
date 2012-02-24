@@ -31,6 +31,15 @@ public class FindMusic extends Activity {
                 return false;
             }
         });
+        EditText findByVenue = (EditText)findViewById(R.id.findByVenueInput);
+        findByVenue.setOnEditorActionListener(new OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    ((ImageButton)findViewById(R.id.findByVenueButton)).performClick();
+                }
+                return false;
+            }
+        });
     }
 
     public void findByArtistHandler(View v) {

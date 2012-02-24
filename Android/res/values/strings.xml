@@ -12,4 +12,5 @@
     <string name="event_list">Events</string>
     <string name="venue_list">Venues</string>
     <string name="no_results">No results found!</string>
+    <string name="event_activity">Event</string>
 </resources>
