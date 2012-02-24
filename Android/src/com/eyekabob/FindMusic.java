@@ -35,27 +35,31 @@ public class FindMusic extends Activity {
 
     public void findByArtistHandler(View v) {
         EditText findByArtist = (EditText)findViewById(R.id.findByArtistInput);
-        String artist = findByArtist.getText().toString();
-        if ("".equals(artist)) {
-        	return;
-        }
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("artist", URLEncoder.encode(artist));
-        Uri uri = EyekabobHelper.LastFM.getUri("artist.search", params);
-        Intent intent = new Intent(v.getContext(), ArtistResults.class);
-        intent.setData(uri);
-        startActivity(intent);
+        find("artist.search", ArtistResults.class, "artist", findByArtist.getText().toString());
     }
+
     public void findByVenueHandler(View v) {
         EditText findByVenue = (EditText)findViewById(R.id.findByVenueInput);
-        String venue = findByVenue.getText().toString();
-        if ("".equals(venue)) {
+        find("venue.search", VenueResults.class, "venue", findByVenue.getText().toString());
+    }
+
+    public void findByLocationHandler(View v) {
+    	find("geo.getEvents", EventResults.class, null, null);
+    }
+
+    private void find(String restAPI, Class<?> intentClass, String paramKey, String paramValue) {
+        if ("".equals(paramValue)) {
         	return;
         }
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("venue", URLEncoder.encode(venue));
-        Uri uri = EyekabobHelper.LastFM.getUri("venue.search", params);
-        Intent intent = new Intent(v.getContext(), VenueResults.class);
+
+        Map<String, String> params = null;
+        if (paramKey != null) {
+        	params = new HashMap<String, String>();
+            params.put(paramKey, URLEncoder.encode(paramValue));
+        }
+
+        Uri uri = EyekabobHelper.LastFM.getUri(restAPI, params);
+        Intent intent = new Intent(getApplicationContext(), intentClass);
         intent.setData(uri);
         startActivity(intent);
     }

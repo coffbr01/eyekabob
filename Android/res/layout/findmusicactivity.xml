@@ -44,4 +44,14 @@
         	android:layout_alignTop="@id/findByVenueInput"
         	android:layout_toRightOf="@id/findByVenueInput" />
 
+        <Button
+            android:id="@+id/findByLocationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="findByLocationHandler"
+            android:src="@drawable/eye_search_button"
+            android:text="@string/find_by_location"
+            android:contentDescription="@string/find_music_button_desc"
+            android:layout_below="@id/findByVenueInput" />
+
 </RelativeLayout>

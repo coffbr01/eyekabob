@@ -17,8 +17,10 @@ public class EyekabobHelper {
 			String url = SERVICE_URL;
 			url += "?method=" + method;
 			url += "&api_key=" + API_KEY;
-			for (String param : params.keySet()) {
-				url += "&" + param + "=" + params.get(param);
+			if (params != null) {
+				for (String param : params.keySet()) {
+					url += "&" + param + "=" + params.get(param);
+				}
 			}
 			return Uri.parse(url);
 		}
