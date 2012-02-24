@@ -13,4 +13,5 @@
     <string name="venue_list">Venues</string>
     <string name="no_results">No results found!</string>
     <string name="event_activity">Event</string>
+    <string name="event_img_desc">Image for an event</string>
 </resources>

@@ -1,5 +1,9 @@
 package com.eyekabob;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,8 +16,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eyekabob.util.LastFMTask;
@@ -85,8 +92,20 @@ public class Event extends Activity {
 		    }
 		}
 
+		ImageView iv = (ImageView)findViewById(R.id.eventImageView);
+		InputStream is = null;
+		try {
+			is = (InputStream) new URL(imageUrl).getContent();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Bitmap img = BitmapFactory.decodeStream(is);
+		iv.setImageBitmap(img);
+
 		TextView tv = (TextView)findViewById(R.id.eventText);
-		tv.append(title + "\n" + venue + "\n" + startDate + "\n" + startTime + "\n" + description + "\n" + imageUrl);
+		tv.append(title + "\n" + venue + "\n" + startDate + "\n" + startTime + "\n" + description);
     }
 
     // TODO: use dialogfragment to show dialog

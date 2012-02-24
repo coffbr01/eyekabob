@@ -40,6 +40,7 @@ public class FindMusic extends Activity {
                 return false;
             }
         });
+        findByArtist.requestFocus();
     }
 
     public void findByArtistHandler(View v) {
