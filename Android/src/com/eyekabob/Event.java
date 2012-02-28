@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Document;
@@ -24,16 +26,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eyekabob.util.LastFMTask;
+import com.eyekabob.util.LastFMUtil;
 
 public class Event extends Activity {
 	private Dialog alertDialog;
 	private Map<String, String> vendors;
-	private String imageUrl;
-	private String title;
-	private String venue;
-	private String startDate;
-	private String startTime;
-	private String description;
+	private List<String> artists;
+	private String startDate = "";
+	private String headliner = "";
+	private String imageUrl = "";
+	private String title = "";
+	private String venue = "";
+	private String description = "";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +45,12 @@ public class Event extends Activity {
         Uri uri = this.getIntent().getData();
         new RequestTask().execute(uri.toString());
     }
+
     protected void loadEvent(Document doc) {
     	Node eventNode = doc.getElementsByTagName("event").item(0);
 
 		vendors = new HashMap<String, String>();
+		artists = new ArrayList<String>();
 		NodeList eventChildren = eventNode.getChildNodes();
 		for (int j = 0; j < eventChildren.getLength(); j++) {
 		    Node eventChildNode = eventChildren.item(j);
@@ -61,10 +67,7 @@ public class Event extends Activity {
 		    	}
 		    }
 		    else if ("startDate".equals(nodeName)) {
-		    	startDate = eventChildNode.getTextContent();
-		    }
-		    else if ("startTime".equals(nodeName)) {
-		    	startTime = eventChildNode.getTextContent();
+		    	startDate = LastFMUtil.toReadableDate(eventChildNode.getTextContent());
 		    }
 		    else if ("image".equals(nodeName)) {
 		    	NamedNodeMap attributes = eventChildNode.getAttributes();
@@ -90,6 +93,20 @@ public class Event extends Activity {
 		    		}
 		    	}
 		    }
+		    else if ("artists".equals(nodeName)) {
+		    	NodeList artistNodes = eventChildNode.getChildNodes();
+		    	for (int k = 0; k < artistNodes.getLength(); k++) {
+		    		if ("artist".equals(artistNodes.item(k).getNodeName())) {
+		    			artists.add(artistNodes.item(k).getTextContent());
+		    		}
+		    		else if ("headliner".equals(artistNodes.item(k).getNodeName())) {
+		    			headliner = artistNodes.item(k).getTextContent();
+		    		}
+		    	}
+		    	if (artists.contains(headliner)) {
+		    		artists.remove(headliner);
+		    	}
+		    }
 		}
 
 		ImageView iv = (ImageView)findViewById(R.id.eventImageView);
@@ -104,8 +121,19 @@ public class Event extends Activity {
 		Bitmap img = BitmapFactory.decodeStream(is);
 		iv.setImageBitmap(img);
 
+		String rendered = "Title: " + title + "\nHeadliner: " + headliner;
+		if (!artists.isEmpty()) {
+			rendered += "\n  also with:";
+		}
+		for (String artist : artists) {
+			rendered += "\n    " + artist;
+		}
+		rendered += "\n\nWhere: " + venue;
+		rendered += "\n" + startDate;
+		rendered += "\n" + description;
+
 		TextView tv = (TextView)findViewById(R.id.eventText);
-		tv.append(title + "\n" + venue + "\n" + startDate + "\n" + startTime + "\n" + description);
+		tv.append(rendered);
     }
 
     // TODO: use dialogfragment to show dialog

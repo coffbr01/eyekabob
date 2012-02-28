@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eyekabob.util.LastFMTask;
+import com.eyekabob.util.LastFMUtil;
 
 public class EventResults extends ListActivity {
 	private Dialog alertDialog;
@@ -92,10 +93,7 @@ public class EventResults extends ListActivity {
     		    	}
     		    }
     		    else if ("startDate".equals(nodeName)) {
-    		    	startDate = eventChildNode.getTextContent();
-    		    }
-    		    else if ("startTime".equals(nodeName)) {
-    		    	startTime = eventChildNode.getTextContent();
+    		    	startDate = LastFMUtil.toReadableDate(eventChildNode.getTextContent());
     		    }
     		}
 		    adapter.add(title + "\n" + venue + "\n" + startDate + " " + startTime);

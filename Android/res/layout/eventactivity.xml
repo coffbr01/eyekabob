@@ -9,11 +9,11 @@
         android:id="@+id/eventImageView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:scaleType="center"
-        android:contentDescription="@string/event_img_desc" />
+        android:contentDescription="@string/event_img_desc"
+        android:layout_margin="10dp"/>
 
     <TextView
         android:id="@+id/eventText"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="fill_parent"/>
 </LinearLayout>
