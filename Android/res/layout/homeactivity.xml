@@ -15,4 +15,26 @@
         android:onClick="findMusicHandler"
         android:contentDescription="@string/find_music_button_desc">
 	</ImageButton>
+
+	<LinearLayout
+	    android:id="@+id/firstRow"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+	    <ImageButton
+	        android:id="@+id/homeAudioButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:layout_gravity="top"
+	        android:background="#00000000"
+	        android:src="@drawable/home_audio_button"
+	        android:onClick="homeAudioHandler"
+	        android:contentDescription="@string/home_button_desc">
+	    </ImageButton>
+	</LinearLayout>
+    <LinearLayout
+        android:id="@+id/secondRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </LinearLayout>
+
 </LinearLayout>
