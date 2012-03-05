@@ -19,4 +19,14 @@ public class Eyekabob extends Activity {
     }
     public void homePicsHandler(View v) {
     }
+    public void homeFriendsHandler(View v) {
+    }
+    public void homeCheckinHandler(View v) {
+    }
+    public void homeSettingsHandler(View v) {
+    }
+    public void homeBandHandler(View v) {
+    }
+    public void homeForumHandler(View v) {
+    }
 }
