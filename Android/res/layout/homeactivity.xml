@@ -86,5 +86,14 @@
             android:contentDescription="@string/home_button_desc">
         </ImageButton>
     </LinearLayout>
-
+    <ImageButton
+        android:id="@+id/homeAd"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="bottom"
+        android:background="#00000000"
+        android:src="@drawable/eyekabob_logo"
+        android:onClick="homeAdHandler"
+        android:contentDescription="@string/home_button_desc">
+    </ImageButton>
 </LinearLayout>

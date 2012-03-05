@@ -29,4 +29,6 @@ public class Eyekabob extends Activity {
     }
     public void homeForumHandler(View v) {
     }
+    public void homeAdHandler(View v) {
+    }
 }
