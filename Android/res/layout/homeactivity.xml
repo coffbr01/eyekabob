@@ -26,8 +26,8 @@
 	        android:layout_height="fill_parent"
 	        android:layout_gravity="top"
 	        android:background="#00000000"
-	        android:src="@drawable/home_audio_button"
-	        android:onClick="homeAudioHandler"
+	        android:src="@drawable/home_pics_button"
+	        android:onClick="homePicsHandler"
 	        android:contentDescription="@string/home_button_desc">
 	    </ImageButton>
 	</LinearLayout>
