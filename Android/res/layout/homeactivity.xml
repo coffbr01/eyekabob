@@ -18,9 +18,9 @@
 
 	<LinearLayout
 	    android:id="@+id/firstRow"
-	    android:layout_width="match_parent"
+	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_gravity="center" >
+	    android:layout_gravity="center_horizontal" >
 	    <ImageButton
 	        android:id="@+id/homePicsButton"
 	        android:layout_width="wrap_content"
@@ -52,11 +52,13 @@
             android:contentDescription="@string/home_button_desc">
         </ImageButton>
 	</LinearLayout>
+
     <LinearLayout
         android:id="@+id/secondRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" >
+        android:layout_gravity="center_horizontal" >
+
         <ImageButton
             android:id="@+id/homeSettingsButton"
             android:layout_width="wrap_content"
