@@ -15,4 +15,5 @@
     <string name="event_activity">Event</string>
     <string name="event_img_desc">Image for an event</string>
     <string name="home_button_desc">Button on the home page</string>
+    <string name="search_live_music">search live music</string>
 </resources>
