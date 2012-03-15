@@ -14,7 +14,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -28,7 +27,7 @@ import android.widget.TextView;
 import com.eyekabob.util.LastFMTask;
 import com.eyekabob.util.LastFMUtil;
 
-public class Event extends Activity {
+public class Event extends EyekabobActivity {
 	private Dialog alertDialog;
 	private Map<String, String> vendors;
 	private List<String> artists;

@@ -4,7 +4,6 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class FindMusic extends Activity {
+public class FindMusic extends EyekabobActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
