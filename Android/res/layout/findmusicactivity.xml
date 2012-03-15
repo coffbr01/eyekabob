@@ -7,13 +7,15 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="fill_horizontal" >
+        android:layout_gravity="fill_horizontal"
+        android:background="@drawable/find_form_bg_layout" >
 
         <EditText
             android:id="@+id/findByArtistInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:hint="@string/search_by_band"
             android:singleLine="true" >
 
@@ -24,8 +26,7 @@
             android:id="@+id/findByArtistButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/findByArtistInput"
-            android:layout_toRightOf="@id/findByArtistInput"
+            android:layout_gravity="center_vertical"
             android:background="#00000000"
             android:contentDescription="@string/find_music_button_desc"
             android:onClick="findByArtistHandler"
@@ -35,14 +36,14 @@
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="fill_horizontal">
-
+        android:layout_gravity="fill_horizontal"
+        android:background="@drawable/find_form_bg_layout">
         <EditText
             android:id="@+id/findByVenueInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_below="@id/findByArtistInput"
+            android:layout_gravity="center_vertical"
             android:hint="@string/search_by_venue"
             android:singleLine="true" >
 
@@ -52,12 +53,11 @@
             android:id="@+id/findByVenueButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:background="#00000000"
             android:onClick="findByVenueHandler"
             android:src="@drawable/eye_search_button"
-            android:contentDescription="@string/find_music_button_desc"
-        	android:layout_alignTop="@id/findByVenueInput"
-        	android:layout_toRightOf="@id/findByVenueInput" />
+            android:contentDescription="@string/find_music_button_desc" />
     </LinearLayout>
 
         <Button
