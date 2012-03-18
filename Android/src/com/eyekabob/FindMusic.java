@@ -95,6 +95,7 @@ public class FindMusic extends EyekabobActivity {
 
     public void adHandler(View v) {
     	Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+    	emailIntent.setType("plain/text");
     	String to[] = {"create@philipjordandesign.com", "christopherrobertfarrow@gmail.com", "coffbr01@gmail.com"};
     	emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
     	emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Eyekabob Advertising");
