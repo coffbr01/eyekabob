@@ -141,15 +141,6 @@
         android:layout_height="fill_parent"
         android:gravity="bottom"
         android:orientation="vertical" >
-
-	    <ImageButton
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:background="#00000000"
-	        android:src="@drawable/eyekabob_logo"
-	        android:contentDescription="@string/home_button_desc" >
-	    </ImageButton>
-
 	    <ImageButton
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
