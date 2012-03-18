@@ -45,16 +45,9 @@ public class FindMusic extends EyekabobActivity {
         SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
         distance.setProgress(10);
         distance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-			}
-			
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
-			}
-			
+			public void onStopTrackingTouch(SeekBar seekBar) {}
+			public void onStartTrackingTouch(SeekBar seekBar) {}
+
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				TextView miles = (TextView)findViewById(R.id.milesTextView);
 
@@ -98,5 +91,13 @@ public class FindMusic extends EyekabobActivity {
         Intent intent = new Intent(getApplicationContext(), intentClass);
         intent.setData(uri);
         startActivity(intent);
+    }
+
+    public void adHandler(View v) {
+    	Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+    	String to[] = {"create@philipjordandesign.com", "christopherrobertfarrow@gmail.com", "coffbr01@gmail.com"};
+    	emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+    	emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Eyekabob Advertising");
+    	startActivity(Intent.createChooser(emailIntent, "Write email with:"));
     }
 }
