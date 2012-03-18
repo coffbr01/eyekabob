@@ -100,6 +100,7 @@
 	            android:contentDescription="@string/find_music_button_desc" />
         </LinearLayout>
         <CheckBox
+            android:id="@+id/useCurrentLocationCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/use_current_location" >

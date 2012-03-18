@@ -4,12 +4,16 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -73,7 +77,39 @@ public class FindMusic extends EyekabobActivity {
     }
 
     public void findByLocationHandler(View v) {
-    	find("geo.getEvents", EventResults.class, null, null);
+    	Map<String, String> params = new HashMap<String, String>();
+
+    	SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
+    	params.put("distance", Integer.toString(distance.getProgress()));
+
+    	CheckBox useCurrentLocationInput = (CheckBox)findViewById(R.id.useCurrentLocationCheckBox);
+    	EditText locationInput = (EditText)findViewById(R.id.findByLocationInput);
+    	if (useCurrentLocationInput.isChecked()) {
+    		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+    		// Gets the last known location without actually asking the service.
+    		// So if another app got location a while ago, this will just use that location.
+    		Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+    		if (location != null) {
+	    		params.put("lat", Double.toString(location.getLatitude()));
+	    		params.put("long", Double.toString(location.getLongitude()));
+    		}
+    	}
+    	else if (!"".equals(locationInput.getText().toString())) {
+    		params.put("location", locationInput.getText().toString());
+    	}
+    	else {
+    		// Nothing entered and not using current location.
+    		return;
+    	}
+
+    	find("geo.getEvents", EventResults.class, params);
+    }
+
+    private void find(String restAPI, Class<?> intentClass, Map<String, String> params) {
+        Uri uri = EyekabobHelper.LastFM.getUri(restAPI, params);
+        Intent intent = new Intent(getApplicationContext(), intentClass);
+        intent.setData(uri);
+        startActivity(intent);
     }
 
     private void find(String restAPI, Class<?> intentClass, String paramKey, String paramValue) {
@@ -87,14 +123,11 @@ public class FindMusic extends EyekabobActivity {
             params.put(paramKey, URLEncoder.encode(paramValue));
         }
 
-        Uri uri = EyekabobHelper.LastFM.getUri(restAPI, params);
-        Intent intent = new Intent(getApplicationContext(), intentClass);
-        intent.setData(uri);
-        startActivity(intent);
+        find(restAPI, intentClass, params);
     }
 
     public void adHandler(View v) {
-    	Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+    	Intent emailIntent = new Intent(Intent.ACTION_SEND);
     	emailIntent.setType("plain/text");
     	String to[] = {"create@philipjordandesign.com", "christopherrobertfarrow@gmail.com", "coffbr01@gmail.com"};
     	emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
