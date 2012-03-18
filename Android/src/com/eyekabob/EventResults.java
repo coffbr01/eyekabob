@@ -61,6 +61,10 @@ public class EventResults extends ListActivity {
     }
     
     protected void loadEvents(Document doc) {
+    	if (doc == null) {
+    		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
+    		return;
+    	}
     	NodeList events = doc.getElementsByTagName("event");
     	if (events.getLength() == 0) {
     		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
