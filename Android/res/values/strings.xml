@@ -4,7 +4,7 @@
     <string name="app_name">Eyekabob</string>
     <string name="search_by_band">SEARCH BY BAND</string>
     <string name="search_by_venue">SEARCH BY VENUE</string>
-    <string name="search_by_location">FIND BY LOCATION</string>
+    <string name="search_by_location">SEARCH BY LOCATION</string>
     <string name="find_music">Find music</string>
     <string name="find_music_button_desc">Find music button</string>
     <string name="searching">Searching &#8230;</string>
