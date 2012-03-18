@@ -17,4 +17,6 @@
     <string name="home_button_desc">Button on the home page</string>
     <string name="search_live_music">search live music</string>
     <string name="use_current_location">USE CURRENT LOCATION</string>
+    <string name="distance">DISTANCE:</string>
+    <string name="miles">mi</string>
 </resources>

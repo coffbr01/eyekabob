@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:text="@string/search_live_music"
         android:textColor="#8d0000"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -43,7 +43,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="fill_horizontal"
-        android:background="@drawable/find_form_bg_layout">
+        android:background="@drawable/find_form_bg_layout" >
         <EditText
             android:id="@+id/findByVenueInput"
             android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="fill_horizontal"
         android:orientation="vertical"
-        android:background="@drawable/find_form_bg_layout">
+        android:background="@drawable/find_form_bg_layout" >
 	    <LinearLayout 
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
@@ -100,7 +100,37 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/use_current_location">
+            android:text="@string/use_current_location" >
         </CheckBox>
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:orientation="horizontal" >
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginRight="5dp"
+	            android:text="@string/distance" >
+	        </TextView>
+	        <TextView
+	            android:id="@+id/milesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10" >
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="@string/miles" >
+            </TextView>
+	    </LinearLayout>
+	    <SeekBar
+	        android:id="@+id/milesSeekBar"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:max="50" >
+	    </SeekBar>
     </LinearLayout>
 </LinearLayout>

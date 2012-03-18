@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -40,6 +41,32 @@ public class FindMusic extends EyekabobActivity {
             }
         });
         findByArtist.requestFocus();
+
+        SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
+        distance.setProgress(10);
+        distance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+			}
+			
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				TextView miles = (TextView)findViewById(R.id.milesTextView);
+
+				if (progress < 1) {
+					progress = 1;
+					SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
+					distance.setProgress(progress);
+				}
+
+				miles.setText(Integer.toString(progress));
+			}
+		});
     }
 
     public void findByArtistHandler(View v) {
