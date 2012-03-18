@@ -70,12 +70,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="fill_horizontal"
         android:orientation="vertical"
-        android:background="@drawable/find_form_bg_layout" >
+        android:background="@drawable/find_form_bg_big_layout" >
 	    <LinearLayout 
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="fill_horizontal"
-	        android:orientation="horizontal">
+	        android:layout_marginTop="5dp"
+	        android:orientation="horizontal" >
 	        <EditText
 	            android:id="@+id/findByLocationInput"
 	            android:layout_width="wrap_content"
@@ -84,7 +85,6 @@
 	            android:layout_gravity="center_vertical"
 	            android:hint="@string/search_by_location"
 	            android:singleLine="true" >
-	
 	        </EditText>
 	
 	        <ImageButton
