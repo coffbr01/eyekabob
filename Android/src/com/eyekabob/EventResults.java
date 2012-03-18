@@ -3,6 +3,9 @@ package com.eyekabob;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -22,7 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.eyekabob.util.LastFMTask;
+import com.eyekabob.util.DocumentTask;
+import com.eyekabob.util.JSONTask;
 import com.eyekabob.util.LastFMUtil;
 
 public class EventResults extends ListActivity {
@@ -39,13 +43,27 @@ public class EventResults extends ListActivity {
 			startActivity(intent);
 		}
 	};
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item);
         setListAdapter(adapter);
         Uri uri = this.getIntent().getData();
-        new RequestTask().execute(uri.toString());
+        if (uri.getHost().contains("geonames")) {
+        	String zip = this.getIntent().getExtras().getString("zip");
+        	if (EyekabobHelper.zipToNameMap.containsKey(zip)) {
+        		Uri lastFMURI = getLastFMURI(EyekabobHelper.zipToNameMap.get("zip"));
+        		sendDocumentRequest(lastFMURI.toString());
+        	}
+        	else {
+        		sendJSONRequest(uri.toString());
+        	}
+        }
+        else {
+        	sendDocumentRequest(uri.toString());
+        }
+
         ListView lv = getListView();
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(listItemListener);
@@ -105,11 +123,57 @@ public class EventResults extends ListActivity {
     	}
     }
 
-    // Handles the asynchronous request, away from the UI thread.
-    private class RequestTask extends LastFMTask {
+    protected void sendJSONRequest(String uri) {
+    	new JSONRequestTask().execute(uri);
+    }
+
+    protected void sendDocumentRequest(String uri) {
+    	new DocumentRequestTask().execute(uri);
+    }
+
+    protected Uri getLastFMURI(String location) {
+    	Map<String, String> params = new HashMap<String, String>();
+    	params.put("location", location);
+    	params.put("distance", (String)getIntent().getExtras().get("distance"));
+    	return EyekabobHelper.LastFM.getUri("geo.getEvents", params);
+    }
+
+    private class JSONRequestTask extends JSONTask {
     	protected void onPreExecute() {
-    		EventResults.this.createDialog();
-    		alertDialog.show();
+    		if (alertDialog == null) {
+        		EventResults.this.createDialog();
+    		}
+
+    		if (!alertDialog.isShowing()) {
+    			alertDialog.show();
+    		}
+    	}
+    	protected void onPostExecute(JSONObject result) {
+    		String location = null;
+    		try {
+        		JSONArray locations = (JSONArray)result.get("postalcodes");
+        		JSONObject jsonLocation = (JSONObject)locations.get(0);
+        		location = (String)jsonLocation.get("placeName");
+    		}
+    		catch (JSONException e) {
+    			e.printStackTrace();
+    		}
+
+    		Uri uri = EventResults.this.getLastFMURI(location);
+    		EventResults.this.sendDocumentRequest(uri.toString());
+    	}
+    }
+
+    // Handles the asynchronous request, away from the UI thread.
+    private class DocumentRequestTask extends DocumentTask {
+    	protected void onPreExecute() {
+    		if (alertDialog == null) {
+        		EventResults.this.createDialog();
+    		}
+
+    		if (!alertDialog.isShowing()) {
+    			alertDialog.show();
+    		}
     	}
     	protected void onPostExecute(Document result) {
     		alertDialog.dismiss();

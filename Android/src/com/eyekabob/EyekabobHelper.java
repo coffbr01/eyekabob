@@ -1,10 +1,13 @@
 package com.eyekabob;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import android.net.Uri;
 
 public class EyekabobHelper {
+	public static final Map<String, String> zipToNameMap = new HashMap<String, String>();
+
 	public static class LastFM {
 		public static final String USER = "eyekabob";
 		public static final String PASS = "eyekabob";
@@ -14,16 +17,29 @@ public class EyekabobHelper {
 		public static final String SERVICE_URL = "http://ws.audioscrobbler.com/2.0/";
 
 		public static Uri getUri(String method, Map<String, String> params) {
+			if (params == null) {
+				params = new HashMap<String, String>();
+			}
+
+			if (!params.containsKey("limit")) {
+				params.put("limit", "100");
+			}
+
+			params.put("api_key", API_KEY);
+
 			String url = SERVICE_URL;
 			url += "?method=" + method;
-			url += "&api_key=" + API_KEY;
-			if (params != null) {
-				for (String param : params.keySet()) {
-					url += "&" + param + "=" + params.get(param);
-				}
+			for (String param : params.keySet()) {
+				url += "&" + param + "=" + params.get(param);
 			}
 			return Uri.parse(url);
 		}
-
+	}
+	public static class GeoNames {
+		public static final String SERVICE_URL = "http://api.geonames.org/postalCodeLookupJSON";
+		public static Uri getUri(String zip) {
+			String url = SERVICE_URL + "?username=eyekabob&country=US&postalcode=" + zip;
+			return Uri.parse(url);
+		}
 	}
 }

@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.eyekabob.util.LastFMTask;
+import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.LastFMUtil;
 
 public class Event extends EyekabobActivity {
@@ -145,7 +145,7 @@ public class Event extends EyekabobActivity {
     }
 
     // Handles the asynchronous request, away from the UI thread.
-    private class RequestTask extends LastFMTask {
+    private class RequestTask extends DocumentTask {
     	protected void onPreExecute() {
     		Event.this.createDialog();
     		alertDialog.show();

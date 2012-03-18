@@ -3,6 +3,8 @@ package com.eyekabob;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.content.Intent;
@@ -94,8 +96,16 @@ public class FindMusic extends EyekabobActivity {
 	    		params.put("long", Double.toString(location.getLongitude()));
     		}
     	}
-    	else if (!"".equals(locationInput.getText().toString())) {
-    		params.put("location", locationInput.getText().toString().trim());
+    	else if (!"".equals(locationInput.getText().toString().trim())) {
+    		String criterion = locationInput.getText().toString().trim();
+			Pattern pattern = Pattern.compile("^\\d{5}(-\\d{4})?$");
+			Matcher matcher = pattern.matcher(criterion);
+			if (matcher.find()) {
+				findByZip(criterion, params.get("distance"));
+				return;
+			}
+
+    		params.put("location", criterion);
     	}
     	else {
     		// Nothing entered and not using current location.
@@ -103,6 +113,15 @@ public class FindMusic extends EyekabobActivity {
     	}
 
     	find("geo.getEvents", EventResults.class, params);
+    }
+
+    private void findByZip(String zip, String distance) {
+    	Uri uri = EyekabobHelper.GeoNames.getUri(zip);
+    	Intent intent = new Intent(getApplicationContext(), EventResults.class);
+    	intent.setData(uri);
+    	intent.putExtra("zip", zip);
+    	intent.putExtra("distance", distance);
+    	startActivity(intent);
     }
 
     private void find(String restAPI, Class<?> intentClass, Map<String, String> params) {

@@ -22,7 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.eyekabob.util.LastFMTask;
+import com.eyekabob.util.DocumentTask;
 
 public class VenueResults extends ListActivity {
 	private Dialog alertDialog;
@@ -96,7 +96,7 @@ public class VenueResults extends ListActivity {
     }
 
     // Handles the asynchronous request, away from the UI thread.
-    private class RequestTask extends LastFMTask {
+    private class RequestTask extends DocumentTask {
     	protected void onPreExecute() {
     		VenueResults.this.createDialog();
     		alertDialog.show();

@@ -23,7 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.eyekabob.util.LastFMTask;
+import com.eyekabob.util.DocumentTask;
 
 public class ArtistResults extends ListActivity {
 	private Dialog alertDialog;
@@ -78,7 +78,7 @@ public class ArtistResults extends ListActivity {
     }
 
     // Handles the asynchronous request, away from the UI thread.
-    private class RequestTask extends LastFMTask {
+    private class RequestTask extends DocumentTask {
     	protected void onPreExecute() {
     		ArtistResults.this.createDialog();
     		alertDialog.show();

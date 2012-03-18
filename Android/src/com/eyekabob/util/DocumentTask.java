@@ -11,7 +11,7 @@ import org.xml.sax.SAXException;
 
 import android.os.AsyncTask;
 
-public abstract class LastFMTask extends AsyncTask<String, Void, Document> {
+public abstract class DocumentTask extends AsyncTask<String, Void, Document> {
 	protected Document doInBackground(String... uris) {
 		return doRequest(uris[0]);
 	}
