@@ -95,7 +95,7 @@ public class FindMusic extends EyekabobActivity {
     		}
     	}
     	else if (!"".equals(locationInput.getText().toString())) {
-    		params.put("location", locationInput.getText().toString());
+    		params.put("location", locationInput.getText().toString().trim());
     	}
     	else {
     		// Nothing entered and not using current location.
