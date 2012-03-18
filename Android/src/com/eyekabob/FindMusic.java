@@ -115,6 +115,11 @@ public class FindMusic extends EyekabobActivity {
     	find("geo.getEvents", EventResults.class, params);
     }
 
+    public void useCurrentLocationHandler(View v) {
+    	EditText location = (EditText)findViewById(R.id.findByLocationInput);
+    	location.setEnabled(!((CheckBox)v).isChecked());
+    }
+
     private void findByZip(String zip, String distance) {
     	Uri uri = EyekabobHelper.GeoNames.getUri(zip);
     	Intent intent = new Intent(getApplicationContext(), EventResults.class);

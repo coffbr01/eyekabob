@@ -86,7 +86,8 @@
 	            android:layout_weight="1"
 	            android:layout_gravity="center_vertical"
 	            android:hint="@string/search_by_location"
-	            android:singleLine="true" >
+	            android:singleLine="true"
+	            android:enabled="false" >
 	        </EditText>
 	
 	        <ImageButton
@@ -103,7 +104,9 @@
             android:id="@+id/useCurrentLocationCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/use_current_location" >
+            android:text="@string/use_current_location"
+            android:checked="true"
+            android:onClick="useCurrentLocationHandler" >
         </CheckBox>
         <LinearLayout
             android:layout_width="fill_parent"
