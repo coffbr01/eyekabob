@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,6 +44,9 @@ public class Event extends EyekabobActivity {
         setContentView(R.layout.eventactivity);
         Uri uri = this.getIntent().getData();
         new RequestTask().execute(uri.toString());
+
+        WebView wv = (WebView)findViewById(R.id.eventDescription);
+        wv.setBackgroundColor(0x00000000);
     }
 
     protected void loadEvent(Document doc) {
@@ -129,10 +133,13 @@ public class Event extends EyekabobActivity {
 		}
 		rendered += "\n\nWhere: " + venue;
 		rendered += "\n" + startDate;
-		rendered += "\n" + description;
 
 		TextView tv = (TextView)findViewById(R.id.eventText);
 		tv.append(rendered);
+
+		WebView wv = (WebView)findViewById(R.id.eventDescription);
+		description = "<div style='color:white'>" + description + "</div>";
+		wv.loadData(description, "text/html", "UTF8");
     }
 
     // TODO: use dialogfragment to show dialog

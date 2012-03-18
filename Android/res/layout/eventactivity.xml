@@ -9,11 +9,16 @@
         android:id="@+id/eventImageView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/event_img_desc"
-        android:layout_margin="10dp"/>
+        android:layout_gravity="fill_horizontal"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/event_img_desc"/>
 
     <TextView
         android:id="@+id/eventText"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="wrap_content"/>
+    <WebView
+        android:id="@+id/eventDescription"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
