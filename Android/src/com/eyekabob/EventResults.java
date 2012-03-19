@@ -95,6 +95,7 @@ public class EventResults extends ListActivity {
     		String startDate = "";
     		String startTime = "";
     		String id = "";
+    		String city = "";
     		Node eventNode = events.item(i);
     		NodeList eventChildren = eventNode.getChildNodes();
     		for (int j = 0; j < eventChildren.getLength(); j++) {
@@ -112,14 +113,22 @@ public class EventResults extends ListActivity {
     		    		if ("name".equals(venueChildren.item(k).getNodeName())) {
     		    			venue = venueChildren.item(k).getTextContent();
     		    		}
+    		    		else if ("location".equals(venueChildren.item(k).getNodeName())) {
+    		    			NodeList locationChildren = venueChildren.item(k).getChildNodes();
+    		    			for (int l = 0; l < locationChildren.getLength(); l++) {
+    		    				if ("city".equals(locationChildren.item(l).getNodeName())) {
+    		    					city = locationChildren.item(l).getTextContent();
+    		    				}
+    		    			}
+    		    		}
     		    	}
     		    }
     		    else if ("startDate".equals(nodeName)) {
     		    	startDate = LastFMUtil.toReadableDate(eventChildNode.getTextContent());
     		    }
     		}
-		    adapter.add(title + "\n" + venue + "\n" + startDate + " " + startTime);
-		    eventMap.put(title + "\n" + venue + "\n" + startDate + " " + startTime, id);
+		    adapter.add(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + startTime);
+		    eventMap.put(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + startTime, id);
     	}
     }
 
