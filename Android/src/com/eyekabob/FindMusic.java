@@ -82,7 +82,9 @@ public class FindMusic extends EyekabobActivity {
     	Map<String, String> params = new HashMap<String, String>();
 
     	SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
-    	params.put("distance", Integer.toString(distance.getProgress()));
+    	int miles = distance.getProgress();
+    	int km = (int)(miles / 1.609344);
+    	params.put("distance", Integer.toString(km));
 
     	CheckBox useCurrentLocationInput = (CheckBox)findViewById(R.id.useCurrentLocationCheckBox);
     	EditText locationInput = (EditText)findViewById(R.id.findByLocationInput);
