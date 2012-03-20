@@ -15,6 +15,7 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -96,6 +97,7 @@ public class EventResults extends ListActivity {
     		String startTime = "";
     		String id = "";
     		String city = "";
+    		String distance = "";
     		Node eventNode = events.item(i);
     		NodeList eventChildren = eventNode.getChildNodes();
     		for (int j = 0; j < eventChildren.getLength(); j++) {
@@ -119,6 +121,20 @@ public class EventResults extends ListActivity {
     		    				if ("city".equals(locationChildren.item(l).getNodeName())) {
     		    					city = locationChildren.item(l).getTextContent();
     		    				}
+    		    				else if ("geo:point".equals(locationChildren.item(l).getNodeName())) {
+    		    					NodeList geoChildren = locationChildren.item(l).getChildNodes();
+    		    					String lat = "";
+    		    					String lon = "";
+    		    					for (int m = 0; m < geoChildren.getLength(); m++) {
+    		    						if ("geo:lat".equals(geoChildren.item(m).getNodeName())) {
+    		    							lat = geoChildren.item(m).getTextContent();
+    		    						}
+    		    						if ("geo:long".equals(geoChildren.item(m).getNodeName())) {
+    		    							lon = geoChildren.item(m).getTextContent();
+    		    						}
+    		    					}
+    		    					distance = getDistance(Double.parseDouble(lat), Double.parseDouble(lon));
+    		    				}
     		    			}
     		    		}
     		    	}
@@ -127,9 +143,26 @@ public class EventResults extends ListActivity {
     		    	startDate = LastFMUtil.toReadableDate(eventChildNode.getTextContent());
     		    }
     		}
-		    adapter.add(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + startTime);
-		    eventMap.put(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + startTime, id);
+		    adapter.add(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + startTime + distance);
+		    eventMap.put(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + startTime + distance, id);
     	}
+    }
+
+    public String getDistance(double lat, double lon) {
+    	Location location = EyekabobHelper.getLocation(this);
+    	if (location == null) {
+    		return "";
+    	}
+    	double currentLat = location.getLatitude();
+    	double currentLon = location.getLongitude();
+    	int R = 3959; // Earth radius in miles.
+    	double dLat = Math.toRadians(currentLat - lat);
+    	double dLon = Math.toRadians(currentLon - lon);
+    	lat = Math.toRadians(lat);
+    	currentLat = Math.toRadians(currentLat);
+    	double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat) * Math.cos(currentLat);
+    	double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    	return "\n" + (int)R * c + " mi";
     }
 
     protected void sendJSONRequest(String uri) {

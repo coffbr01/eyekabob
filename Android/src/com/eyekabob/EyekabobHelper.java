@@ -3,10 +3,21 @@ package com.eyekabob;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 
 public class EyekabobHelper {
 	public static final Map<String, String> zipToNameMap = new HashMap<String, String>();
+
+	public static Location getLocation(Activity activity) {
+		LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+		// Gets the last known location without actually asking the service.
+		// So if another app got location a while ago, this will just use that location.
+		return locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+	}
 
 	public static class LastFM {
 		public static final String USER = "eyekabob";

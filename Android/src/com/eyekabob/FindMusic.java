@@ -89,10 +89,7 @@ public class FindMusic extends EyekabobActivity {
     	CheckBox useCurrentLocationInput = (CheckBox)findViewById(R.id.useCurrentLocationCheckBox);
     	EditText locationInput = (EditText)findViewById(R.id.findByLocationInput);
     	if (useCurrentLocationInput.isChecked()) {
-    		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-    		// Gets the last known location without actually asking the service.
-    		// So if another app got location a while ago, this will just use that location.
-    		Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+    		Location location = EyekabobHelper.getLocation(this);
     		if (location != null) {
 	    		params.put("lat", Double.toString(location.getLatitude()));
 	    		params.put("long", Double.toString(location.getLongitude()));
