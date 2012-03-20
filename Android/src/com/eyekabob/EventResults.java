@@ -162,7 +162,7 @@ public class EventResults extends ListActivity {
     	currentLat = Math.toRadians(currentLat);
     	double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat) * Math.cos(currentLat);
     	double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    	return "\n" + (int)R * c + " mi";
+    	return "\n" + Math.round(R * c) + " mi";
     }
 
     protected void sendJSONRequest(String uri) {
