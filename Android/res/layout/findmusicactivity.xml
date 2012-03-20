@@ -144,14 +144,11 @@
         android:layout_height="fill_parent"
         android:gravity="bottom"
         android:orientation="vertical" >
-        <ImageButton
-            android:layout_width="match_parent"
+        <com.eyekabob.AdBanner
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:background="#00000000"
             android:contentDescription="@string/home_button_desc"
-            android:onClick="adHandler"
-            android:src="@drawable/advertisement" />
+            android:onClick="adHandler" />
     </LinearLayout>
 
 </LinearLayout>
