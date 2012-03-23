@@ -26,14 +26,14 @@
 
     <LinearLayout
         android:id="@+id/sixButtons"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:gravity="bottom"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical" >
 	    <LinearLayout
 		    android:id="@+id/firstRow"
-		    android:layout_width="fill_parent"
+		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_gravity="center_horizontal"
 		    android:orientation="horizontal" >
@@ -70,7 +70,7 @@
 		</LinearLayout>
 	    <LinearLayout
 	        android:id="@+id/secondRow"
-	        android:layout_width="fill_parent"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
 	        android:orientation="horizontal" >
