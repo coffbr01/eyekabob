@@ -133,7 +133,9 @@ public class EventResults extends ListActivity {
     		    							lon = geoChildren.item(m).getTextContent();
     		    						}
     		    					}
-    		    					distance = getDistance(Double.parseDouble(lat), Double.parseDouble(lon));
+    		    					if (!"".equals(lat) && !"".equals(lon)) {
+    		    						distance = getDistance(Double.parseDouble(lat), Double.parseDouble(lon));
+    		    					}
     		    				}
     		    			}
     		    		}
