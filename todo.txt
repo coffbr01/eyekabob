@@ -1,4 +1,0 @@
-prompt for gps
-
-next focus: events list
-

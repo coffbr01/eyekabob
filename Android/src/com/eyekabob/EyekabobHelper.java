@@ -15,11 +15,8 @@ public class EyekabobHelper {
 
 	public static Location getLocation(Activity activity) {
 		LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-		// Gets the last known location without actually asking the service.
-		// So if another app got location a while ago, this will just use that location.
-		Criteria criterion = new Criteria();
-		criterion.setSpeedRequired(true);
-		String bestLocationProvider = locationManager.getBestProvider(new Criteria(), true/*enabled only*/);
+		// Gets the last known location from the best service.
+		String bestLocationProvider = locationManager.getBestProvider(new Criteria(), true /*enabled only*/);
 		return locationManager.getLastKnownLocation(bestLocationProvider);
 	}
 
