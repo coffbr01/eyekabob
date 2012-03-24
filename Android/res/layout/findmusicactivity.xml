@@ -32,7 +32,7 @@
         <ImageButton
             android:id="@+id/findByArtistButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
             android:background="#00000000"
             android:contentDescription="@string/find_music_button_desc"
@@ -59,7 +59,7 @@
         <ImageButton
             android:id="@+id/findByVenueButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
             android:background="#00000000"
             android:onClick="findByVenueHandler"
@@ -92,7 +92,7 @@
 	        <ImageButton
 	            android:id="@+id/findByLocationButton"
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
+	            android:layout_height="fill_parent"
 	            android:layout_gravity="center_vertical"
 	            android:background="#00000000"
 	            android:onClick="findByLocationHandler"
