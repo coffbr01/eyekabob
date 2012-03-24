@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 public class FindMusic extends EyekabobActivity {
@@ -97,15 +98,19 @@ public class FindMusic extends EyekabobActivity {
     		String criterion = locationInput.getText().toString().trim();
 			Pattern pattern = Pattern.compile("^\\d{5}(-\\d{4})?$");
 			Matcher matcher = pattern.matcher(criterion);
+
 			if (matcher.find()) {
 				findByZip(criterion, params.get("distance"));
-				return;
+			}
+			else {
+				Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
 			}
 
-    		params.put("location", criterion);
+			return;
     	}
     	else {
     		// Nothing entered and not using current location.
+    		Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
     		return;
     	}
 

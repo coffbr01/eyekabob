@@ -1,6 +1,5 @@
-zip in the location
-bigger magnifying glass
 prompt for gps
-next focus: events list
 miles bug
+
+next focus: events list
 

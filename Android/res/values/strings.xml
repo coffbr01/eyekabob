@@ -4,7 +4,7 @@
     <string name="app_name">Eyekabob</string>
     <string name="search_by_band">SEARCH BY BAND</string>
     <string name="search_by_venue">SEARCH BY VENUE</string>
-    <string name="search_by_location">SEARCH BY LOCATION</string>
+    <string name="search_by_location">SEARCH BY ZIP</string>
     <string name="find_music">Find music</string>
     <string name="find_music_button_desc">Find music button</string>
     <string name="searching">Searching &#8230;</string>
@@ -19,4 +19,5 @@
     <string name="use_current_location">USE CURRENT LOCATION</string>
     <string name="distance">DISTANCE:</string>
     <string name="miles">mi</string>
+    <string name="no_zip_entered">Enter a zip code</string>
 </resources>
