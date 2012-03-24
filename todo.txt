@@ -1,5 +1,4 @@
 prompt for gps
-miles bug
 
 next focus: events list
 
