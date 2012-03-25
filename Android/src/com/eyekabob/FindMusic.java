@@ -127,7 +127,6 @@ public class FindMusic extends EyekabobActivity {
     	Intent intent = new Intent(getApplicationContext(), EventResults.class);
     	intent.setData(uri);
     	intent.putExtra("zip", zip);
-    	intent.putExtra("distance", distance);
     	startActivity(intent);
     }
 

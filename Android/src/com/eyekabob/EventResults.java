@@ -65,6 +65,9 @@ public class EventResults extends EyekabobActivity {
         		LOG.d(getClass().getName(), "Getting zip from geonames service");
         		sendJSONRequest(uri.toString());
         	}
+
+        	// Don't show distance for zip search.
+        	getIntent().putExtra("showDistance", false);
         }
         else {
         	LOG.d(getClass().getName(), "Searching for events using current location");
