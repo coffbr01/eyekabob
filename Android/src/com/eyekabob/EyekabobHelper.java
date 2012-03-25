@@ -34,7 +34,7 @@ public class EyekabobHelper {
 			}
 
 			if (!params.containsKey("limit")) {
-				params.put("limit", "100");
+				params.put("limit", "50");
 			}
 
 			params.put("api_key", API_KEY);
@@ -54,4 +54,21 @@ public class EyekabobHelper {
 			return Uri.parse(url);
 		}
 	}
+
+    public static String getDistance(double lat, double lon, Activity activity) {
+    	Location location = EyekabobHelper.getLocation(activity);
+    	if (location == null) {
+    		return "";
+    	}
+    	double currentLat = location.getLatitude();
+    	double currentLon = location.getLongitude();
+    	int R = 3959; // Earth radius in miles.
+    	double dLat = Math.toRadians(currentLat - lat);
+    	double dLon = Math.toRadians(currentLon - lon);
+    	lat = Math.toRadians(lat);
+    	currentLat = Math.toRadians(currentLat);
+    	double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat) * Math.cos(currentLat);
+    	double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    	return "\n" + Math.round(R * c) + " mi";
+    }
 }

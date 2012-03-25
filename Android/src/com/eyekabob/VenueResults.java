@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eyekabob.util.DocumentTask;
+import com.eyekabob.util.NiceNodeList;
 
 public class VenueResults extends ListActivity {
 	private Dialog alertDialog;
@@ -69,29 +70,33 @@ public class VenueResults extends ListActivity {
     	venueMap = new HashMap<String, String>();
     	for (int i = 0; i < venues.getLength(); i++) {
     		Node artistNode = venues.item(i);
-    		NodeList venueChildren = artistNode.getChildNodes();
-    		String name = "";
-    		String city = "";
-    		String id = "";
-    		for (int j = 0; j < venueChildren.getLength(); j++) {
-    		    Node venueChildNode = venueChildren.item(j);
-    		    if ("name".equals(venueChildNode.getNodeName())) {
-    		    	name = venueChildNode.getTextContent();
-    		    }
-    		    else if ("id".equals(venueChildNode.getNodeName())) {
-    		    	id = venueChildNode.getTextContent();
-    		    }
-    		    else if ("location".equals(venueChildNode.getNodeName())) {
-    		    	NodeList locationChildren = venueChildNode.getChildNodes();
-    		    	for (int k = 0; k < locationChildren.getLength(); k++) {
-    		    		if ("city".equals(locationChildren.item(k).getNodeName())) {
-    		    			city = locationChildren.item(k).getTextContent();
-    		    		}
-    		    	}
-    		    }
+    		NiceNodeList venueNodeList = new NiceNodeList(artistNode.getChildNodes());
+    		Map<String, Node> venueNodes = venueNodeList.get("name", "id", "location");
+    		String name = venueNodes.get("name").getTextContent();
+    		String id = venueNodes.get("id").getTextContent();
+
+    		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
+    		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
+    		String city = locationNodes.get("city").getTextContent();
+
+    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
+    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
+    		Node lat = geoNodes.get("geo:lat");
+    		Node lon = geoNodes.get("geo:long");
+
+    		String distance = "";
+    		if (lat != null && lon != null) {
+    			String latStr = lat.getTextContent();
+    			String lonStr = lon.getTextContent();
+    			if (!"".equals(latStr) && !"".equals(lonStr)) {
+        			distance = EyekabobHelper.getDistance(Double.parseDouble(latStr), Double.parseDouble(lonStr), this);
+    			}
     		}
-    		adapter.add(name + "\n" + city);
-    		venueMap.put(name + "\n" + city, id);
+
+    		String listItem = name + "\n" + city + distance;
+
+    		adapter.add(listItem);
+    		venueMap.put(listItem, id);
     	}
     }
 

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eyekabob.util.DocumentTask;
+import com.eyekabob.util.NiceNodeList;
 
 public class ArtistResults extends ListActivity {
 	private Dialog alertDialog;
@@ -67,13 +68,9 @@ public class ArtistResults extends ListActivity {
     	}
     	for (int i = 0; i < artists.getLength(); i++) {
     		Node artistNode = artists.item(i);
-    		NodeList artistChildren = artistNode.getChildNodes();
-    		for (int j = 0; j < artistChildren.getLength(); j++) {
-    		    Node artistChildNode = artistChildren.item(j);
-    		    if ("name".equals(artistChildNode.getNodeName())) {
-    		    	adapter.add(artistChildNode.getTextContent());
-    		    }
-    		}
+    		NiceNodeList artistNodeList = new NiceNodeList(artistNode.getChildNodes());
+    		Map<String, Node> artistNodes = artistNodeList.get("name");
+    		adapter.add(artistNodes.get("name").getTextContent());
     	}
     }
 

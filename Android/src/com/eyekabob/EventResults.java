@@ -15,7 +15,6 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +28,7 @@ import android.widget.Toast;
 import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.JSONTask;
 import com.eyekabob.util.LastFMUtil;
+import com.eyekabob.util.NiceNodeList;
 
 public class EventResults extends ListActivity {
 	private Dialog alertDialog;
@@ -91,80 +91,39 @@ public class EventResults extends ListActivity {
     	}
     	eventMap = new HashMap<String, String>();
     	for (int i = 0; i < events.getLength(); i++) {
-    		String title = "";
-    		String venue = "";
-    		String startDate = "";
-    		String startTime = "";
-    		String id = "";
-    		String city = "";
-    		String distance = "";
     		Node eventNode = events.item(i);
-    		NodeList eventChildren = eventNode.getChildNodes();
-    		for (int j = 0; j < eventChildren.getLength(); j++) {
-    		    Node eventChildNode = eventChildren.item(j);
-    		    String nodeName = eventChildNode.getNodeName();
-    		    if ("title".equals(nodeName)) {
-    		    	title = eventChildNode.getTextContent();
-    		    }
-    		    else if ("id".equals(nodeName)) {
-    		    	id = eventChildNode.getTextContent();
-    		    }
-    		    else if ("venue".equals(nodeName)) {
-    		    	NodeList venueChildren = eventChildNode.getChildNodes();
-    		    	for (int k = 0; k < venueChildren.getLength(); k++) {
-    		    		if ("name".equals(venueChildren.item(k).getNodeName())) {
-    		    			venue = venueChildren.item(k).getTextContent();
-    		    		}
-    		    		else if ("location".equals(venueChildren.item(k).getNodeName())) {
-    		    			NodeList locationChildren = venueChildren.item(k).getChildNodes();
-    		    			for (int l = 0; l < locationChildren.getLength(); l++) {
-    		    				if ("city".equals(locationChildren.item(l).getNodeName())) {
-    		    					city = locationChildren.item(l).getTextContent();
-    		    				}
-    		    				else if ("geo:point".equals(locationChildren.item(l).getNodeName())) {
-    		    					NodeList geoChildren = locationChildren.item(l).getChildNodes();
-    		    					String lat = "";
-    		    					String lon = "";
-    		    					for (int m = 0; m < geoChildren.getLength(); m++) {
-    		    						if ("geo:lat".equals(geoChildren.item(m).getNodeName())) {
-    		    							lat = geoChildren.item(m).getTextContent();
-    		    						}
-    		    						if ("geo:long".equals(geoChildren.item(m).getNodeName())) {
-    		    							lon = geoChildren.item(m).getTextContent();
-    		    						}
-    		    					}
-    		    					if (!"".equals(lat) && !"".equals(lon)) {
-    		    						distance = getDistance(Double.parseDouble(lat), Double.parseDouble(lon));
-    		    					}
-    		    				}
-    		    			}
-    		    		}
-    		    	}
-    		    }
-    		    else if ("startDate".equals(nodeName)) {
-    		    	startDate = LastFMUtil.toReadableDate(eventChildNode.getTextContent());
-    		    }
-    		}
-		    adapter.add(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + startTime + distance);
-		    eventMap.put(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + startTime + distance, id);
-    	}
-    }
+    		NiceNodeList eventNodeList = new NiceNodeList(eventNode.getChildNodes());
+    		Map<String, Node> eventNodes = eventNodeList.get("title", "id", "venue", "startDate");
 
-    public String getDistance(double lat, double lon) {
-    	Location location = EyekabobHelper.getLocation(this);
-    	if (location == null) {
-    		return "";
+    		NiceNodeList venueNodeList = new NiceNodeList(eventNodes.get("venue").getChildNodes());
+    		Map<String, Node> venueNodes = venueNodeList.get("name", "location");
+
+    		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
+    		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
+
+    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
+    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
+    		Node lat = geoNodes.get("geo:lat");
+    		Node lon = geoNodes.get("geo:long");
+
+    		String distance = "";
+    		if (lat != null && lon != null) {
+    			String latStr = lat.getTextContent();
+    			String lonStr = lon.getTextContent();
+    			if (!"".equals(latStr) && !"".equals(lonStr)) {
+        			distance = EyekabobHelper.getDistance(Double.parseDouble(latStr), Double.parseDouble(lonStr), this);
+    			}
+    		}
+
+    		String title = eventNodes.get("title").getTextContent();
+    		String id = eventNodes.get("id").getTextContent();
+    		String startDate = LastFMUtil.toReadableDate(eventNodes.get("startDate").getTextContent());
+    		String venue = venueNodes.get("name").getTextContent();
+    		String city = locationNodes.get("city").getTextContent();
+
+		    adapter.add(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + distance);
+		    eventMap.put(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + distance, id);
     	}
-    	double currentLat = location.getLatitude();
-    	double currentLon = location.getLongitude();
-    	int R = 3959; // Earth radius in miles.
-    	double dLat = Math.toRadians(currentLat - lat);
-    	double dLon = Math.toRadians(currentLon - lon);
-    	lat = Math.toRadians(lat);
-    	currentLat = Math.toRadians(currentLat);
-    	double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat) * Math.cos(currentLat);
-    	double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    	return "\n" + Math.round(R * c) + " mi";
     }
 
     protected void sendJSONRequest(String uri) {
