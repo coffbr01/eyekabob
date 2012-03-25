@@ -5,9 +5,8 @@
     android:orientation="vertical" >
 
     <ListView
-        android:id="@+id/artistsList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:id="@+id/eventsList"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent" >
     </ListView>
-
 </LinearLayout>

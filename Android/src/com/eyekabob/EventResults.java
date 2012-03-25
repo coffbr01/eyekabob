@@ -13,7 +13,6 @@ import org.w3c.dom.NodeList;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ import com.eyekabob.util.JSONTask;
 import com.eyekabob.util.LastFMUtil;
 import com.eyekabob.util.NiceNodeList;
 
-public class EventResults extends ListActivity {
+public class EventResults extends EyekabobActivity {
 	private Dialog alertDialog;
 	ArrayAdapter<String> adapter;
 	private Map<String, String> eventMap;
@@ -49,8 +48,10 @@ public class EventResults extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.eventlistactivity);
         adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item);
-        setListAdapter(adapter);
+        ListView lv = (ListView)findViewById(R.id.eventsList);
+        lv.setAdapter(adapter);
         Uri uri = this.getIntent().getData();
         if (uri.getHost().contains("geonames")) {
         	String zip = this.getIntent().getExtras().getString("zip");
@@ -66,7 +67,6 @@ public class EventResults extends ListActivity {
         	sendDocumentRequest(uri.toString());
         }
 
-        ListView lv = getListView();
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(listItemListener);
 
