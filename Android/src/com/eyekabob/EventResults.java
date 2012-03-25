@@ -34,6 +34,7 @@ public class EventResults extends ListActivity {
 	private Dialog alertDialog;
 	ArrayAdapter<String> adapter;
 	private Map<String, String> eventMap;
+	private boolean hasExtras = false;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			String event = ((TextView) view).getText().toString();
@@ -68,6 +69,8 @@ public class EventResults extends ListActivity {
         ListView lv = getListView();
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(listItemListener);
+
+        hasExtras = this.getIntent().getExtras() != null;
     }
 
     // TODO: use dialogfragment to show dialog
@@ -101,28 +104,40 @@ public class EventResults extends ListActivity {
     		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
     		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
 
-    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
-    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
-    		Node lat = geoNodes.get("geo:lat");
-    		Node lon = geoNodes.get("geo:long");
-
     		String distance = "";
-    		if (lat != null && lon != null) {
-    			String latStr = lat.getTextContent();
-    			String lonStr = lon.getTextContent();
-    			if (!"".equals(latStr) && !"".equals(lonStr)) {
-        			distance = EyekabobHelper.getDistance(Double.parseDouble(latStr), Double.parseDouble(lonStr), this);
-    			}
+    		if (!hasExtras || this.getIntent().getExtras().getBoolean("showDistance", true)) {
+	    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
+	    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
+	    		Node lat = geoNodes.get("geo:lat");
+	    		Node lon = geoNodes.get("geo:long");
+
+	    		if (lat != null && lon != null) {
+	    			String latStr = lat.getTextContent();
+	    			String lonStr = lon.getTextContent();
+	    			if (!"".equals(latStr) && !"".equals(lonStr)) {
+	        			distance = EyekabobHelper.getDistance(Double.parseDouble(latStr), Double.parseDouble(lonStr), this);
+	    			}
+	    		}
     		}
 
-    		String title = eventNodes.get("title").getTextContent();
+    		String title = eventNodes.get("title").getTextContent() + "\n";
     		String id = eventNodes.get("id").getTextContent();
-    		String startDate = LastFMUtil.toReadableDate(eventNodes.get("startDate").getTextContent());
-    		String venue = venueNodes.get("name").getTextContent();
-    		String city = locationNodes.get("city").getTextContent();
 
-		    adapter.add(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + distance);
-		    eventMap.put(title + "\n" + venue + "\n" + city + "\n" + startDate + " " + distance, id);
+    		// Startdate doesn't need a newline because distance prepends one. Yuck.
+    		String startDate = LastFMUtil.toReadableDate(eventNodes.get("startDate").getTextContent());
+
+    		String venue = "";
+    		if (!hasExtras || this.getIntent().getExtras().getBoolean("showVenue", true)) {
+    			venue = venueNodes.get("name").getTextContent() + "\n";
+    		}
+
+    		String city = "";
+    		if (!hasExtras || this.getIntent().getExtras().getBoolean("showCity", true)) {
+    			city = locationNodes.get("city").getTextContent() + "\n";
+    		}
+
+		    adapter.add(title + venue + city + startDate + distance);
+		    eventMap.put(title + venue + city + startDate + distance, id);
     	}
     }
 

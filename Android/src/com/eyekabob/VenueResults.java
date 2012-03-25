@@ -36,6 +36,9 @@ public class VenueResults extends ListActivity {
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("venue", venueMap.get(key));
 			intent.setData(EyekabobHelper.LastFM.getUri("venue.getEvents", params));
+			intent.putExtra("showDistance", false);
+			intent.putExtra("showCity", false);
+			intent.putExtra("showVenue", false);
 			startActivity(intent);
 		}
 	};
