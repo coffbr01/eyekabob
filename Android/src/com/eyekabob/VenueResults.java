@@ -75,19 +75,16 @@ public class VenueResults extends ListActivity {
     		Node artistNode = venues.item(i);
     		NiceNodeList venueNodeList = new NiceNodeList(artistNode.getChildNodes());
     		Map<String, Node> venueNodes = venueNodeList.get("name", "id", "location");
-    		String name = venueNodes.get("name").getTextContent();
-    		String id = venueNodes.get("id").getTextContent();
 
     		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
     		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
-    		String city = locationNodes.get("city").getTextContent();
 
     		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
     		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
     		Node lat = geoNodes.get("geo:lat");
     		Node lon = geoNodes.get("geo:long");
 
-    		String distance = "";
+    		long distance = -1;
     		if (lat != null && lon != null) {
     			String latStr = lat.getTextContent();
     			String lonStr = lon.getTextContent();
@@ -96,10 +93,18 @@ public class VenueResults extends ListActivity {
     			}
     		}
 
-    		String listItem = name + "\n" + city + distance;
+    		String distanceStr = "";
+    		if (distance != -1) {
+    			distanceStr = distance + " mi";
+    		}
+
+    		String city = locationNodes.get("city").getTextContent() + "\n";
+    		String name = venueNodes.get("name").getTextContent() + "\n";
+
+    		String listItem = name + city + distanceStr;
 
     		adapter.add(listItem);
-    		venueMap.put(listItem, id);
+    		venueMap.put(listItem, venueNodes.get("id").getTextContent());
     	}
     }
 

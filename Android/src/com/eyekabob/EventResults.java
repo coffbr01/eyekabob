@@ -104,7 +104,7 @@ public class EventResults extends ListActivity {
     		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
     		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
 
-    		String distance = "";
+    		long distance = -1;
     		if (!hasExtras || this.getIntent().getExtras().getBoolean("showDistance", true)) {
 	    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
 	    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
@@ -120,10 +120,12 @@ public class EventResults extends ListActivity {
 	    		}
     		}
 
-    		String title = eventNodes.get("title").getTextContent() + "\n";
-    		String id = eventNodes.get("id").getTextContent();
+    		String distanceStr = "";
+    		if (distance != -1) {
+    			distanceStr = "\n" + distance + " mi";
+    		}
 
-    		// Startdate doesn't need a newline because distance prepends one. Yuck.
+    		String title = eventNodes.get("title").getTextContent() + "\n";
     		String startDate = LastFMUtil.toReadableDate(eventNodes.get("startDate").getTextContent());
 
     		String venue = "";
@@ -136,8 +138,8 @@ public class EventResults extends ListActivity {
     			city = locationNodes.get("city").getTextContent() + "\n";
     		}
 
-		    adapter.add(title + venue + city + startDate + distance);
-		    eventMap.put(title + venue + city + startDate + distance, id);
+		    adapter.add(title + venue + city + startDate + distanceStr);
+		    eventMap.put(title + venue + city + startDate + distanceStr, eventNodes.get("id").getTextContent());
     	}
     }
 

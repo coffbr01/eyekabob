@@ -55,10 +55,17 @@ public class EyekabobHelper {
 		}
 	}
 
-    public static String getDistance(double lat, double lon, Activity activity) {
+	/**
+	 * Gets distance from current location to given lat/lon.
+	 * @param lat
+	 * @param lon
+	 * @param activity
+	 * @return
+	 */
+    public static long getDistance(double lat, double lon, Activity activity) {
     	Location location = EyekabobHelper.getLocation(activity);
     	if (location == null) {
-    		return "";
+    		return -1;
     	}
     	double currentLat = location.getLatitude();
     	double currentLon = location.getLongitude();
@@ -69,6 +76,6 @@ public class EyekabobHelper {
     	currentLat = Math.toRadians(currentLat);
     	double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat) * Math.cos(currentLat);
     	double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    	return "\n" + Math.round(R * c) + " mi";
+    	return Math.round(R * c);
     }
 }
