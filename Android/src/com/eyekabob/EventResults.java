@@ -28,12 +28,12 @@ import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.JSONTask;
 import com.eyekabob.util.LastFMUtil;
 import com.eyekabob.util.NiceNodeList;
+import com.phonegap.api.LOG;
 
 public class EventResults extends EyekabobActivity {
 	private Dialog alertDialog;
 	ArrayAdapter<String> adapter;
 	private Map<String, String> eventMap;
-	private boolean hasExtras = false;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			String event = ((TextView) view).getText().toString();
@@ -53,24 +53,26 @@ public class EventResults extends EyekabobActivity {
         ListView lv = (ListView)findViewById(R.id.eventsList);
         lv.setAdapter(adapter);
         Uri uri = this.getIntent().getData();
-        if (uri.getHost().contains("geonames")) {
-        	String zip = this.getIntent().getExtras().getString("zip");
+        if (getIntent().hasExtra("zip")) {
+        	// Search by zip.
+        	String zip = getIntent().getExtras().getString("zip");
         	if (EyekabobHelper.zipToNameMap.containsKey(zip)) {
+        		LOG.d(getClass().getName(), "Using cached zip");
         		Uri lastFMURI = getLastFMURI(EyekabobHelper.zipToNameMap.get("zip"));
         		sendDocumentRequest(lastFMURI.toString());
         	}
         	else {
+        		LOG.d(getClass().getName(), "Getting zip from geonames service");
         		sendJSONRequest(uri.toString());
         	}
         }
         else {
+        	LOG.d(getClass().getName(), "Searching for events using current location");
         	sendDocumentRequest(uri.toString());
         }
 
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(listItemListener);
-
-        hasExtras = this.getIntent().getExtras() != null;
     }
 
     // TODO: use dialogfragment to show dialog
@@ -105,7 +107,7 @@ public class EventResults extends EyekabobActivity {
     		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
 
     		long distance = -1;
-    		if (!hasExtras || this.getIntent().getExtras().getBoolean("showDistance", true)) {
+    		if (!getIntent().hasExtra("showDistance") || getIntent().getExtras().getBoolean("showDistance", true)) {
 	    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
 	    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
 	    		Node lat = geoNodes.get("geo:lat");
@@ -129,12 +131,12 @@ public class EventResults extends EyekabobActivity {
     		String startDate = LastFMUtil.toReadableDate(eventNodes.get("startDate").getTextContent());
 
     		String venue = "";
-    		if (!hasExtras || this.getIntent().getExtras().getBoolean("showVenue", true)) {
+    		if (!getIntent().hasExtra("showVenue") || getIntent().getExtras().getBoolean("showVenue", true)) {
     			venue = venueNodes.get("name").getTextContent() + "\n";
     		}
 
     		String city = "";
-    		if (!hasExtras || this.getIntent().getExtras().getBoolean("showCity", true)) {
+    		if (!getIntent().hasExtra("showCity") || getIntent().getExtras().getBoolean("showCity", true)) {
     			city = locationNodes.get("city").getTextContent() + "\n";
     		}
 
