@@ -156,7 +156,7 @@ public class EventResults extends EyekabobActivity {
     protected Uri getLastFMURI(String location) {
     	Map<String, String> params = new HashMap<String, String>();
     	params.put("location", location);
-    	params.put("distance", (String)getIntent().getExtras().get("distance"));
+    	params.put("distance", getIntent().getExtras().getString("distance"));
     	return EyekabobHelper.LastFM.getUri("geo.getEvents", params);
     }
 
