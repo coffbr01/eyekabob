@@ -5,6 +5,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -77,5 +78,14 @@ public class EyekabobHelper {
     	double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat) * Math.cos(currentLat);
     	double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     	return Math.round(R * c);
+    }
+
+    public static void launchEmail(Activity activity) {
+    	Intent emailIntent = new Intent(Intent.ACTION_SEND);
+    	emailIntent.setType("plain/text");
+    	String to[] = {"create@philipjordandesign.com", "christopherrobertfarrow@gmail.com", "coffbr01@gmail.com"};
+    	emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+    	emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Eyekabob Advertising");
+    	activity.startActivity(Intent.createChooser(emailIntent, "Write email with:"));
     }
 }

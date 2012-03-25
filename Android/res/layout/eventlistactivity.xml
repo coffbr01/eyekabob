@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent" >
 
     <ListView
         android:id="@+id/eventsList"
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent" >
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="40dp" >
     </ListView>
-</LinearLayout>
+
+    <com.eyekabob.AdBanner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/ad_desc"
+        android:layout_alignParentBottom="true"
+        android:onClick="adHandler" />
+</RelativeLayout>

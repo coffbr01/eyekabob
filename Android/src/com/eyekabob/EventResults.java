@@ -163,6 +163,10 @@ public class EventResults extends EyekabobActivity {
     	return EyekabobHelper.LastFM.getUri("geo.getEvents", params);
     }
 
+    public void adHandler(View v) {
+    	EyekabobHelper.launchEmail(this);
+    }
+
     private class JSONRequestTask extends JSONTask {
     	protected void onPreExecute() {
     		if (alertDialog == null) {
