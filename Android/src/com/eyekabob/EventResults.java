@@ -1,5 +1,6 @@
 package com.eyekabob;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -19,7 +21,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +33,8 @@ import com.phonegap.api.LOG;
 
 public class EventResults extends EyekabobActivity {
 	private Dialog alertDialog;
-	ArrayAdapter<String> adapter;
-	private Map<String, String> eventMap;
+	EventsAdapter adapter;
+	private Map<EventRow, String> eventMap;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			String event = ((TextView) view).getText().toString();
@@ -49,7 +50,7 @@ public class EventResults extends EyekabobActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.eventlistactivity);
-        adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item);
+        adapter = new EventsAdapter(getApplicationContext(), R.layout.events_list_item, new ArrayList<EventRow>());
         ListView lv = (ListView)findViewById(R.id.eventsList);
         lv.setAdapter(adapter);
         Uri uri = this.getIntent().getData();
@@ -97,11 +98,12 @@ public class EventResults extends EyekabobActivity {
     		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
     		return;
     	}
-    	eventMap = new HashMap<String, String>();
+    	eventMap = new HashMap<EventRow, String>();
     	for (int i = 0; i < events.getLength(); i++) {
+    		EventRow row = new EventRow();
     		Node eventNode = events.item(i);
     		NiceNodeList eventNodeList = new NiceNodeList(eventNode.getChildNodes());
-    		Map<String, Node> eventNodes = eventNodeList.get("title", "id", "venue", "startDate");
+    		Map<String, Node> eventNodes = eventNodeList.get("title", "id", "venue", "startDate", "image");
 
     		NiceNodeList venueNodeList = new NiceNodeList(eventNodes.get("venue").getChildNodes());
     		Map<String, Node> venueNodes = venueNodeList.get("name", "location");
@@ -109,7 +111,9 @@ public class EventResults extends EyekabobActivity {
     		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
     		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
 
-    		long distance = -1;
+    		// Do special parsing for the images.
+    		row.setImage(getLargeImage(eventNode.getChildNodes()));
+
     		if (!getIntent().hasExtra("showDistance") || getIntent().getExtras().getBoolean("showDistance", true)) {
 	    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
 	    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
@@ -120,32 +124,39 @@ public class EventResults extends EyekabobActivity {
 	    			String latStr = lat.getTextContent();
 	    			String lonStr = lon.getTextContent();
 	    			if (!"".equals(latStr) && !"".equals(lonStr)) {
-	        			distance = EyekabobHelper.getDistance(Double.parseDouble(latStr), Double.parseDouble(lonStr), this);
+	        			row.setDistance(EyekabobHelper.getDistance(Double.parseDouble(latStr), Double.parseDouble(lonStr), this));
 	    			}
 	    		}
     		}
 
-    		String distanceStr = "";
-    		if (distance != -1) {
-    			distanceStr = "\n" + distance + " mi";
-    		}
+    		row.setName(eventNodes.get("title").getTextContent());
+    		row.setDate(LastFMUtil.toReadableDate(eventNodes.get("startDate").getTextContent()));
 
-    		String title = eventNodes.get("title").getTextContent() + "\n";
-    		String startDate = LastFMUtil.toReadableDate(eventNodes.get("startDate").getTextContent());
-
-    		String venue = "";
     		if (!getIntent().hasExtra("showVenue") || getIntent().getExtras().getBoolean("showVenue", true)) {
-    			venue = venueNodes.get("name").getTextContent() + "\n";
+    			row.setVenue(venueNodes.get("name").getTextContent());
     		}
 
-    		String city = "";
     		if (!getIntent().hasExtra("showCity") || getIntent().getExtras().getBoolean("showCity", true)) {
-    			city = locationNodes.get("city").getTextContent() + "\n";
+    			row.setCity(locationNodes.get("city").getTextContent());
     		}
 
-		    adapter.add(title + venue + city + startDate + distanceStr);
-		    eventMap.put(title + venue + city + startDate + distanceStr, eventNodes.get("id").getTextContent());
+		    adapter.add(row);
+		    eventMap.put(row, eventNodes.get("id").getTextContent());
     	}
+    }
+
+    protected String getLargeImage(NodeList eventChildren) {
+    	for (int i = 0; i < eventChildren.getLength(); i++) {
+    		Node node = eventChildren.item(i);
+    		if ("image".equals(node.getNodeName())) {
+    			NamedNodeMap attrs = node.getAttributes();
+    			if ("large".equals(attrs.getNamedItem("size").getTextContent())) {
+    				return node.getTextContent();
+    			}
+    		}
+    	}
+
+    	return null;
     }
 
     protected void sendJSONRequest(String uri) {
