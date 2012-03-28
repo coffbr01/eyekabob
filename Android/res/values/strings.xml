@@ -21,4 +21,5 @@
     <string name="distance">DISTANCE:</string>
     <string name="miles">mi</string>
     <string name="no_zip_entered">Enter a zip code</string>
+    <string name="scaled_img_desc">An image scaled to be the correct horizontal width without stretching</string>
 </resources>

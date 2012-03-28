@@ -11,7 +11,14 @@
         android:layout_marginBottom="50dp" >
     </ListView>
 
+    <com.eyekabob.ListFadeImage
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/scaled_img_desc"
+        android:layout_above="@+id/eventsAdBanner" />
+
     <com.eyekabob.AdBanner
+        android:id="@+id/eventsAdBanner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:contentDescription="@string/ad_desc"
