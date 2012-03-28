@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eyekabob.util.DocumentTask;
@@ -37,10 +36,11 @@ public class EventResults extends EyekabobActivity {
 	private Map<EventRow, String> eventMap;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			String event = ((TextView) view).getText().toString();
+			ListView list = (ListView) parent;
+			EventRow eventRow = (EventRow)list.getAdapter().getItem(position);
 			Intent intent = new Intent(getApplicationContext(), Event.class);
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("event", eventMap.get(event));
+			params.put("event", eventMap.get(eventRow));
 			intent.setData(EyekabobHelper.LastFM.getUri("event.getInfo", params));
 			startActivity(intent);
 		}
