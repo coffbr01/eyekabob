@@ -145,7 +145,7 @@ public class Event extends EyekabobActivity {
     // TODO: use dialogfragment to show dialog
     protected void createDialog() {
 	    Builder builder = new AlertDialog.Builder(this);
-	    builder.setMessage(R.string.searching);
+	    builder.setMessage(R.string.loading);
 	    builder.setCancelable(false);
 	    alertDialog = builder.create();
 	    alertDialog.setOwnerActivity(this);
