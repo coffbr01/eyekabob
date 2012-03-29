@@ -30,7 +30,7 @@ public class EventsAdapter extends ArrayAdapter<EventRow> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		EventRow eventRow = getItem(position);
 
-		// Inflate unilaterally, ignoring the convertView parameter.
+		// Inflate unilaterally, reassigning the convertView parameter.
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.events_list_item, parent, false);
 
