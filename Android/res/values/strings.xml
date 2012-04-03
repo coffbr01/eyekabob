@@ -23,4 +23,5 @@
     <string name="no_zip_entered">Enter a zip code</string>
     <string name="scaled_img_desc">An image scaled to be the correct horizontal width without stretching</string>
     <string name="loading">Loading &#8230;</string>
+    <string name="artist_info_label">Artist</string>
 </resources>

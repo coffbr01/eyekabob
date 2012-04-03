@@ -1,7 +1,5 @@
 package com.eyekabob;
 
-import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.w3c.dom.Document;
@@ -32,10 +30,8 @@ public class ArtistResults extends ListActivity {
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			String artist = ((TextView) view).getText().toString();
-			Intent intent = new Intent(getApplicationContext(), EventResults.class);
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("artist", URLEncoder.encode(artist));
-			intent.setData(EyekabobHelper.LastFM.getUri("artist.getEvents", params));
+			Intent intent = new Intent(getApplicationContext(), ArtistInfo.class);
+			intent.putExtra("artist", artist);
 			startActivity(intent);
 		}
 	};
