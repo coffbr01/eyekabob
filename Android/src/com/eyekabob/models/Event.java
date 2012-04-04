@@ -6,7 +6,7 @@ public class Event {
 	private String venue;
 	private String city;
 	private String date;
-	private long distance = -1;
+	private long distance = -1;//todo this doesn't make sense
 
 	public Event() {}
 

@@ -34,12 +34,11 @@ import com.phonegap.api.LOG;
 
 public class EventList extends EyekabobActivity {
 	private Dialog alertDialog;
-	EventsAdapter adapter;
+	EventListAdapter adapter;
 	private Map<Event, String> eventMap;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			ListView list = (ListView) parent;
-			Event eventRow = (Event)list.getAdapter().getItem(position);
+			Event eventRow = (Event)parent.getAdapter().getItem(position);
 			Intent intent = new Intent(getApplicationContext(), EventInfo.class);
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("event", eventMap.get(eventRow));
@@ -52,7 +51,7 @@ public class EventList extends EyekabobActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.eventlistactivity);
-        adapter = new EventsAdapter(getApplicationContext(), R.layout.events_list_item, new ArrayList<Event>());
+        adapter = new EventListAdapter(getApplicationContext(), R.layout.image_text_list_item, new ArrayList<Event>());
         ListView lv = (ListView)findViewById(R.id.eventsList);
         lv.setAdapter(adapter);
         Uri uri = this.getIntent().getData();

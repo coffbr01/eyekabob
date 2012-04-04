@@ -1,5 +1,6 @@
 package com.eyekabob.util;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,5 +88,21 @@ public class EyekabobHelper {
     	emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
     	emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Eyekabob Advertising");
     	activity.startActivity(Intent.createChooser(emailIntent, "Write email with:"));
+    }
+
+    public static URL getLargestImageURL(Map<String, URL> imageURLs) {
+		URL result = imageURLs.get("large");
+
+		if (result != null) {
+			return result;
+		}
+
+		result = imageURLs.get("medium");
+
+		if (result != null) {
+			return result;
+		}
+
+		return imageURLs.get("small");
     }
 }

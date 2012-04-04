@@ -16,29 +16,28 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eyekabob.models.Artist;
 import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.NiceNodeList;
 
 public class ArtistList extends ListActivity {
 	private Dialog alertDialog;
-	ArrayAdapter<String> adapter;
+	ArtistListAdapter adapter;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			String artist = ((TextView) view).getText().toString();
+			Artist artist = (Artist)parent.getAdapter().getItem(position);
 			Intent intent = new Intent(getApplicationContext(), ArtistInfo.class);
-			intent.putExtra("artist", artist);
+			intent.putExtra("artist", artist.getName());
 			startActivity(intent);
 		}
 	};
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item);
+        adapter = new ArtistListAdapter(getApplicationContext());
         setListAdapter(adapter);
         Uri uri = this.getIntent().getData();
         new RequestTask().execute(uri.toString());
@@ -65,8 +64,12 @@ public class ArtistList extends ListActivity {
     	for (int i = 0; i < artists.getLength(); i++) {
     		Node artistNode = artists.item(i);
     		NiceNodeList artistNodeList = new NiceNodeList(artistNode.getChildNodes());
-    		Map<String, Node> artistNodes = artistNodeList.get("name");
-    		adapter.add(artistNodes.get("name").getTextContent());
+    		Map<String, Node> artistNodes = artistNodeList.get("name", "mbid", "url");
+    		Artist artist = new Artist();
+    		artist.setName(artistNodes.get("name").getTextContent());
+    		artist.setMbid(artistNodes.get("mbid").getTextContent());
+    		artist.setUrl(artistNodes.get("url").getTextContent());
+    		adapter.add(artist);
     	}
     }
 

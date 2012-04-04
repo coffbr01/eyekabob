@@ -5,12 +5,12 @@
     android:orientation="horizontal"
     android:background="@drawable/list_item_bg_layout" >
     <ImageView
-        android:id="@+id/eventRowImage"
+        android:id="@+id/rowImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical" />
 	<TextView
-	    android:id="@+id/eventRowText"
+	    android:id="@+id/rowText"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:padding="10dp"
