@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.eyekabob.util.EyekabobHelper;
+
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
@@ -69,12 +71,12 @@ public class FindMusic extends EyekabobActivity {
 
     public void findByArtistHandler(View v) {
         EditText findByArtist = (EditText)findViewById(R.id.findByArtistInput);
-        find("artist.search", ArtistResults.class, "artist", findByArtist.getText().toString());
+        find("artist.search", ArtistList.class, "artist", findByArtist.getText().toString());
     }
 
     public void findByVenueHandler(View v) {
         EditText findByVenue = (EditText)findViewById(R.id.findByVenueInput);
-        find("venue.search", VenueResults.class, "venue", findByVenue.getText().toString());
+        find("venue.search", VenueList.class, "venue", findByVenue.getText().toString());
     }
 
     public void findByLocationHandler(View v) {
@@ -114,7 +116,7 @@ public class FindMusic extends EyekabobActivity {
     		return;
     	}
 
-    	find("geo.getEvents", EventResults.class, params);
+    	find("geo.getEvents", EventList.class, params);
     }
 
     public void useCurrentLocationHandler(View v) {
@@ -124,7 +126,7 @@ public class FindMusic extends EyekabobActivity {
 
     private void findByZip(String zip, String distance) {
     	Uri uri = EyekabobHelper.GeoNames.getUri(zip);
-    	Intent intent = new Intent(getApplicationContext(), EventResults.class);
+    	Intent intent = new Intent(getApplicationContext(), EventList.class);
     	intent.setData(uri);
     	intent.putExtra("zip", zip);
     	startActivity(intent);

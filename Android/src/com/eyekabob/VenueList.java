@@ -23,16 +23,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eyekabob.util.DocumentTask;
+import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.NiceNodeList;
 
-public class VenueResults extends ListActivity {
+public class VenueList extends ListActivity {
 	private Dialog alertDialog;
 	private ArrayAdapter<String> adapter;
 	private Map<String, String> venueMap;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			String key = ((TextView) view).getText().toString();
-			Intent intent = new Intent(getApplicationContext(), EventResults.class);
+			Intent intent = new Intent(getApplicationContext(), EventList.class);
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("venue", venueMap.get(key));
 			intent.setData(EyekabobHelper.LastFM.getUri("venue.getEvents", params));
@@ -111,12 +112,12 @@ public class VenueResults extends ListActivity {
     // Handles the asynchronous request, away from the UI thread.
     private class RequestTask extends DocumentTask {
     	protected void onPreExecute() {
-    		VenueResults.this.createDialog();
+    		VenueList.this.createDialog();
     		alertDialog.show();
     	}
     	protected void onPostExecute(Document result) {
     		alertDialog.dismiss();
-    		VenueResults.this.loadVenues(result);
+    		VenueList.this.loadVenues(result);
     	}
     }
 }

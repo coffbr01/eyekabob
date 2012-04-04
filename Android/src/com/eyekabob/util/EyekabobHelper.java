@@ -1,4 +1,4 @@
-package com.eyekabob;
+package com.eyekabob.util;
 
 import java.util.HashMap;
 import java.util.Map;

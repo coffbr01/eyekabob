@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.NiceNodeList;
 
-public class ArtistResults extends ListActivity {
+public class ArtistList extends ListActivity {
 	private Dialog alertDialog;
 	ArrayAdapter<String> adapter;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
@@ -73,12 +73,12 @@ public class ArtistResults extends ListActivity {
     // Handles the asynchronous request, away from the UI thread.
     private class RequestTask extends DocumentTask {
     	protected void onPreExecute() {
-    		ArtistResults.this.createDialog();
+    		ArtistList.this.createDialog();
     		alertDialog.show();
     	}
     	protected void onPostExecute(Document result) {
     		alertDialog.dismiss();
-    		ArtistResults.this.loadArtists(result);
+    		ArtistList.this.loadArtists(result);
     	}
     }
 }

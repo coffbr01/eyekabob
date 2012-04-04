@@ -1,6 +1,6 @@
-package com.eyekabob;
+package com.eyekabob.models;
 
-public class EventRow {
+public class Event {
 	private String image;
 	private String name;
 	private String venue;
@@ -8,9 +8,9 @@ public class EventRow {
 	private String date;
 	private long distance = -1;
 
-	public EventRow() {}
+	public Event() {}
 
-	public EventRow(String image, String name, String venue, String city, String date, long distance) {
+	public Event(String image, String name, String venue, String city, String date, long distance) {
 		this.image = image;
 		this.name = name;
 		this.venue = venue;

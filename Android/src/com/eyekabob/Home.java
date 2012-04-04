@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-public class HomeActivity extends EyekabobActivity {
+public class Home extends EyekabobActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

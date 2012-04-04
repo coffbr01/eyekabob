@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.eyekabob.models.Event;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,15 +22,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class EventsAdapter extends ArrayAdapter<EventRow> {
+public class EventsAdapter extends ArrayAdapter<Event> {
 	protected Map<URL, Bitmap> bitmapCache = new HashMap<URL, Bitmap>();
 
-	public EventsAdapter(Context context, int resource, List<EventRow> objects) {
+	public EventsAdapter(Context context, int resource, List<Event> objects) {
 		super(context, resource, objects);
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		EventRow eventRow = getItem(position);
+		Event eventRow = getItem(position);
 
 		// Inflate unilaterally, reassigning the convertView parameter.
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

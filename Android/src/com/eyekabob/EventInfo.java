@@ -28,7 +28,7 @@ import android.widget.TextView;
 import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.LastFMUtil;
 
-public class Event extends EyekabobActivity {
+public class EventInfo extends EyekabobActivity {
 	private Dialog alertDialog;
 	private Map<String, String> vendors;
 	private List<String> artists;
@@ -154,12 +154,12 @@ public class Event extends EyekabobActivity {
     // Handles the asynchronous request, away from the UI thread.
     private class RequestTask extends DocumentTask {
     	protected void onPreExecute() {
-    		Event.this.createDialog();
+    		EventInfo.this.createDialog();
     		alertDialog.show();
     	}
     	protected void onPostExecute(Document result) {
     		alertDialog.dismiss();
-    		Event.this.loadEvent(result);
+    		EventInfo.this.loadEvent(result);
     	}
 
     }

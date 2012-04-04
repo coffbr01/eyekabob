@@ -24,21 +24,23 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.eyekabob.models.Event;
 import com.eyekabob.util.DocumentTask;
+import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
 import com.eyekabob.util.LastFMUtil;
 import com.eyekabob.util.NiceNodeList;
 import com.phonegap.api.LOG;
 
-public class EventResults extends EyekabobActivity {
+public class EventList extends EyekabobActivity {
 	private Dialog alertDialog;
 	EventsAdapter adapter;
-	private Map<EventRow, String> eventMap;
+	private Map<Event, String> eventMap;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			ListView list = (ListView) parent;
-			EventRow eventRow = (EventRow)list.getAdapter().getItem(position);
-			Intent intent = new Intent(getApplicationContext(), Event.class);
+			Event eventRow = (Event)list.getAdapter().getItem(position);
+			Intent intent = new Intent(getApplicationContext(), EventInfo.class);
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("event", eventMap.get(eventRow));
 			intent.setData(EyekabobHelper.LastFM.getUri("event.getInfo", params));
@@ -50,7 +52,7 @@ public class EventResults extends EyekabobActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.eventlistactivity);
-        adapter = new EventsAdapter(getApplicationContext(), R.layout.events_list_item, new ArrayList<EventRow>());
+        adapter = new EventsAdapter(getApplicationContext(), R.layout.events_list_item, new ArrayList<Event>());
         ListView lv = (ListView)findViewById(R.id.eventsList);
         lv.setAdapter(adapter);
         Uri uri = this.getIntent().getData();
@@ -98,9 +100,9 @@ public class EventResults extends EyekabobActivity {
     		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
     		return;
     	}
-    	eventMap = new HashMap<EventRow, String>();
+    	eventMap = new HashMap<Event, String>();
     	for (int i = 0; i < events.getLength(); i++) {
-    		EventRow row = new EventRow();
+    		Event row = new Event();
     		Node eventNode = events.item(i);
     		NiceNodeList eventNodeList = new NiceNodeList(eventNode.getChildNodes());
     		Map<String, Node> eventNodes = eventNodeList.get("title", "id", "venue", "startDate", "image");
@@ -181,7 +183,7 @@ public class EventResults extends EyekabobActivity {
     private class JSONRequestTask extends JSONTask {
     	protected void onPreExecute() {
     		if (alertDialog == null) {
-        		EventResults.this.createDialog();
+        		EventList.this.createDialog();
     		}
 
     		if (!alertDialog.isShowing()) {
@@ -199,8 +201,8 @@ public class EventResults extends EyekabobActivity {
     			e.printStackTrace();
     		}
 
-    		Uri uri = EventResults.this.getLastFMURI(location);
-    		EventResults.this.sendDocumentRequest(uri.toString());
+    		Uri uri = EventList.this.getLastFMURI(location);
+    		EventList.this.sendDocumentRequest(uri.toString());
     	}
     }
 
@@ -208,7 +210,7 @@ public class EventResults extends EyekabobActivity {
     private class DocumentRequestTask extends DocumentTask {
     	protected void onPreExecute() {
     		if (alertDialog == null) {
-        		EventResults.this.createDialog();
+        		EventList.this.createDialog();
     		}
 
     		if (!alertDialog.isShowing()) {
@@ -217,7 +219,7 @@ public class EventResults extends EyekabobActivity {
     	}
     	protected void onPostExecute(Document result) {
     		alertDialog.dismiss();
-    		EventResults.this.loadEvents(result);
+    		EventList.this.loadEvents(result);
     	}
     }
 }
