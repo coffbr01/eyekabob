@@ -1,12 +1,13 @@
 package com.eyekabob;
 
+import java.lang.ref.SoftReference;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,19 +17,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eyekabob.models.Event;
+import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.ImageTask;
 
 public class EventListAdapter extends ArrayAdapter<Event> {
-	protected Map<URL, Bitmap> bitmapCache = new HashMap<URL, Bitmap>();
+	private Map<URL, SoftReference<Drawable>> cache = new HashMap<URL, SoftReference<Drawable>>();
 
-	public EventListAdapter(Context context, int resource, List<Event> objects) {
-		super(context, resource, objects);
+	public EventListAdapter(Context context) {
+		super(context, R.layout.image_text_list_item, new ArrayList<Event>());
+	}
+
+	public void clearCache() {
+		cache.clear();
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Event eventRow = getItem(position);
 
-		// Inflate unilaterally, reassigning the convertView parameter.
+		// Inflate, reassigning the convertView parameter.
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.image_text_list_item, parent, false);
 
@@ -58,13 +64,15 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 		TextView tv = (TextView)convertView.findViewById(R.id.rowText);
 		tv.setText(text);
 
-		if (eventRow.getImage() != null && !"".equals(eventRow.getImage().trim())) {
-			Log.d(getClass().getName(), "Adding image [" + eventRow.getImage() + "] to row [" + eventRow.getName() + "]");
+		URL imageUrl = EyekabobHelper.getLargestImageURL(eventRow.getImageURLs());
+
+		if (imageUrl != null) {
+			Log.d(getClass().getName(), "Adding image [" + imageUrl + "] to row [" + eventRow.getName() + "]");
 			ImageView iv = (ImageView)convertView.findViewById(R.id.rowImage);
 			ImageTask task = new ImageTask();
+			task.setCache(cache);
 			task.setImageView(iv);
-			task.setCache(bitmapCache);
-			task.execute(eventRow.getImage());
+			task.execute(imageUrl);
 		}
 
 		return convertView;

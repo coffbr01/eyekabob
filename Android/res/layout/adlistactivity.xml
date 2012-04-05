@@ -4,21 +4,22 @@
     android:layout_height="fill_parent" >
 
     <ListView
-        android:id="@+id/eventsList"
+        android:id="@+id/adList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="65dp" >
+        android:layout_marginBottom="65dp"
+        android:fadingEdge="vertical" >
     </ListView>
 
     <com.eyekabob.ListFadeImage
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:contentDescription="@string/scaled_img_desc"
-        android:layout_above="@+id/eventsAdBanner" />
+        android:layout_above="@+id/adBanner" />
 
     <com.eyekabob.AdBanner
-        android:id="@+id/eventsAdBanner"
+        android:id="@+id/adBanner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:contentDescription="@string/ad_desc"

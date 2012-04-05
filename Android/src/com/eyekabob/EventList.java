@@ -1,6 +1,5 @@
 package com.eyekabob;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -18,6 +16,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -30,12 +29,12 @@ import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
 import com.eyekabob.util.LastFMUtil;
 import com.eyekabob.util.NiceNodeList;
-import com.phonegap.api.LOG;
 
 public class EventList extends EyekabobActivity {
 	private Dialog alertDialog;
 	EventListAdapter adapter;
 	private Map<Event, String> eventMap;
+
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Event eventRow = (Event)parent.getAdapter().getItem(position);
@@ -50,21 +49,21 @@ public class EventList extends EyekabobActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.eventlistactivity);
-        adapter = new EventListAdapter(getApplicationContext(), R.layout.image_text_list_item, new ArrayList<Event>());
-        ListView lv = (ListView)findViewById(R.id.eventsList);
+        setContentView(R.layout.adlistactivity);
+        adapter = new EventListAdapter(getApplicationContext());
+        ListView lv = (ListView)findViewById(R.id.adList);
         lv.setAdapter(adapter);
         Uri uri = this.getIntent().getData();
         if (getIntent().hasExtra("zip")) {
         	// Search by zip.
         	String zip = getIntent().getExtras().getString("zip");
         	if (EyekabobHelper.zipToNameMap.containsKey(zip)) {
-        		LOG.d(getClass().getName(), "Using cached zip");
+        		Log.d(getClass().getName(), "Using cached zip");
         		Uri lastFMURI = getLastFMURI(EyekabobHelper.zipToNameMap.get("zip"));
         		sendDocumentRequest(lastFMURI.toString());
         	}
         	else {
-        		LOG.d(getClass().getName(), "Getting zip from geonames service");
+        		Log.d(getClass().getName(), "Getting zip from geonames service");
         		sendJSONRequest(uri.toString());
         	}
 
@@ -72,12 +71,17 @@ public class EventList extends EyekabobActivity {
         	getIntent().putExtra("showDistance", false);
         }
         else {
-        	LOG.d(getClass().getName(), "Searching for events using current location");
+        	Log.d(getClass().getName(), "Searching for events using current location");
         	sendDocumentRequest(uri.toString());
         }
 
-        lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(listItemListener);
+    }
+
+    @Override
+    public void onDestroy() {
+    	adapter.clearCache();
+    	super.onDestroy();
     }
 
     // TODO: use dialogfragment to show dialog
@@ -112,8 +116,7 @@ public class EventList extends EyekabobActivity {
     		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
     		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
 
-    		// Do special parsing for the images.
-    		row.setImage(getLargeImage(eventNode.getChildNodes()));
+    		row.addImageURL("large", eventNodes.get("image").getTextContent());
 
     		if (!getIntent().hasExtra("showDistance") || getIntent().getExtras().getBoolean("showDistance", true)) {
 	    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
@@ -144,20 +147,6 @@ public class EventList extends EyekabobActivity {
 		    adapter.add(row);
 		    eventMap.put(row, eventNodes.get("id").getTextContent());
     	}
-    }
-
-    protected String getLargeImage(NodeList eventChildren) {
-    	for (int i = 0; i < eventChildren.getLength(); i++) {
-    		Node node = eventChildren.item(i);
-    		if ("image".equals(node.getNodeName())) {
-    			NamedNodeMap attrs = node.getAttributes();
-    			if ("large".equals(attrs.getNamedItem("size").getTextContent())) {
-    				return node.getTextContent();
-    			}
-    		}
-    	}
-
-    	return null;
     }
 
     protected void sendJSONRequest(String uri) {

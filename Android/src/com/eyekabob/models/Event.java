@@ -1,29 +1,41 @@
 package com.eyekabob.models;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Event {
-	private String image;
+	private Map<String, URL> imageURLs;
 	private String name;
 	private String venue;
 	private String city;
 	private String date;
-	private long distance = -1;//todo this doesn't make sense
+	private long distance = -1;//TODO: this doesn't make sense
 
-	public Event() {}
-
-	public Event(String image, String name, String venue, String city, String date, long distance) {
-		this.image = image;
-		this.name = name;
-		this.venue = venue;
-		this.city = city;
-		this.date = date;
-		this.distance = distance;
+	public Map<String, URL> getImageURLs() {
+		return imageURLs;
 	}
-
-	public String getImage() {
-		return image;
+	public void setImage(Map<String, URL> imageURLs) {
+		this.imageURLs = imageURLs;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public void addImageURL(String size, URL url) {
+		if (imageURLs == null) {
+			imageURLs = new HashMap<String, URL>();
+		}
+
+		imageURLs.put(size, url);
+	}
+	public void addImageURL(String size, String url) {
+		URL aUrl = null;
+		try {
+			aUrl = new URL(url);
+		}
+		catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+
+		addImageURL(size, aUrl);
 	}
 
 	public String getName() {

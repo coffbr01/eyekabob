@@ -2,6 +2,7 @@ package com.eyekabob.models;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Artist {
@@ -29,6 +30,24 @@ public class Artist {
 	}
 	public void setImageURLs(Map<String, URL> imageURLs) {
 		this.imageURLs = imageURLs;
+	}
+	public void addImageURL(String size, URL url) {
+		if (imageURLs == null) {
+			imageURLs = new HashMap<String, URL>();
+		}
+
+		imageURLs.put(size, url);
+	}
+	public void addImageURL(String size, String url) {
+		URL aUrl = null;
+		try {
+			aUrl = new URL(url);
+		}
+		catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+
+		addImageURL(size, aUrl);
 	}
 	public String getSummary() {
 		return summary;

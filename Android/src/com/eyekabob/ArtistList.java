@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +22,7 @@ import com.eyekabob.models.Artist;
 import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.NiceNodeList;
 
-public class ArtistList extends ListActivity {
+public class ArtistList extends EyekabobActivity {
 	private Dialog alertDialog;
 	ArtistListAdapter adapter;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
@@ -37,13 +36,19 @@ public class ArtistList extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.adlistactivity);
         adapter = new ArtistListAdapter(getApplicationContext());
-        setListAdapter(adapter);
+        ListView lv = (ListView)findViewById(R.id.adList);
+        lv.setAdapter(adapter);
         Uri uri = this.getIntent().getData();
         new RequestTask().execute(uri.toString());
-        ListView lv = getListView();
-        lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(listItemListener);
+    }
+
+    @Override
+    public void onDestroy() {
+    	adapter.clearCache();
+    	super.onDestroy();
     }
 
     // TODO: use dialogfragment to show dialog
@@ -64,11 +69,12 @@ public class ArtistList extends ListActivity {
     	for (int i = 0; i < artists.getLength(); i++) {
     		Node artistNode = artists.item(i);
     		NiceNodeList artistNodeList = new NiceNodeList(artistNode.getChildNodes());
-    		Map<String, Node> artistNodes = artistNodeList.get("name", "mbid", "url");
+    		Map<String, Node> artistNodes = artistNodeList.get("name", "mbid", "url", "image");
     		Artist artist = new Artist();
     		artist.setName(artistNodes.get("name").getTextContent());
     		artist.setMbid(artistNodes.get("mbid").getTextContent());
     		artist.setUrl(artistNodes.get("url").getTextContent());
+    		artist.addImageURL("large", artistNodes.get("image").getTextContent());
     		adapter.add(artist);
     	}
     }
