@@ -1,22 +1,23 @@
 package com.eyekabob.models;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Venue {
-	private int id;
+	private Integer id;
 	private String name;
 	private String city;
 	private String country;
 	private String street;
 	private String postalCode;
-	private long lat;
-	private long lon;
+	private Double lat;
+	private Double lon;
 	private URL url;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -49,16 +50,16 @@ public class Venue {
 	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
 	}
-	public long getLat() {
+	public Double getLat() {
 		return lat;
 	}
-	public void setLat(long lat) {
+	public void setLat(Double lat) {
 		this.lat = lat;
 	}
-	public long getLon() {
+	public Double getLon() {
 		return lon;
 	}
-	public void setLon(long lon) {
+	public void setLon(Double lon) {
 		this.lon = lon;
 	}
 	public URL getUrl() {
@@ -67,6 +68,12 @@ public class Venue {
 	public void setUrl(URL url) {
 		this.url = url;
 	}
-
-	
+	public void setUrl(String url) {
+		try {
+			this.url = new URL(url);
+		}
+		catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
 }

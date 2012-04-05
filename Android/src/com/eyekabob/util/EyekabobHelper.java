@@ -15,8 +15,8 @@ import android.net.Uri;
 public class EyekabobHelper {
 	public static final Map<String, String> zipToNameMap = new HashMap<String, String>();
 
-	public static Location getLocation(Activity activity) {
-		LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+	public static Location getLocation(Context context) {
+		LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		// Gets the last known location from the best service.
 		String bestLocationProvider = locationManager.getBestProvider(new Criteria(), true /*enabled only*/);
 		return locationManager.getLastKnownLocation(bestLocationProvider);
@@ -64,8 +64,8 @@ public class EyekabobHelper {
 	 * @param activity
 	 * @return
 	 */
-    public static long getDistance(double lat, double lon, Activity activity) {
-    	Location location = EyekabobHelper.getLocation(activity);
+    public static long getDistance(double lat, double lon, Context context) {
+    	Location location = EyekabobHelper.getLocation(context);
     	if (location == null) {
     		return -1;
     	}
