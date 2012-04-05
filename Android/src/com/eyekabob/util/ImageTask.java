@@ -10,6 +10,7 @@ import java.util.Map;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 public class ImageTask extends AsyncTask<URL, Object, Drawable> {
@@ -60,6 +61,13 @@ public class ImageTask extends AsyncTask<URL, Object, Drawable> {
 	@Override
     protected void onPostExecute(Drawable result) {
         iv.setImageDrawable(result);
+
+        // TODO: this height/width doesn't belong here.
+        LayoutParams params = iv.getLayoutParams();
+        params.width = 200;
+        params.height = 200;
+        iv.setLayoutParams(params);
+
         iv.invalidateDrawable(result);
     }
 

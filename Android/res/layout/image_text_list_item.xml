@@ -3,17 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:weightSum="1"
     android:background="@drawable/list_item_bg_layout" >
     <ImageView
         android:id="@+id/rowImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="100dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="5dp"
-        android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:layout_gravity="center_vertical" />
 	<TextView
