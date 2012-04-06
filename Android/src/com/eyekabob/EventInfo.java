@@ -25,7 +25,9 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.eyekabob.models.Event;
 import com.eyekabob.util.DocumentTask;
+import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.LastFMUtil;
 
 public class EventInfo extends EyekabobActivity {
@@ -42,7 +44,10 @@ public class EventInfo extends EyekabobActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.eventactivity);
-        Uri uri = this.getIntent().getData();
+        Event event = (Event)getIntent().getExtras().get("event");
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("event", event.getId());
+        Uri uri = EyekabobHelper.LastFM.getUri("event.getInfo", params);
         new RequestTask().execute(uri.toString());
 
         WebView wv = (WebView)findViewById(R.id.eventDescription);

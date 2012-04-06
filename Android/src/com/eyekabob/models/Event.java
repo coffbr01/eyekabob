@@ -1,12 +1,16 @@
 package com.eyekabob.models;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Event {
+public class Event implements Serializable {
+	private static final long serialVersionUID = -6773600490438197194L;
+
 	private Map<String, URL> imageURLs;
+	private String id;
 	private String name;
 	private String venue;
 	private String city;
@@ -71,5 +75,11 @@ public class Event {
 	}
 	public void setDistance(long distance) {
 		this.distance = distance;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 }

@@ -1,9 +1,12 @@
 package com.eyekabob.models;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Venue {
+public class Venue implements Serializable {
+	private static final long serialVersionUID = -5136924774088920040L;
+
 	private Integer id;
 	private String name;
 	private String city;

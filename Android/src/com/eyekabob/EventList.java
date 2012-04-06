@@ -33,15 +33,12 @@ import com.eyekabob.util.NiceNodeList;
 public class EventList extends EyekabobActivity {
 	private Dialog alertDialog;
 	EventListAdapter adapter;
-	private Map<Event, String> eventMap;
 
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			Event eventRow = (Event)parent.getAdapter().getItem(position);
+			Event event = (Event)parent.getAdapter().getItem(position);
 			Intent intent = new Intent(getApplicationContext(), EventInfo.class);
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("event", eventMap.get(eventRow));
-			intent.setData(EyekabobHelper.LastFM.getUri("event.getInfo", params));
+			intent.putExtra("event", event);
 			startActivity(intent);
 		}
 	};
@@ -103,7 +100,7 @@ public class EventList extends EyekabobActivity {
     		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
     		return;
     	}
-    	eventMap = new HashMap<Event, String>();
+
     	for (int i = 0; i < events.getLength(); i++) {
     		Event row = new Event();
     		Node eventNode = events.item(i);
@@ -116,6 +113,7 @@ public class EventList extends EyekabobActivity {
     		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
     		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
 
+    		row.setId(eventNodes.get("id").getTextContent());
     		row.addImageURL("large", eventNodes.get("image").getTextContent());
 
     		if (!getIntent().hasExtra("showDistance") || getIntent().getExtras().getBoolean("showDistance", true)) {
@@ -145,7 +143,6 @@ public class EventList extends EyekabobActivity {
     		}
 
 		    adapter.add(row);
-		    eventMap.put(row, eventNodes.get("id").getTextContent());
     	}
     }
 

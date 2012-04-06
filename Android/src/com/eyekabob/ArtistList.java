@@ -29,7 +29,7 @@ public class ArtistList extends EyekabobActivity {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Artist artist = (Artist)parent.getAdapter().getItem(position);
 			Intent intent = new Intent(getApplicationContext(), ArtistInfo.class);
-			intent.putExtra("artist", artist.getName());
+			intent.putExtra("artist", artist);
 			startActivity(intent);
 		}
 	};

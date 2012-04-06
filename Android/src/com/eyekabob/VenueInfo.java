@@ -4,14 +4,16 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.eyekabob.models.Venue;
+
 public class VenueInfo extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.venue_info);
-		String artist = getIntent().getExtras().getString("venue");
-		Log.d(getClass().getName(), "Venue name is: " + artist);
+		Venue venue = (Venue)getIntent().getExtras().get("venue");
+		Log.d(getClass().getName(), "Venue name is: " + venue.getName());
 
 		// TODO: request info based on venue name
 	}

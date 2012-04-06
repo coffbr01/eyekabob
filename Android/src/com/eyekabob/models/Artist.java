@@ -1,11 +1,14 @@
 package com.eyekabob.models;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Artist {
+public class Artist implements Serializable {
+	private static final long serialVersionUID = 1293081737855453644L;
+
 	private String name;
 	private String mbid;
 	private Map<String, URL> imageURLs;

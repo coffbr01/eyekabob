@@ -30,7 +30,7 @@ public class VenueList extends ListActivity {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Venue venue = (Venue)parent.getAdapter().getItem(position);
 			Intent intent = new Intent(getApplicationContext(), VenueInfo.class);
-			intent.putExtra("venue", venue.getName());
+			intent.putExtra("venue", venue);
 			startActivity(intent);
 		}
 	};
