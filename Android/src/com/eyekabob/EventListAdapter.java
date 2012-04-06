@@ -41,25 +41,28 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 		// Render the event.
 		String text = "";
 		if (eventRow.getName() != null && !"".equals(eventRow.getName().trim())) {
-			text += eventRow.getName() + "\n";
+			text += eventRow.getName();
 		}
 
 		if (eventRow.getVenue() != null && !"".equals(eventRow.getVenue().trim())) {
-			text += eventRow.getVenue() + "\n";
+			text += "\n" + eventRow.getVenue();
 		}
 
 		if (eventRow.getCity() != null && !"".equals(eventRow.getCity().trim())) {
-			text += eventRow.getCity() + "\n";
+			text += "\n" + eventRow.getCity();
 		}
 
 		if (eventRow.getDate() != null && !"".equals(eventRow.getDate().trim())) {
-			text += eventRow.getDate();
-			if (eventRow.getLat() != null && eventRow.getLon() != null) {
-				text += "\n";
-			}
+			text += "\n" + eventRow.getDate();
 		}
 
-		text += String.valueOf(EyekabobHelper.getDistance(eventRow.getLat(), eventRow.getLon(), parent.getContext())) + " mi";
+
+		if (eventRow.getLat() != null && eventRow.getLon() != null) {
+			long dist = EyekabobHelper.getDistance(eventRow.getLat(), eventRow.getLon(), parent.getContext());
+			if (dist > -1) {
+				text += "\n" + String.valueOf(dist) + " mi";
+			}
+		}
 
 		TextView tv = (TextView)convertView.findViewById(R.id.rowText);
 		tv.setText(text);

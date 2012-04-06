@@ -25,14 +25,11 @@ public class VenueListAdapter extends ArrayAdapter<Venue> {
 
         String rendered = "";
         if (venueRow.getName() != null) {
-        	rendered += venueRow.getName() + "\n";
+        	rendered += venueRow.getName();
         }
 
         if (venueRow.getStreet() != null) {
-        	rendered += venueRow.getStreet();
-        	if (venueRow.getCity() == null) {
-        		rendered += "\n";
-        	}
+        	rendered += "\n" + venueRow.getStreet();
         }
 
         if (venueRow.getCity() != null) {
@@ -40,13 +37,15 @@ public class VenueListAdapter extends ArrayAdapter<Venue> {
         		rendered += ", " + venueRow.getCity();
         	}
         	else {
-        		rendered += venueRow.getCity();
+        		rendered += "\n" + venueRow.getCity();
         	}
-        	rendered += "\n";
         }
 
         if (venueRow.getLat() != null && venueRow.getLon() != null) {
-        	EyekabobHelper.getDistance(venueRow.getLat(), venueRow.getLon(), convertView.getContext().getApplicationContext());
+        	long dist = EyekabobHelper.getDistance(venueRow.getLat(), venueRow.getLon(), convertView.getContext().getApplicationContext()); 
+        	if (dist > -1) {
+        		rendered += "\n" + String.valueOf(dist) + " mi";
+        	}
         }
 
         ((TextView)convertView).setText(rendered);
