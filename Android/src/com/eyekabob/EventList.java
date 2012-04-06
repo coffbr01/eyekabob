@@ -27,7 +27,6 @@ import com.eyekabob.models.Event;
 import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
-import com.eyekabob.util.LastFMUtil;
 import com.eyekabob.util.NiceNodeList;
 
 public class EventList extends EyekabobActivity {
@@ -132,7 +131,7 @@ public class EventList extends EyekabobActivity {
     		}
 
     		row.setName(eventNodes.get("title").getTextContent());
-    		row.setDate(LastFMUtil.toReadableDate(eventNodes.get("startDate").getTextContent()));
+    		row.setDate(EyekabobHelper.LastFM.toReadableDate(eventNodes.get("startDate").getTextContent()));
 
     		if (!getIntent().hasExtra("showVenue") || getIntent().getExtras().getBoolean("showVenue", true)) {
     			row.setVenue(venueNodes.get("name").getTextContent());

@@ -28,7 +28,6 @@ import android.widget.TextView;
 import com.eyekabob.models.Event;
 import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.EyekabobHelper;
-import com.eyekabob.util.LastFMUtil;
 
 public class EventInfo extends EyekabobActivity {
 	private Dialog alertDialog;
@@ -75,7 +74,7 @@ public class EventInfo extends EyekabobActivity {
 		    	}
 		    }
 		    else if ("startDate".equals(nodeName)) {
-		    	startDate = LastFMUtil.toReadableDate(eventChildNode.getTextContent());
+		    	startDate = EyekabobHelper.LastFM.toReadableDate(eventChildNode.getTextContent());
 		    }
 		    else if ("image".equals(nodeName)) {
 		    	NamedNodeMap attributes = eventChildNode.getAttributes();

@@ -1,8 +1,14 @@
 package com.eyekabob.util;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.w3c.dom.DOMException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -47,6 +53,20 @@ public class EyekabobHelper {
 				url += "&" + param + "=" + params.get(param);
 			}
 			return Uri.parse(url);
+		}
+		public static String toReadableDate(String unparsedDate) {
+			String result = unparsedDate;
+			try {
+				DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+				Date d = df.parse(unparsedDate);
+				DateFormat readableDF = new SimpleDateFormat("EEE, MMM d, h:mm a");
+				result = readableDF.format(d);
+			} catch (DOMException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			return result;
 		}
 	}
 	public static class GeoNames {
