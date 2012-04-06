@@ -6,10 +6,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,8 +19,7 @@ import com.eyekabob.models.Venue;
 import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.NiceNodeList;
 
-public class VenueList extends ListActivity {
-	private Dialog alertDialog;
+public class VenueList extends EyekabobActivity {
 	private VenueListAdapter adapter;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -38,22 +33,13 @@ public class VenueList extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.adlistactivity);
         adapter = new VenueListAdapter(getApplicationContext());
-        setListAdapter(adapter);
         Uri uri = this.getIntent().getData();
         new RequestTask().execute(uri.toString());
-        ListView lv = getListView();
-        lv.setTextFilterEnabled(true);
+        ListView lv = (ListView)findViewById(R.id.adList);
+        lv.setAdapter(adapter);
         lv.setOnItemClickListener(listItemListener);
-    }
-
-    // TODO: use dialogfragment to show dialog
-    protected void createDialog() {
-	    Builder builder = new AlertDialog.Builder(this);
-	    builder.setMessage(R.string.searching);
-	    builder.setCancelable(false);
-	    alertDialog = builder.create();
-	    alertDialog.setOwnerActivity(this);
     }
     
     protected void loadVenues(Document doc) {
@@ -81,8 +67,8 @@ public class VenueList extends ListActivity {
     			String latStr = lat.getTextContent();
     			String lonStr = lon.getTextContent();
     			if (!"".equals(latStr) && !"".equals(lonStr)) {
-    				venueRow.setLat(Double.parseDouble(latStr));
-    				venueRow.setLon(Double.parseDouble(lonStr));
+    				venueRow.setLat(latStr);
+    				venueRow.setLon(lonStr);
     			}
     		}
 
@@ -101,11 +87,11 @@ public class VenueList extends ListActivity {
     // Handles the asynchronous request, away from the UI thread.
     private class RequestTask extends DocumentTask {
     	protected void onPreExecute() {
-    		VenueList.this.createDialog();
-    		alertDialog.show();
+    		VenueList.this.createDialog(R.string.searching);
+    		VenueList.this.showDialog();
     	}
     	protected void onPostExecute(Document result) {
-    		alertDialog.dismiss();
+    		VenueList.this.dismissDialog();
     		VenueList.this.loadVenues(result);
     	}
     }

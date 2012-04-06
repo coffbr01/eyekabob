@@ -14,9 +14,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -30,7 +27,6 @@ import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.EyekabobHelper;
 
 public class EventInfo extends EyekabobActivity {
-	private Dialog alertDialog;
 	private Map<String, String> vendors;
 	private List<String> artists;
 	private String startDate = "";
@@ -146,23 +142,14 @@ public class EventInfo extends EyekabobActivity {
 		wv.loadData(description, "text/html", "UTF8");
     }
 
-    // TODO: use dialogfragment to show dialog
-    protected void createDialog() {
-	    Builder builder = new AlertDialog.Builder(this);
-	    builder.setMessage(R.string.loading);
-	    builder.setCancelable(false);
-	    alertDialog = builder.create();
-	    alertDialog.setOwnerActivity(this);
-    }
-
     // Handles the asynchronous request, away from the UI thread.
     private class RequestTask extends DocumentTask {
     	protected void onPreExecute() {
-    		EventInfo.this.createDialog();
-    		alertDialog.show();
+    		EventInfo.this.createDialog(R.string.loading);
+    		EventInfo.this.showDialog();
     	}
     	protected void onPostExecute(Document result) {
-    		alertDialog.dismiss();
+    		EventInfo.this.dismissDialog();
     		EventInfo.this.loadEvent(result);
     	}
 

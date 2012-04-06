@@ -101,6 +101,10 @@ public class EyekabobHelper {
     	return Math.round(R * c);
     }
 
+    public static long getDistance(String lat, String lon, Context context) {
+    	return getDistance(Double.parseDouble(lat), Double.parseDouble(lon), context);
+    }
+
     public static void launchEmail(Activity activity) {
     	Intent emailIntent = new Intent(Intent.ACTION_SEND);
     	emailIntent.setType("plain/text");

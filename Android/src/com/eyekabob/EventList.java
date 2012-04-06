@@ -10,9 +10,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,7 +27,6 @@ import com.eyekabob.util.JSONTask;
 import com.eyekabob.util.NiceNodeList;
 
 public class EventList extends EyekabobActivity {
-	private Dialog alertDialog;
 	EventListAdapter adapter;
 
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
@@ -79,15 +75,6 @@ public class EventList extends EyekabobActivity {
     	adapter.clearCache();
     	super.onDestroy();
     }
-
-    // TODO: use dialogfragment to show dialog
-    protected void createDialog() {
-	    Builder builder = new AlertDialog.Builder(this);
-	    builder.setMessage(R.string.searching);
-	    builder.setCancelable(false);
-	    alertDialog = builder.create();
-	    alertDialog.setOwnerActivity(this);
-    }
     
     protected void loadEvents(Document doc) {
     	if (doc == null) {
@@ -125,7 +112,8 @@ public class EventList extends EyekabobActivity {
 	    			String latStr = lat.getTextContent();
 	    			String lonStr = lon.getTextContent();
 	    			if (!"".equals(latStr) && !"".equals(lonStr)) {
-	        			row.setDistance(EyekabobHelper.getDistance(Double.parseDouble(latStr), Double.parseDouble(lonStr), this));
+	    				row.setLat(latStr);
+	    				row.setLon(lonStr);
 	    			}
 	    		}
     		}
@@ -166,13 +154,8 @@ public class EventList extends EyekabobActivity {
 
     private class JSONRequestTask extends JSONTask {
     	protected void onPreExecute() {
-    		if (alertDialog == null) {
-        		EventList.this.createDialog();
-    		}
-
-    		if (!alertDialog.isShowing()) {
-    			alertDialog.show();
-    		}
+    		EventList.this.createDialog(R.string.searching);
+    		EventList.this.showDialog();
     	}
     	protected void onPostExecute(JSONObject result) {
     		String location = null;
@@ -193,16 +176,11 @@ public class EventList extends EyekabobActivity {
     // Handles the asynchronous request, away from the UI thread.
     private class DocumentRequestTask extends DocumentTask {
     	protected void onPreExecute() {
-    		if (alertDialog == null) {
-        		EventList.this.createDialog();
-    		}
-
-    		if (!alertDialog.isShowing()) {
-    			alertDialog.show();
-    		}
+    		EventList.this.createDialog(R.string.searching);
+    		EventList.this.showDialog();
     	}
     	protected void onPostExecute(Document result) {
-    		alertDialog.dismiss();
+    		EventList.this.dismissDialog();
     		EventList.this.loadEvents(result);
     	}
     }

@@ -54,12 +54,12 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 
 		if (eventRow.getDate() != null && !"".equals(eventRow.getDate().trim())) {
 			text += eventRow.getDate();
-			if (eventRow.getDistance() != -1) {
+			if (eventRow.getLat() != null && eventRow.getLon() != null) {
 				text += "\n";
 			}
 		}
 
-		text += eventRow.getDistance() + " mi";
+		text += String.valueOf(EyekabobHelper.getDistance(eventRow.getLat(), eventRow.getLon(), parent.getContext())) + " mi";
 
 		TextView tv = (TextView)convertView.findViewById(R.id.rowText);
 		tv.setText(text);

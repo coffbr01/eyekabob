@@ -6,9 +6,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +20,6 @@ import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.NiceNodeList;
 
 public class ArtistList extends EyekabobActivity {
-	private Dialog alertDialog;
 	ArtistListAdapter adapter;
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -51,15 +47,6 @@ public class ArtistList extends EyekabobActivity {
     	super.onDestroy();
     }
 
-    // TODO: use dialogfragment to show dialog
-    protected void createDialog() {
-	    Builder builder = new AlertDialog.Builder(this);
-	    builder.setMessage(R.string.searching);
-	    builder.setCancelable(false);
-	    alertDialog = builder.create();
-	    alertDialog.setOwnerActivity(this);
-    }
-
     protected void loadArtists(Document doc) {
     	NodeList artists = doc.getElementsByTagName("artist");
     	if (artists.getLength() == 0) {
@@ -82,11 +69,11 @@ public class ArtistList extends EyekabobActivity {
     // Handles the asynchronous request, away from the UI thread.
     private class RequestTask extends DocumentTask {
     	protected void onPreExecute() {
-    		ArtistList.this.createDialog();
-    		alertDialog.show();
+    		ArtistList.this.createDialog(R.string.searching);
+    		ArtistList.this.showDialog();
     	}
     	protected void onPostExecute(Document result) {
-    		alertDialog.dismiss();
+    		ArtistList.this.dismissDialog();
     		ArtistList.this.loadArtists(result);
     	}
     }

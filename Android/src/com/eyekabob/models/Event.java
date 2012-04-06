@@ -15,7 +15,8 @@ public class Event implements Serializable {
 	private String venue;
 	private String city;
 	private String date;
-	private long distance = -1;//TODO: this doesn't make sense
+	private String lat;
+	private String lon;
 
 	public Map<String, URL> getImageURLs() {
 		return imageURLs;
@@ -70,16 +71,22 @@ public class Event implements Serializable {
 		this.date = date;
 	}
 
-	public long getDistance() {
-		return distance;
-	}
-	public void setDistance(long distance) {
-		this.distance = distance;
-	}
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public String getLat() {
+		return lat;
+	}
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+	public String getLon() {
+		return lon;
+	}
+	public void setLon(String lon) {
+		this.lon = lon;
 	}
 }
