@@ -1,3 +1,7 @@
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
 package com.eyekabob;
 
 import java.util.HashMap;
@@ -32,9 +36,16 @@ public class ArtistInfo extends EyekabobActivity {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("mbid", artist.getMbid());
 		Uri artistInfoUri = EyekabobHelper.LastFM.getUri("artist.getInfo", params);
+
+		// Send the request for artist info.
 		new ArtistRequestTask().execute(artistInfoUri.toString());
 	}
 
+	/**
+	 * This method is called after the last.fm response is received. It will
+	 * parse the XML document response and put attributes on the Artist object.
+	 * @param result
+	 */
 	protected void handleArtistResponse(Document result) {
 		NiceNodeList artistNodeList = new NiceNodeList(result.getElementsByTagName("artist").item(0).getChildNodes());
 		Map<String, Node> artistNodes = artistNodeList.get("name", "mbid", "url", "bio");
@@ -50,6 +61,9 @@ public class ArtistInfo extends EyekabobActivity {
 		render();
 	}
 
+	/**
+	 * Puts attributes from the Artist object into the views.
+	 */
 	private void render() {
 		// TODO: Phil to put rendering code here.
 
