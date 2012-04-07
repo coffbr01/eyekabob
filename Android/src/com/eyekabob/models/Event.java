@@ -7,7 +7,9 @@ package com.eyekabob.models;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,52 +19,19 @@ import java.util.Map;
 public class Event implements Serializable {
 	private static final long serialVersionUID = -6773600490438197194L;
 
-	/**
-	 * The URLs for the images of this artist. The keys
-	 * will be sizes, i.e. "small", "medium", "large".
-	 */
 	private Map<String, URL> imageURLs;
-
-	/**
-	 * Last.fm ID for the event.
-	 */
+	private Map<String, URL> vendors;
+	private List<Artist> openingArtists;
+	private Artist headliner;
+	private Venue venue;
 	private String id;
-
-	/**
-	 * Common name of the event. "Rock Fest" or "Jam at corner bar"
-	 * might be possible values for this field.
-	 */
 	private String name;
-
-	/**
-	 * Name of the venue hosting the event. "Corner bar" is a legitimate
-	 * value for this field.
-	 */
-	private String venue;
-
-	/**
-	 * Name of the city where the venue is.
-	 */
-	private String city;
-
-	/**
-	 * Date and time of the event, already formatted.
-	 */
 	private String date;
 
 	/**
-	 * Latitude.
-	 */
-	private String lat;
-
-	/**
-	 * Longitude.
-	 */
-	private String lon;
-
-	/**
 	 * The URLs for the images of this artist. The keys
 	 * will be sizes, i.e. "small", "medium", "large".
+	 * @return
 	 */
 	public Map<String, URL> getImageURLs() {
 		return imageURLs;
@@ -92,6 +61,7 @@ public class Event implements Serializable {
 	/**
 	 * Common name of the event. "Rock Fest" or "Jam at corner bar"
 	 * might be possible values for this field.
+	 * @return
 	 */
 	public String getName() {
 		return name;
@@ -101,28 +71,20 @@ public class Event implements Serializable {
 	}
 
 	/**
-	 * Name of the venue hosting the event. "Corner bar" is a legitimate
-	 * value for this field.
+	 * Venue where the event will be held. See com.eyekabob.models.Venue
+	 * for more information about venues.
+	 * @return
 	 */
-	public String getVenue() {
+	public Venue getVenue() {
 		return venue;
 	}
-	public void setVenue(String venue) {
+	public void setVenue(Venue venue) {
 		this.venue = venue;
 	}
 
 	/**
-	 * Name of the city where the venue is.
-	 */
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	/**
 	 * Date and time of the event, already formatted.
+	 * @return
 	 */
 	public String getDate() {
 		return date;
@@ -133,6 +95,7 @@ public class Event implements Serializable {
 
 	/**
 	 * Last.fm ID for the event.
+	 * @return
 	 */
 	public String getId() {
 		return id;
@@ -142,22 +105,61 @@ public class Event implements Serializable {
 	}
 
 	/**
-	 * Latitude.
+	 * A list of vendors for the event. These are not usually
+	 * provided for most events. But if they are, they will be
+	 * URLs for TicketMaster and similar ticket vendors.
+	 * @return
 	 */
-	public String getLat() {
-		return lat;
+	public Map<String, URL> getVendors() {
+		return vendors;
 	}
-	public void setLat(String lat) {
-		this.lat = lat;
+	public void setVendors(Map<String, URL> vendors) {
+		this.vendors = vendors;
+	}
+	public void addVendor(String vendorName, URL url) {
+		if (vendors == null) {
+			vendors = new HashMap<String, URL>();
+		}
+
+		vendors.put(vendorName, url);
+	}
+	public void addVendor(String vendorName, String url) {
+		URL aUrl = null;
+		try {
+			aUrl = new URL(url);
+		}
+		catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		addVendor(vendorName, aUrl);
 	}
 
 	/**
-	 * Longitude.
+	 * A list of artists that will perform at the event.
+	 * These are artists that are opening for the headliner.
+	 * @return
 	 */
-	public String getLon() {
-		return lon;
+	public List<Artist> getOpeningArtists() {
+		return openingArtists;
 	}
-	public void setLon(String lon) {
-		this.lon = lon;
+	public void setOpeningArtists(List<Artist> artists) {
+		this.openingArtists = artists;
+	}
+	public void addOpeningArtist(Artist artist) {
+		if (openingArtists == null) {
+			openingArtists = new ArrayList<Artist>();
+		}
+		openingArtists.add(artist);
+	}
+
+	/**
+	 * The main artist that will perform at a given event.
+	 * @return
+	 */
+	public Artist getHeadliner() {
+		return headliner;
+	}
+	public void setHeadliner(Artist headliner) {
+		this.headliner = headliner;
 	}
 }

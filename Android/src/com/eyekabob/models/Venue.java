@@ -15,55 +15,19 @@ import java.net.URL;
 public class Venue implements Serializable {
 	private static final long serialVersionUID = -5136924774088920040L;
 
-	/**
-	 * Last.fm ID for the venue.
-	 */
 	private Integer id;
-
-	/**
-	 * Common name for the venue. Could be values like "Corner bar"
-	 * or "Jim's garage"
-	 */
 	private String name;
-
-	/**
-	 * The city in which the venue resides.
-	 */
 	private String city;
-
-	/**
-	 * The country in which the venue resides.
-	 */
 	private String country;
-
-	/**
-	 * The street on which the venue resides. This typically
-	 * includes the address as well, i.e. "1800 N Main St."
-	 */
 	private String street;
-
-	/**
-	 * Zip code of the venue.
-	 */
 	private String postalCode;
-
-	/**
-	 * Latitude.
-	 */
 	private String lat;
-
-	/**
-	 * Longitude.
-	 */
 	private String lon;
-
-	/**
-	 * Venue's website.
-	 */
 	private URL url;
 
 	/**
 	 * Last.fm ID for the venue.
+	 * @return
 	 */
 	public Integer getId() {
 		return id;
@@ -75,6 +39,7 @@ public class Venue implements Serializable {
 	/**
 	 * Common name for the venue. Could be values like "Corner bar"
 	 * or "Jim's garage"
+	 * @return
 	 */
 	public String getName() {
 		return name;
@@ -85,6 +50,7 @@ public class Venue implements Serializable {
 
 	/**
 	 * The city in which the venue resides.
+	 * @return
 	 */
 	public String getCity() {
 		return city;
@@ -95,6 +61,7 @@ public class Venue implements Serializable {
 
 	/**
 	 * The country in which the venue resides.
+	 * @return
 	 */
 	public String getCountry() {
 		return country;
@@ -106,6 +73,7 @@ public class Venue implements Serializable {
 	/**
 	 * The street on which the venue resides. This typically
 	 * includes the address as well, i.e. "1800 N Main St."
+	 * @return
 	 */
 	public String getStreet() {
 		return street;
@@ -116,6 +84,7 @@ public class Venue implements Serializable {
 
 	/**
 	 * Zip code of the venue.
+	 * @return
 	 */
 	public String getPostalCode() {
 		return postalCode;
@@ -126,6 +95,7 @@ public class Venue implements Serializable {
 
 	/**
 	 * Latitude.
+	 * @return
 	 */
 	public String getLat() {
 		return lat;
@@ -136,6 +106,7 @@ public class Venue implements Serializable {
 
 	/**
 	 * Longitude.
+	 * @return
 	 */
 	public String getLon() {
 		return lon;
@@ -146,6 +117,7 @@ public class Venue implements Serializable {
 
 	/**
 	 * Venue's website.
+	 * @return
 	 */
 	public URL getUrl() {
 		return url;

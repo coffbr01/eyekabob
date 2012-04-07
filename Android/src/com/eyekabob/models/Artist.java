@@ -17,39 +17,16 @@ import java.util.Map;
 public class Artist implements Serializable {
 	private static final long serialVersionUID = 1293081737855453644L;
 
-	/**
-	 * Common name for the artist.
-	 */
 	private String name;
-
-	/**
-	 * Music brainz ID.
-	 */
 	private String mbid;
-
-	/**
-	 * The URLs for the images of this artist. The keys
-	 * will be sizes, i.e. "small", "medium", "large".
-	 */
 	private Map<String, URL> imageURLs;
-
-	/**
-	 * A (usually HTML) summary of the artist.
-	 */
 	private String summary;
-
-	/**
-	 * A long version of summary.
-	 */
 	private String content;
-
-	/**
-	 * Artist's web site.
-	 */
 	private URL url;
 
 	/**
 	 * Common name for the artist.
+	 * @return
 	 */
 	public String getName() {
 		return name;
@@ -60,6 +37,7 @@ public class Artist implements Serializable {
 
 	/**
 	 * Music brainz ID.
+	 * @return
 	 */
 	public String getMbid() {
 		return mbid;
@@ -71,6 +49,7 @@ public class Artist implements Serializable {
 	/**
 	 * The URLs for the images of this artist. The keys
 	 * will be sizes, i.e. "small", "medium", "large".
+	 * @return
 	 */
 	public Map<String, URL> getImageURLs() {
 		return imageURLs;
@@ -99,6 +78,7 @@ public class Artist implements Serializable {
 
 	/**
 	 * A (usually HTML) summary of the artist.
+	 * @return
 	 */
 	public String getSummary() {
 		return summary;
@@ -109,6 +89,7 @@ public class Artist implements Serializable {
 
 	/**
 	 * A long version of summary.
+	 * @return
 	 */
 	public String getContent() {
 		return content;
@@ -119,6 +100,7 @@ public class Artist implements Serializable {
 
 	/**
 	 * Artist's web site.
+	 * @return
 	 */
 	public URL getUrl() {
 		return url;

@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.eyekabob.models.Event;
+import com.eyekabob.models.Venue;
 import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
@@ -92,7 +93,9 @@ public class EventList extends EyekabobActivity {
     	}
 
     	for (int i = 0; i < events.getLength(); i++) {
-    		Event row = new Event();
+    		Event event = new Event();
+    		Venue venue = new Venue();
+    		event.setVenue(venue);
     		Node eventNode = events.item(i);
     		NiceNodeList eventNodeList = new NiceNodeList(eventNode.getChildNodes());
     		Map<String, Node> eventNodes = eventNodeList.get("title", "id", "venue", "startDate", "image");
@@ -103,37 +106,30 @@ public class EventList extends EyekabobActivity {
     		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
     		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
 
-    		row.setId(eventNodes.get("id").getTextContent());
-    		row.addImageURL("large", eventNodes.get("image").getTextContent());
+    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
+    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
 
-    		if (!getIntent().hasExtra("showDistance") || getIntent().getExtras().getBoolean("showDistance", true)) {
-	    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
-	    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
-	    		Node lat = geoNodes.get("geo:lat");
-	    		Node lon = geoNodes.get("geo:long");
+    		event.setId(eventNodes.get("id").getTextContent());
+    		event.setName(eventNodes.get("title").getTextContent());
+    		event.setDate(EyekabobHelper.LastFM.toReadableDate(eventNodes.get("startDate").getTextContent()));
+    		event.addImageURL("large", eventNodes.get("image").getTextContent());
 
-	    		if (lat != null && lon != null) {
-	    			String latStr = lat.getTextContent();
-	    			String lonStr = lon.getTextContent();
-	    			if (!"".equals(latStr) && !"".equals(lonStr)) {
-	    				row.setLat(latStr);
-	    				row.setLon(lonStr);
-	    			}
-	    		}
+    		venue.setName(venueNodes.get("name").getTextContent());
+    		venue.setCity(locationNodes.get("city").getTextContent());
+
+    		Node lat = geoNodes.get("geo:lat");
+    		Node lon = geoNodes.get("geo:long");
+
+    		if (lat != null && lon != null) {
+    			String latStr = lat.getTextContent();
+    			String lonStr = lon.getTextContent();
+    			if (!"".equals(latStr) && !"".equals(lonStr)) {
+    				venue.setLat(latStr);
+    				venue.setLon(lonStr);
+    			}
     		}
 
-    		row.setName(eventNodes.get("title").getTextContent());
-    		row.setDate(EyekabobHelper.LastFM.toReadableDate(eventNodes.get("startDate").getTextContent()));
-
-    		if (!getIntent().hasExtra("showVenue") || getIntent().getExtras().getBoolean("showVenue", true)) {
-    			row.setVenue(venueNodes.get("name").getTextContent());
-    		}
-
-    		if (!getIntent().hasExtra("showCity") || getIntent().getExtras().getBoolean("showCity", true)) {
-    			row.setCity(locationNodes.get("city").getTextContent());
-    		}
-
-		    adapter.add(row);
+		    adapter.add(event);
     	}
     }
 

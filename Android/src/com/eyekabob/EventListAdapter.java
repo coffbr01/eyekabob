@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eyekabob.models.Event;
+import com.eyekabob.models.Venue;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.ImageTask;
 
@@ -48,23 +49,25 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 			text += eventRow.getName();
 		}
 
-		if (eventRow.getVenue() != null && !"".equals(eventRow.getVenue().trim())) {
-			text += "\n" + eventRow.getVenue();
-		}
-
-		if (eventRow.getCity() != null && !"".equals(eventRow.getCity().trim())) {
-			text += "\n" + eventRow.getCity();
-		}
-
 		if (eventRow.getDate() != null && !"".equals(eventRow.getDate().trim())) {
 			text += "\n" + eventRow.getDate();
 		}
 
+		if (eventRow.getVenue() != null) {
+			Venue venue = eventRow.getVenue();
+			if (venue.getName() != null && !"".equals(venue.getName().trim())) {
+				text += "\n" + venue.getName();
+			}
 
-		if (eventRow.getLat() != null && eventRow.getLon() != null) {
-			long dist = EyekabobHelper.getDistance(eventRow.getLat(), eventRow.getLon(), parent.getContext());
-			if (dist > -1) {
-				text += "\n" + String.valueOf(dist) + " mi";
+			if (venue.getCity() != null && !"".equals(venue.getCity().trim())) {
+				text += "\n" + venue.getCity();
+			}
+
+			if (venue.getLat() != null && venue.getLon() != null) {
+				long dist = EyekabobHelper.getDistance(venue.getLat(), venue.getLon(), parent.getContext());
+				if (dist > -1) {
+					text += "\n" + String.valueOf(dist) + " mi";
+				}
 			}
 		}
 

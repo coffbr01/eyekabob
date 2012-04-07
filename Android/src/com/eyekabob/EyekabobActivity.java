@@ -22,22 +22,22 @@ public class EyekabobActivity extends Activity {
 
     // TODO: use dialogfragment to show dialog
     protected void createDialog(int message) {
+    	if (alertDialog != null) {
+    		alertDialog.setTitle(message);
+    		return;
+    	}
+
 	    Builder builder = new AlertDialog.Builder(this);
 	    builder.setMessage(message);
-	    builder.setCancelable(false);
 	    alertDialog = builder.create();
 	    alertDialog.setOwnerActivity(this);
     }
 
     protected void showDialog() {
-    	if (!alertDialog.isShowing()) {
-    		alertDialog.show();
-    	}
+		alertDialog.show();
     }
 
     protected void dismissDialog() {
-    	if (alertDialog.isShowing()) {
-    		alertDialog.dismiss();
-    	}
+		alertDialog.dismiss();
     }
 }

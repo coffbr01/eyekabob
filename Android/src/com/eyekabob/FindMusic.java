@@ -124,8 +124,12 @@ public class FindMusic extends EyekabobActivity {
     }
 
     public void useCurrentLocationHandler(View v) {
+    	// When the checkbox is checked, the slider should be enabled and the text input should be disabled.
+    	// When the checkbox is unchecked, the slider should be disabled and the text input should be enabled.
     	EditText location = (EditText)findViewById(R.id.findByLocationInput);
     	location.setEnabled(!((CheckBox)v).isChecked());
+    	SeekBar slider = (SeekBar)findViewById(R.id.milesSeekBar);
+    	slider.setEnabled(((CheckBox)v).isChecked());
     }
 
     private void findByZip(String zip, String distance) {
