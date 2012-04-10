@@ -45,12 +45,8 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 
 		// Render the event.
 		String text = "";
-		if (eventRow.getName() != null && !"".equals(eventRow.getName().trim())) {
-			text += eventRow.getName();
-		}
-
 		if (eventRow.getDate() != null && !"".equals(eventRow.getDate().trim())) {
-			text += "\n" + eventRow.getDate();
+			text += eventRow.getDate();
 		}
 
 		if (eventRow.getVenue() != null) {
@@ -69,6 +65,11 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 					text += "\n" + String.valueOf(dist) + " mi";
 				}
 			}
+		}
+
+		if (eventRow.getName() != null && !"".equals(eventRow.getName().trim())) {
+			TextView headerTv = (TextView)convertView.findViewById(R.id.rowHeader);
+			headerTv.setText(eventRow.getName());
 		}
 
 		TextView tv = (TextView)convertView.findViewById(R.id.rowText);
