@@ -42,7 +42,7 @@ public class EventInfo extends EyekabobActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.eventactivity);
+        setContentView(R.layout.event_info);
         Event event = (Event)getIntent().getExtras().get("event");
         Map<String, String> params = new HashMap<String, String>();
         params.put("event", event.getId());
