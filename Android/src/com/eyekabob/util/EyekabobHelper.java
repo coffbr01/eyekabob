@@ -80,6 +80,13 @@ public class EyekabobHelper {
 			return Uri.parse(url);
 		}
 	}
+	public static class Facebook {
+		public static final String SERVICE_URL = "https://graph.facebook.com";
+		public static final String APP_ID = "328167973871652";
+		public static final String APP_SECRET = "6d2e4d3a73a78117e46d95540ce6d24e";
+		public static final String APP_NAMESPACE = "eyekabob";
+		public static boolean CHECKED_IN = false;
+	}
 
 	/**
 	 * Gets distance from current location to given lat/lon.
