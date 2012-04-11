@@ -46,13 +46,14 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 		// Render the event.
 		String text = "";
 		if (eventRow.getDate() != null && !"".equals(eventRow.getDate().trim())) {
-			text += eventRow.getDate();
+			TextView dateTv = (TextView)convertView.findViewById(R.id.rowDate);
+			dateTv.setText(eventRow.getDate());
 		}
 
 		if (eventRow.getVenue() != null) {
 			Venue venue = eventRow.getVenue();
 			if (venue.getName() != null && !"".equals(venue.getName().trim())) {
-				text += "\n" + venue.getName();
+				text += venue.getName();
 			}
 
 			if (venue.getCity() != null && !"".equals(venue.getCity().trim())) {
