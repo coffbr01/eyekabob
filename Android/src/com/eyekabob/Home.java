@@ -4,15 +4,17 @@
  */
 package com.eyekabob;
 
+import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.facebook.DialogError;
 import com.eyekabob.util.facebook.Facebook;
 import com.eyekabob.util.facebook.FacebookError;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 public class Home extends EyekabobActivity {
 
@@ -38,24 +40,35 @@ public class Home extends EyekabobActivity {
     	if (!facebook.isSessionValid()) {
     		facebook.authorize(this, new Facebook.DialogListener(){
 				public void onComplete(Bundle values) {
-					// TODO: checkin!
-				    Toast.makeText(getApplicationContext(), "Facebook login successful", Toast.LENGTH_SHORT).show();
+					Home.this.startCheckin();
 				}
 				public void onFacebookError(FacebookError e) {
-					// TODO Auto-generated method stub
+					Log.e(Home.class.toString(), "Facebook error while refreshing session", e);
 				}
 				public void onError(DialogError e) {
-					// TODO Auto-generated method stub
+					Log.e(Home.class.toString(), "Generic error while refreshing Facebook session", e);
 				}
 				public void onCancel() {
-					// TODO Auto-generated method stub
+					Log.d(Home.class.toString(), "Canceled Facebook login");
 				}
     		});
     		return;
     	}
 
-    	// TODO: checkin!
-    	Toast.makeText(this, "You're already signed in!", Toast.LENGTH_SHORT).show();
+    	startCheckin();
+    }
+
+    private void startCheckin() {
+    	Location location = EyekabobHelper.getLocation(this);
+
+    	if (location == null) {
+    		Toast.makeText(this, "Could not check in. Make sure GPS is turned on.", Toast.LENGTH_SHORT).show();
+    		return;
+    	}
+
+    	Intent checkinSearchIntent = new Intent(this, CheckinSearchList.class);
+    	checkinSearchIntent.putExtra("location", location);
+    	startActivity(checkinSearchIntent);
     }
 
     public void homeSettingsHandler(View v) {

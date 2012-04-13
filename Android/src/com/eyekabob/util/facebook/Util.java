@@ -61,17 +61,19 @@ public final class Util {
      * @param boundary the random string as boundary
      * @return a string of the post body
      */
+    // COFFBR01 MODIFIED.
     public static String encodePostBody(Bundle parameters, String boundary) {
         if (parameters == null) return "";
         StringBuilder sb = new StringBuilder();
 
         for (String key : parameters.keySet()) {
-            if (parameters.getByteArray(key) != null) {
-                continue;
-            }
+        	Object value = parameters.get(key);
+        	if (value instanceof byte[]) {
+        		continue;
+        	}
 
             sb.append("Content-Disposition: form-data; name=\"" + key +
-                    "\"\r\n\r\n" + parameters.getString(key));
+                    "\"\r\n\r\n" + value);
             sb.append("\r\n" + "--" + boundary + "\r\n");
         }
 
@@ -139,6 +141,7 @@ public final class Util {
      * @throws MalformedURLException - if the URL format is invalid
      * @throws IOException - if a network problem occurs
      */
+    // COFFBR01 MODIFIED
     public static String openUrl(String url, String method, Bundle params)
           throws MalformedURLException, IOException {
         // random string as boundary for multi-part http post
@@ -158,8 +161,9 @@ public final class Util {
         if (!method.equals("GET")) {
             Bundle dataparams = new Bundle();
             for (String key : params.keySet()) {
-                if (params.getByteArray(key) != null) {
-                        dataparams.putByteArray(key, params.getByteArray(key));
+            	Object value = params.get(key);
+                if (value instanceof byte[]) {
+                    dataparams.putByteArray(key, (byte[])value);
                 }
             }
 

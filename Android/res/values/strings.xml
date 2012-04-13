@@ -25,4 +25,5 @@
     <string name="loading">Loading &#8230;</string>
     <string name="artist_info_label">Artist</string>
     <string name="venue_info_label">Artist</string>
+    <string name="checkin_search_label">Nearby Places</string>
 </resources>
