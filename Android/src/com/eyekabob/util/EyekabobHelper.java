@@ -22,6 +22,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 
+import com.eyekabob.OAuthWebView;
+
 public class EyekabobHelper {
 	public static final Map<String, String> zipToNameMap = new HashMap<String, String>();
 
@@ -91,6 +93,19 @@ public class EyekabobHelper {
 				facebook = new com.eyekabob.util.facebook.Facebook(APP_ID);
 			}
 			return facebook;
+		}
+	}
+	public static class Foursquare {
+		public static final String CLIENT_ID = "WCRBSK0WI3HTK0OCLECBWKKJPNEJVATUOVZ0PHI0ONFUP145";
+		public static final String SECRET = "0ASOSBCQZHRRYRXQCD1CWX3BLSXTNTFR50DYR5TODVE32FHY";
+		public static final String ACCESS_TOKEN_URL = "https://foursquare.com/oauth2/access_token";
+		public static final String AUTHORIZE_URL = "https://foursquare.com/oauth2/authorize";
+		public static final String AUTHENTICATE_URL = "https://foursquare.com/oauth2/authenticate";
+		public static final String CALLBACK_URL = "http://bcoffield.dyndns.org/eyekabob/foursquare";
+		public static void authenticate(Context context, Class<?> callbackClass) {
+			Intent oAuthIntent = new Intent(context, OAuthWebView.class);
+			oAuthIntent.putExtra("callbackClass", callbackClass);
+			context.startActivity(oAuthIntent);
 		}
 	}
 
