@@ -1,11 +1,14 @@
 package com.eyekabob;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,20 +19,16 @@ import android.widget.Toast;
 
 import com.eyekabob.models.Venue;
 import com.eyekabob.util.EyekabobHelper;
+import com.eyekabob.util.JSONTask;
 
 public class CheckinSearchList extends EyekabobActivity {
 
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Venue venue = (Venue)parent.getAdapter().getItem(position);
-			Bundle params = new Bundle();
-			params.putString("place", venue.getId().toString());
-			try {
-				// TODO: this doesn't work yet!
-				EyekabobHelper.Facebook.getInstance().request("me/checkins", params, "POST");
-			} catch (Exception e) {
-				Log.e(CheckinSearchList.this.getClass().getName(), "Problem checking in to [" + venue.getName() + "]", e);
-			}
+			Intent checkinIntent = new Intent(CheckinSearchList.this, Checkin.class);
+			checkinIntent.putExtra("venue", venue);
+			CheckinSearchList.this.startActivity(checkinIntent);
 		}
 	};
 
@@ -41,62 +40,58 @@ public class CheckinSearchList extends EyekabobActivity {
 		ListView lv = (ListView)findViewById(R.id.adList);
 		lv.setOnItemClickListener(listItemListener);
 		lv.setAdapter(adapter);
-		Location location = (Location)getIntent().getExtras().get("location");
+		Bundle extras = (Bundle)getIntent().getExtras();
+		Location location = null;
 
-    	Bundle params = new Bundle();
-		params.putCharSequence("center", location.getLatitude() + "," + location.getLongitude());
-    	params.putCharSequence("type", "place");
-    	params.putCharSequence("distance", "50000"); // 50km, max supported by Facebook.
-    	new JSONRequestTask().execute(params);
+		if (extras != null) {
+			location = (Location)extras.get("location");
+		}
+
+		if (location == null) {
+			location = EyekabobHelper.getLocation(this);
+		}
+
+    	Map<String, String> params = new HashMap<String, String>();
+		params.put("ll", location.getLatitude() + "," + location.getLongitude());
+    	params.put("radius", "2000"); // 2km seems like a reasonable checkin distance.
+
+    	String uri = EyekabobHelper.Foursquare.getUri("venues/search", params);
+    	
+    	new JSONRequestTask().execute(uri);
 	}
 
 	public void loadData(JSONObject data) {
 		try {
-			// The key for the list of places is "data".
-			JSONArray list = data.getJSONArray("data");
+			JSONObject response = data.getJSONObject("response");
 			ListView lv = (ListView)findViewById(R.id.adList);
 			VenueListAdapter adapter = (VenueListAdapter)lv.getAdapter();
-			for (int i = 0; i < list.length(); i++) {
-				JSONObject placeData = list.getJSONObject(i);
+			JSONArray venues = response.getJSONArray("venues");
+			for (int i = 0; i < venues.length(); i++) {
+				JSONObject placeData = venues.getJSONObject(i);
 				Venue venue = new Venue();
 				venue.setName(placeData.optString("name"));
-				venue.setId(placeData.optInt("id"));
+				venue.setId(Integer.getInteger(placeData.optString("id")));
 				JSONObject location = placeData.optJSONObject("location");
 				if (location != null) {
-					// TODO: enable this after you can sort by distance!
-					//venue.setLat(location.optString("latitude"));
-					//venue.setLon(location.optString("longitude"));
 					venue.setCity(location.optString("city"));
-					venue.setStreet(location.optString("street"));
-					venue.setPostalCode(location.optString("zip"));
+					venue.setStreet(location.optString("address"));
+					venue.setPostalCode(location.optString("postalCode"));
 					venue.setCountry(location.optString("country"));
 				}
 				adapter.add(venue);
 			}
 		}
 		catch (JSONException e) {
-			Toast.makeText(this, "Error in reading Facebook place search", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Could not get nearby places", Toast.LENGTH_SHORT).show();
 			Log.e(getClass().getName(), "Unable to parse JSON response", e);
 		}
 	}
 
-	public class JSONRequestTask extends AsyncTask<Bundle, Void, JSONObject> {
+	public class JSONRequestTask extends JSONTask {
     	protected void onPreExecute() {
     		CheckinSearchList.this.createDialog(R.string.searching);
     		CheckinSearchList.this.showDialog();
     	}
-		@Override
-		protected JSONObject doInBackground(Bundle... args) {
-			Bundle params = args[0];
-	    	JSONObject response = null;
-	    	try {
-				String jsonString = EyekabobHelper.Facebook.getInstance().request("search", params);
-				response = new JSONObject(jsonString);
-			} catch (Exception e) {
-				Log.e(this.getClass().getName(),"Facebook place search error", e);
-			}
-	    	return response;
-		}
     	protected void onPostExecute(JSONObject result) {
     		CheckinSearchList.this.dismissDialog();
 

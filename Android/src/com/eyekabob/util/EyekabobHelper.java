@@ -21,6 +21,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 
 import com.eyekabob.OAuthWebView;
 
@@ -101,11 +102,43 @@ public class EyekabobHelper {
 		public static final String ACCESS_TOKEN_URL = "https://foursquare.com/oauth2/access_token";
 		public static final String AUTHORIZE_URL = "https://foursquare.com/oauth2/authorize";
 		public static final String AUTHENTICATE_URL = "https://foursquare.com/oauth2/authenticate";
+		public static final String SERVICE_URL = "https://api.foursquare.com/v2";
 		public static final String CALLBACK_URL = "http://bcoffield.dyndns.org/eyekabob/foursquare";
-		public static void authenticate(Context context, Class<?> callbackClass) {
+		public static String ACCESS_TOKEN;
+		public static final void authenticate(Context context, Class<?> callbackClass) {
 			Intent oAuthIntent = new Intent(context, OAuthWebView.class);
 			oAuthIntent.putExtra("callbackClass", callbackClass);
+			oAuthIntent.putExtra("url", getAuthUrl());
 			context.startActivity(oAuthIntent);
+		}
+		public static final String getAuthUrl() {
+			return AUTHENTICATE_URL + "?client_id=" + CLIENT_ID + "&response_type=token" + "&redirect_uri=" + CALLBACK_URL;
+		}
+		public static final void setAccessToken(String accessToken) {
+			ACCESS_TOKEN = accessToken;
+		}
+		public static final String getUri(String api, Map<String, String> params) {
+			if (params == null) {
+				params = new HashMap<String, String>();
+			}
+
+			if (!params.containsKey("limit")) {
+				params.put("limit", "2");
+			}
+
+			if (!params.containsKey("v")) {
+				params.put("v", "20120415");
+			}
+
+			String url = SERVICE_URL + "/" + api;
+			url += "?oauth_token=" + ACCESS_TOKEN;
+			for (String param : params.keySet()) {
+				url += "&" + param + "=" + params.get(param);
+			}
+			return url;
+		}
+		public static final void checkin(Bundle params) {
+			// TODO: do stuff.
 		}
 	}
 

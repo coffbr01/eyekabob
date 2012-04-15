@@ -26,4 +26,5 @@
     <string name="artist_info_label">Artist</string>
     <string name="venue_info_label">Artist</string>
     <string name="checkin_search_label">Nearby Places</string>
+    <string name="checkin_label">Check in</string>
 </resources>
