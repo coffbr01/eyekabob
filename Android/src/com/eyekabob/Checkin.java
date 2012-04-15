@@ -23,6 +23,8 @@ public class Checkin extends EyekabobActivity {
 		Venue venue = (Venue)getIntent().getExtras().get("venue");
 		EditText venueName = (EditText)findViewById(R.id.checkinVenue);
 		venueName.setText(venue.getName());
+		EditText shout = (EditText)findViewById(R.id.checkinShout);
+		shout.requestFocus();
 	}
 	public void submitButtonHandler(View v) {
 		String venueName = ((EditText)findViewById(R.id.checkinVenue)).getText().toString();
