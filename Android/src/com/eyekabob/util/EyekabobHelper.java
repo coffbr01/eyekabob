@@ -21,8 +21,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Bundle;
 
+import com.eyekabob.CheckinSearchList;
 import com.eyekabob.OAuthWebView;
 
 public class EyekabobHelper {
@@ -127,6 +127,7 @@ public class EyekabobHelper {
 			}
 
 			if (!params.containsKey("v")) {
+				// Date of implementation, YYYYMMDD.
 				params.put("v", "20120415");
 			}
 
@@ -137,8 +138,14 @@ public class EyekabobHelper {
 			}
 			return url;
 		}
-		public static final void checkin(Bundle params) {
-			// TODO: do stuff.
+		public static final void searchNearby(Context context) {
+			if (ACCESS_TOKEN == null) {
+				authenticate(context, CheckinSearchList.class);
+				return;
+			}
+
+			Intent checkinSearchIntent = new Intent(context, CheckinSearchList.class);
+			context.startActivity(checkinSearchIntent);
 		}
 	}
 

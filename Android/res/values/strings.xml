@@ -27,4 +27,6 @@
     <string name="venue_info_label">Artist</string>
     <string name="checkin_search_label">Nearby Places</string>
     <string name="checkin_label">Check in</string>
+    <string name="checkin_shout_hint">Comments about checkin (not required)</string>
+    <string name="checking_in">Checking in ...</string>
 </resources>

@@ -56,7 +56,7 @@ public class CheckinSearchList extends EyekabobActivity {
     	params.put("radius", "2000"); // 2km seems like a reasonable checkin distance.
 
     	String uri = EyekabobHelper.Foursquare.getUri("venues/search", params);
-    	
+
     	new JSONRequestTask().execute(uri);
 	}
 
@@ -70,7 +70,7 @@ public class CheckinSearchList extends EyekabobActivity {
 				JSONObject placeData = venues.getJSONObject(i);
 				Venue venue = new Venue();
 				venue.setName(placeData.optString("name"));
-				venue.setId(Integer.getInteger(placeData.optString("id")));
+				venue.setId(placeData.optString("id"));
 				JSONObject location = placeData.optJSONObject("location");
 				if (location != null) {
 					venue.setCity(location.optString("city"));

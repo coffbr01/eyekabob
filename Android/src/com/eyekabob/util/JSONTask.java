@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,12 +20,26 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 
 public abstract class JSONTask extends AsyncTask<String, Void, JSONObject> {
+	private String requestType;
+	public JSONTask() {
+		super();
+	}
+	public JSONTask(String requestType) {
+		super();
+		this.requestType = requestType;
+	}
 	protected JSONObject doInBackground(String... uris) {
 		return doRequest(uris[0]);
 	}
     public JSONObject doRequest(String uri) {
     	HttpClient client = new DefaultHttpClient();
-    	HttpGet request = new HttpGet(uri);
+    	HttpRequestBase request = null;
+    	if ("POST".equals(requestType)) {
+    		request = new HttpPost(uri);
+    	}
+    	else {
+    		request = new HttpGet(uri);
+    	}
     	StringBuffer sb = null;
 
     	try {

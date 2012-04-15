@@ -30,7 +30,7 @@ public class Home extends EyekabobActivity {
     }
 
     public void homeCheckinHandler(View v) {
-    	EyekabobHelper.Foursquare.authenticate(this, CheckinSearchList.class);
+    	EyekabobHelper.Foursquare.searchNearby(this);
     }
 
     public void homeSettingsHandler(View v) {

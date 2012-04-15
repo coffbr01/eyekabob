@@ -4,9 +4,22 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/checkinText"
+    <EditText
+        android:id="@+id/checkinVenue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/checkinShout"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:gravity="top|left"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TODO: work needed here to actually check in to the selected venue" />
+        android:hint="@string/checkin_shout_hint" />
+    <Button
+        android:id="@+id/checkinSubmit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/checkin_label"
+        android:onClick="submitButtonHandler" />
 </LinearLayout>

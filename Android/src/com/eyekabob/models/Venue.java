@@ -15,7 +15,7 @@ import java.net.URL;
 public class Venue implements Serializable {
 	private static final long serialVersionUID = -5136924774088920040L;
 
-	private Integer id;
+	private String id;
 	private String name;
 	private String city;
 	private String country;
@@ -26,13 +26,13 @@ public class Venue implements Serializable {
 	private URL url;
 
 	/**
-	 * Last.fm ID for the venue.
+	 * ID for the venue.
 	 * @return
 	 */
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

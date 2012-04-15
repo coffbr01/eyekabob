@@ -76,7 +76,7 @@ public class VenueList extends EyekabobActivity {
     			}
     		}
 
-    		venueRow.setId(Integer.parseInt(venueNodes.get("id").getTextContent()));
+    		venueRow.setId(venueNodes.get("id").getTextContent());
     		venueRow.setName(venueNodes.get("name").getTextContent());
     		venueRow.setUrl(venueNodes.get("url").getTextContent());
 
