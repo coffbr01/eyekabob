@@ -36,7 +36,7 @@ public class CheckinSearchList extends EyekabobActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.adlistactivity);
-		VenueListAdapter adapter = new VenueListAdapter(this);
+		VenueListAdapter adapter = new VenueListAdapter(getApplicationContext());
 		ListView lv = (ListView)findViewById(R.id.adList);
 		lv.setOnItemClickListener(listItemListener);
 		lv.setAdapter(adapter);
@@ -53,7 +53,7 @@ public class CheckinSearchList extends EyekabobActivity {
 
     	Map<String, String> params = new HashMap<String, String>();
 		params.put("ll", location.getLatitude() + "," + location.getLongitude());
-    	params.put("radius", "2000"); // 2km seems like a reasonable checkin distance.
+    	params.put("radius", "3000"); // 3km seems like a reasonable checkin distance.
 
     	String uri = EyekabobHelper.Foursquare.getUri("venues/search", params);
 

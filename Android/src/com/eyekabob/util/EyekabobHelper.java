@@ -21,6 +21,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.util.Log;
 
 import com.eyekabob.CheckinSearchList;
 import com.eyekabob.OAuthWebView;
@@ -140,10 +141,12 @@ public class EyekabobHelper {
 		}
 		public static final void searchNearby(Context context) {
 			if (ACCESS_TOKEN == null) {
+				Log.d(EyekabobHelper.class.getName(), "Foursquare access token was null");
 				authenticate(context, CheckinSearchList.class);
 				return;
 			}
 
+			Log.d(EyekabobHelper.class.getName(), "Foursquare access token was defined. Starting checkin search activity.");
 			Intent checkinSearchIntent = new Intent(context, CheckinSearchList.class);
 			context.startActivity(checkinSearchIntent);
 		}
