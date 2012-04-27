@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -54,7 +55,8 @@ public class ArtistList extends EyekabobActivity {
     protected void loadArtists(Document doc) {
     	NodeList artists = doc.getElementsByTagName("artist");
     	if (artists.getLength() == 0) {
-    		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
+    		LinearLayout noResultsLayout = (LinearLayout)findViewById(R.id.noResults);
+    		noResultsLayout.setVisibility(View.VISIBLE);
     		return;
     	}
     	for (int i = 0; i < artists.getLength(); i++) {
@@ -80,5 +82,9 @@ public class ArtistList extends EyekabobActivity {
     		ArtistList.this.dismissDialog();
     		ArtistList.this.loadArtists(result);
     	}
+    }
+
+    public void addBand(View v) {
+    	Toast.makeText(this, "HERE IS WHERE YOU MIGHT ADD A BAND", Toast.LENGTH_SHORT).show();
     }
 }
