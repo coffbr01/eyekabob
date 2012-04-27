@@ -18,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.eyekabob.models.Artist;
 import com.eyekabob.util.DocumentTask;
@@ -85,6 +84,8 @@ public class ArtistList extends EyekabobActivity {
     }
 
     public void addBand(View v) {
-    	Toast.makeText(this, "HERE IS WHERE YOU MIGHT ADD A BAND", Toast.LENGTH_SHORT).show();
+    	Intent addBandIntent = new Intent(this, AddBand.class);
+    	addBandIntent.putExtra("url", "http://www.last.fm/uploadmusic");
+    	startActivity(addBandIntent);
     }
 }
