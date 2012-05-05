@@ -13,10 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,11 +26,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eyekabob.models.Event;
-import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.EyekabobHelper;
+import com.eyekabob.util.JSONTask;
 
 public class EventInfo extends EyekabobActivity {
-	private Map<String, String> vendors;
 	private List<String> artists;
 	private String startDate = "";
 	private String headliner = "";
@@ -53,68 +51,33 @@ public class EventInfo extends EyekabobActivity {
         wv.setBackgroundColor(0x00000000);
     }
 
-    protected void loadEvent(Document doc) {
-    	Node eventNode = doc.getElementsByTagName("event").item(0);
+    protected void loadEvent(JSONObject response) {
+    	try {
+	    	JSONObject jsonEvent = response.getJSONObject("event");
 
-		vendors = new HashMap<String, String>();
-		artists = new ArrayList<String>();
-		NodeList eventChildren = eventNode.getChildNodes();
-		for (int j = 0; j < eventChildren.getLength(); j++) {
-		    Node eventChildNode = eventChildren.item(j);
-		    String nodeName = eventChildNode.getNodeName();
-		    if ("title".equals(nodeName)) {
-		    	title = eventChildNode.getTextContent();
-		    }
-		    else if ("venue".equals(nodeName)) {
-		    	NodeList venueChildren = eventChildNode.getChildNodes();
-		    	for (int k = 0; k < venueChildren.getLength(); k++) {
-		    		if ("name".equals(venueChildren.item(k).getNodeName())) {
-		    			venue = venueChildren.item(k).getTextContent();
-		    		}
-		    	}
-		    }
-		    else if ("startDate".equals(nodeName)) {
-		    	startDate = EyekabobHelper.LastFM.toReadableDate(eventChildNode.getTextContent());
-		    }
-		    else if ("image".equals(nodeName)) {
-		    	NamedNodeMap attributes = eventChildNode.getAttributes();
-		    	String size = attributes.getNamedItem("size").getTextContent();
-		    	if ("large".equals(size)) {
-		    		imageUrl = eventChildNode.getTextContent();
-		    	}
-		    	else if ("".equals(imageUrl)) {
-		    		imageUrl = eventChildNode.getTextContent();
-		    	}
-		    }
-		    else if ("description".equals(nodeName)) {
-		    	description = eventChildNode.getTextContent();
-		    }
-		    else if ("tickets".equals(nodeName)) {
-		    	NodeList vendorNodes = eventChildNode.getChildNodes();
-		    	for (int k = 0; k < vendorNodes.getLength(); k++) {
-		    		if ("ticket".equals(vendorNodes.item(k).getNodeName())) {
-		    			Node ticket = vendorNodes.item(k);
-		    			NamedNodeMap attributes = ticket.getAttributes();
-		    			String vendorName = attributes.getNamedItem("supplier").getTextContent();
-		    			vendors.put(vendorName, ticket.getTextContent());
-		    		}
-		    	}
-		    }
-		    else if ("artists".equals(nodeName)) {
-		    	NodeList artistNodes = eventChildNode.getChildNodes();
-		    	for (int k = 0; k < artistNodes.getLength(); k++) {
-		    		if ("artist".equals(artistNodes.item(k).getNodeName())) {
-		    			artists.add(artistNodes.item(k).getTextContent());
-		    		}
-		    		else if ("headliner".equals(artistNodes.item(k).getNodeName())) {
-		    			headliner = artistNodes.item(k).getTextContent();
-		    		}
-		    	}
-		    	if (artists.contains(headliner)) {
-		    		artists.remove(headliner);
-		    	}
-		    }
+			artists = new ArrayList<String>();
+		    title = jsonEvent.getString("title");
+		    JSONObject jsonVenue = jsonEvent.getJSONObject("venue");
+		    venue = jsonVenue.optString("name");
+	    	startDate = EyekabobHelper.LastFM.toReadableDate(jsonEvent.getString("startDate"));
+	    	JSONObject image = EyekabobHelper.LastFM.getJSONImage("large", jsonEvent.getJSONArray("image"));
+			imageUrl = image.getString("#text");
+			description = jsonEvent.getString("description");
+
+			JSONObject jsonAllArtists = jsonEvent.getJSONObject("artists");
+			headliner = jsonAllArtists.getString("headliner");
+			JSONArray jsonOpeners = jsonAllArtists.getJSONArray("artist");
+			for (int i = 0; i < jsonOpeners.length(); i++) {
+				String artistName = jsonOpeners.getString(i);
+				if (!headliner.equals(artistName)) {
+					artists.add(artistName);
+				}
+			}
 		}
+    	catch (JSONException e) {
+    		e.printStackTrace();
+    		throw new RuntimeException(e);
+    	}
 
 		ImageView iv = (ImageView)findViewById(R.id.eventImageView);
 		InputStream is = null;
@@ -147,12 +110,12 @@ public class EventInfo extends EyekabobActivity {
     }
 
     // Handles the asynchronous request, away from the UI thread.
-    private class RequestTask extends DocumentTask {
+    private class RequestTask extends JSONTask {
     	protected void onPreExecute() {
     		EventInfo.this.createDialog(R.string.loading);
     		EventInfo.this.showDialog();
     	}
-    	protected void onPostExecute(Document result) {
+    	protected void onPostExecute(JSONObject result) {
     		EventInfo.this.dismissDialog();
     		EventInfo.this.loadEvent(result);
     	}

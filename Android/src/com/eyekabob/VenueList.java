@@ -4,11 +4,9 @@
  */
 package com.eyekabob;
 
-import java.util.Map;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -20,8 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.eyekabob.models.Venue;
-import com.eyekabob.util.DocumentTask;
-import com.eyekabob.util.NiceNodeList;
+import com.eyekabob.util.JSONTask;
 
 public class VenueList extends EyekabobActivity {
 	private VenueListAdapter adapter;
@@ -46,55 +43,48 @@ public class VenueList extends EyekabobActivity {
         lv.setOnItemClickListener(listItemListener);
     }
     
-    protected void loadVenues(Document doc) {
-    	NodeList venues = doc.getElementsByTagName("venue");
-    	if (venues.getLength() == 0) {
-    		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
-    		return;
+    protected void loadVenues(JSONObject response) {
+    	try {
+	    	JSONArray venues = response.getJSONObject("results").getJSONObject("venuematches").getJSONArray("venue");
+	    	if (venues.length() == 0) {
+	    		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
+	    		return;
+	    	}
+	    	for (int i = 0; i < venues.length(); i++) {
+	    		JSONObject venue = venues.getJSONObject(i);
+	    		JSONObject location = venue.getJSONObject("location");
+	
+	    		Venue venueRow = new Venue();
+	
+	    		venueRow.setId(venue.optString("id"));
+	    		venueRow.setName(venue.optString("name"));
+	    		venueRow.setUrl(venue.optString("url"));
+	
+	    		venueRow.setCity(location.optString("city"));
+	    		venueRow.setCountry(location.optString("country"));
+	    		venueRow.setStreet(location.optString("street"));
+	
+	    		JSONObject geoPoint = venue.optJSONObject("geo:point");
+	    		if (geoPoint != null) {
+		    		venueRow.setLat(geoPoint.optString("geo:lat"));
+		    		venueRow.setLon(geoPoint.optString("geo:long"));
+	    		}
+
+	    		adapter.add(venueRow);
+	    	}
     	}
-    	for (int i = 0; i < venues.getLength(); i++) {
-    		Node venueNode = venues.item(i);
-    		NiceNodeList venueNodeList = new NiceNodeList(venueNode.getChildNodes());
-    		Map<String, Node> venueNodes = venueNodeList.get("name", "id", "url", "location");
-
-    		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
-    		Map<String, Node> locationNodes = locationNodeList.get("city", "country", "street", "geo:point");
-
-    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
-    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
-    		Node lat = geoNodes.get("geo:lat");
-    		Node lon = geoNodes.get("geo:long");
-
-    		Venue venueRow = new Venue();
-
-    		if (lat != null && lon != null) {
-    			String latStr = lat.getTextContent();
-    			String lonStr = lon.getTextContent();
-    			if (!"".equals(latStr) && !"".equals(lonStr)) {
-    				venueRow.setLat(latStr);
-    				venueRow.setLon(lonStr);
-    			}
-    		}
-
-    		venueRow.setId(venueNodes.get("id").getTextContent());
-    		venueRow.setName(venueNodes.get("name").getTextContent());
-    		venueRow.setUrl(venueNodes.get("url").getTextContent());
-
-    		venueRow.setCity(locationNodes.get("city").getTextContent());
-    		venueRow.setCountry(locationNodes.get("country").getTextContent());
-    		venueRow.setStreet(locationNodes.get("street").getTextContent());
-
-    		adapter.add(venueRow);
+    	catch (JSONException e) {
+    		throw new RuntimeException(e);
     	}
     }
 
     // Handles the asynchronous request, away from the UI thread.
-    private class RequestTask extends DocumentTask {
+    private class RequestTask extends JSONTask {
     	protected void onPreExecute() {
     		VenueList.this.createDialog(R.string.searching);
     		VenueList.this.showDialog();
     	}
-    	protected void onPostExecute(Document result) {
+    	protected void onPostExecute(JSONObject result) {
     		VenueList.this.dismissDialog();
     		VenueList.this.loadVenues(result);
     	}

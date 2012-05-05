@@ -7,8 +7,8 @@ package com.eyekabob;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,9 +17,8 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.eyekabob.models.Artist;
-import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.EyekabobHelper;
-import com.eyekabob.util.NiceNodeList;
+import com.eyekabob.util.JSONTask;
 
 public class ArtistInfo extends EyekabobActivity {
 	private Artist artist;
@@ -46,17 +45,20 @@ public class ArtistInfo extends EyekabobActivity {
 	 * parse the XML document response and put attributes on the Artist object.
 	 * @param result
 	 */
-	protected void handleArtistResponse(Document result) {
-		NiceNodeList artistNodeList = new NiceNodeList(result.getElementsByTagName("artist").item(0).getChildNodes());
-		Map<String, Node> artistNodes = artistNodeList.get("name", "mbid", "url", "bio");
-		artist.setName(artistNodes.get("name").getTextContent());
-		artist.setMbid(artistNodes.get("mbid").getTextContent());
-		artist.setUrl(artistNodes.get("url").getTextContent());
-
-		NiceNodeList bioNodeList = new NiceNodeList(artistNodes.get("bio").getChildNodes());
-		Map<String, Node> bioNodes = bioNodeList.get("summary", "content");
-		artist.setSummary(bioNodes.get("summary").getTextContent());
-		artist.setContent(bioNodes.get("content").getTextContent());
+	protected void handleArtistResponse(JSONObject response) {
+		try {
+			JSONObject jsonArtist = response.getJSONObject("artist");
+			artist.setName(jsonArtist.getString("name"));
+			artist.setMbid(jsonArtist.getString("mbid"));
+			artist.setUrl(jsonArtist.getString("url"));
+	
+			JSONObject bio = jsonArtist.getJSONObject("bio");
+			artist.setSummary(bio.getString("summary"));
+			artist.setContent(bio.getString("content"));
+		}
+		catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
 
 		render();
 	}
@@ -79,12 +81,12 @@ public class ArtistInfo extends EyekabobActivity {
 	}
 
     // Handles the asynchronous request, away from the UI thread.
-    private class ArtistRequestTask extends DocumentTask {
+    private class ArtistRequestTask extends JSONTask {
     	protected void onPreExecute() {
     		ArtistInfo.this.createDialog(R.string.loading);
     		ArtistInfo.this.showDialog();
     	}
-    	protected void onPostExecute(Document result) {
+    	protected void onPostExecute(JSONObject result) {
     		ArtistInfo.this.dismissDialog();
     		ArtistInfo.this.handleArtistResponse(result);
     	}

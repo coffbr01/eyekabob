@@ -10,9 +10,6 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -26,10 +23,8 @@ import android.widget.Toast;
 
 import com.eyekabob.models.Event;
 import com.eyekabob.models.Venue;
-import com.eyekabob.util.DocumentTask;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
-import com.eyekabob.util.NiceNodeList;
 
 public class EventList extends EyekabobActivity {
 	EventListAdapter adapter;
@@ -81,55 +76,45 @@ public class EventList extends EyekabobActivity {
     	super.onDestroy();
     }
     
-    protected void loadEvents(Document doc) {
-    	if (doc == null) {
-    		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
-    		return;
+    protected void loadEvents(JSONObject response) {
+    	try {
+	    	JSONArray events = response.getJSONObject("events").getJSONArray("event");
+	    	if (events.length() == 0) {
+	    		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
+	    		return;
+	    	}
+	
+	    	for (int i = 0; i < events.length(); i++) {
+	    		Event event = new Event();
+	    		Venue venue = new Venue();
+	    		event.setVenue(venue);
+	    		JSONObject jsonEvent = events.getJSONObject(i);
+	    		jsonEvent.getString("title");
+	    		jsonEvent.getString("id");
+	    		JSONObject jsonVenue = jsonEvent.getJSONObject("venue");
+	    		JSONObject jsonLocation = jsonVenue.getJSONObject("location");
+	    		JSONObject jsonGeo = jsonLocation.optJSONObject("geo:point");
+	    		event.setDate(EyekabobHelper.LastFM.toReadableDate(jsonEvent.getString("startDate")));
+	
+	    		event.setId(jsonEvent.getString("id"));
+	    		event.setName(jsonEvent.getString("title"));
+	    		event.setDate(EyekabobHelper.LastFM.toReadableDate(jsonEvent.getString("startDate")));
+	    		JSONObject jsonImage = EyekabobHelper.LastFM.getJSONImage("large", jsonEvent.getJSONArray("image"));
+	    		event.addImageURL("large", jsonImage.getString("#text"));
+	
+	    		venue.setName(jsonVenue.getString("name"));
+	    		venue.setCity(jsonLocation.getString("city"));
+	
+	    		if (jsonGeo != null) {
+		    		venue.setLat(jsonGeo.optString("geo:lat"));
+		    		venue.setLon(jsonGeo.getString("geo:long"));
+	    		}
+	
+			    adapter.add(event);
+	    	}
     	}
-    	NodeList events = doc.getElementsByTagName("event");
-    	if (events.getLength() == 0) {
-    		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
-    		return;
-    	}
-
-    	for (int i = 0; i < events.getLength(); i++) {
-    		Event event = new Event();
-    		Venue venue = new Venue();
-    		event.setVenue(venue);
-    		Node eventNode = events.item(i);
-    		NiceNodeList eventNodeList = new NiceNodeList(eventNode.getChildNodes());
-    		Map<String, Node> eventNodes = eventNodeList.get("title", "id", "venue", "startDate", "image");
-
-    		NiceNodeList venueNodeList = new NiceNodeList(eventNodes.get("venue").getChildNodes());
-    		Map<String, Node> venueNodes = venueNodeList.get("name", "location");
-
-    		NiceNodeList locationNodeList = new NiceNodeList(venueNodes.get("location").getChildNodes());
-    		Map<String, Node> locationNodes = locationNodeList.get("city", "geo:point");
-
-    		NiceNodeList geoNodeList = new NiceNodeList(locationNodes.get("geo:point").getChildNodes());
-    		Map<String, Node> geoNodes = geoNodeList.get("geo:lat", "geo:long");
-
-    		event.setId(eventNodes.get("id").getTextContent());
-    		event.setName(eventNodes.get("title").getTextContent());
-    		event.setDate(EyekabobHelper.LastFM.toReadableDate(eventNodes.get("startDate").getTextContent()));
-    		event.addImageURL("large", eventNodes.get("image").getTextContent());
-
-    		venue.setName(venueNodes.get("name").getTextContent());
-    		venue.setCity(locationNodes.get("city").getTextContent());
-
-    		Node lat = geoNodes.get("geo:lat");
-    		Node lon = geoNodes.get("geo:long");
-
-    		if (lat != null && lon != null) {
-    			String latStr = lat.getTextContent();
-    			String lonStr = lon.getTextContent();
-    			if (!"".equals(latStr) && !"".equals(lonStr)) {
-    				venue.setLat(latStr);
-    				venue.setLon(lonStr);
-    			}
-    		}
-
-		    adapter.add(event);
+    	catch (JSONException e) {
+    		throw new RuntimeException(e);
     	}
     }
 
@@ -174,12 +159,12 @@ public class EventList extends EyekabobActivity {
     }
 
     // Handles the asynchronous request, away from the UI thread.
-    private class DocumentRequestTask extends DocumentTask {
+    private class DocumentRequestTask extends JSONTask {
     	protected void onPreExecute() {
     		EventList.this.createDialog(R.string.searching);
     		EventList.this.showDialog();
     	}
-    	protected void onPostExecute(Document result) {
+    	protected void onPostExecute(JSONObject result) {
     		EventList.this.dismissDialog();
     		EventList.this.loadEvents(result);
     	}

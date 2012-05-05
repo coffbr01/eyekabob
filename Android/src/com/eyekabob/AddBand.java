@@ -13,6 +13,8 @@ public class AddBand extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addband);
 		WebView webView = (WebView)findViewById(R.id.addBandWebView);
-		webView.loadUrl((String)getIntent().getExtras().get("url"));
+		String url = (String)getIntent().getExtras().get("url");
+		String html = "<html><head></head><body><iframe src='" + url + "'></iframe></body></html>";
+		webView.loadData(html, "text/html", null);
 	}
 }

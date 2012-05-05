@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.DOMException;
 
 import android.app.Activity;
@@ -53,6 +56,10 @@ public class EyekabobHelper {
 				params.put("limit", "50");
 			}
 
+			if (!params.containsKey("format")) {
+				params.put("format", "json");
+			}
+
 			params.put("api_key", API_KEY);
 
 			String url = SERVICE_URL;
@@ -75,6 +82,16 @@ public class EyekabobHelper {
 				e.printStackTrace();
 			}
 			return result;
+		}
+		public static JSONObject getJSONImage(String size, JSONArray images) throws JSONException {
+			JSONObject image = null;
+			for (int i = 0; i < images.length(); i++) {
+				image = images.getJSONObject(i);
+				if (size.equals(image.getString("size"))) {
+					return image;
+				}
+			}
+			return image;
 		}
 	}
 	public static class GeoNames {

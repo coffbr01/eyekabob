@@ -4,11 +4,9 @@
  */
 package com.eyekabob;
 
-import java.util.Map;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -20,8 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.eyekabob.models.Artist;
-import com.eyekabob.util.DocumentTask;
-import com.eyekabob.util.NiceNodeList;
+import com.eyekabob.util.JSONTask;
 
 public class ArtistList extends EyekabobActivity {
 	ArtistListAdapter adapter;
@@ -51,33 +48,49 @@ public class ArtistList extends EyekabobActivity {
     	super.onDestroy();
     }
 
-    protected void loadArtists(Document doc) {
-    	NodeList artists = doc.getElementsByTagName("artist");
-    	if (artists.getLength() == 0) {
-    		LinearLayout noResultsLayout = (LinearLayout)findViewById(R.id.noResults);
-    		noResultsLayout.setVisibility(View.VISIBLE);
-    		return;
+    protected void loadArtists(JSONObject response) {
+    	try {
+	    	JSONArray artists = response.getJSONObject("results").getJSONObject("artistmatches").getJSONArray("artist");
+	    	if (artists.length() == 0) {
+	    		LinearLayout noResultsLayout = (LinearLayout)findViewById(R.id.noResults);
+	    		noResultsLayout.setVisibility(View.VISIBLE);
+	    		return;
+	    	}
+	    	for (int i = 0; i < artists.length(); i++) {
+	    		JSONObject artistNode = artists.getJSONObject(i);
+	    		String name = artistNode.getString("name");
+	    		String mbid = artistNode.getString("mbid");
+	    		String url = artistNode.getString("url");
+
+	    		String image = "";
+	    		JSONArray images = artistNode.getJSONArray("image");
+	    		for (int j = 0; j < images.length(); j++) {
+	    			JSONObject imageJson = images.getJSONObject(j);
+	    			if ("large".equals(imageJson.getString("size"))) {
+	    				image = imageJson.getString("#text");
+	    			}
+	    		}
+
+	    		Artist artist = new Artist();
+	    		artist.setName(name);
+	    		artist.setMbid(mbid);
+	    		artist.setUrl(url);
+	    		artist.addImageURL("large", image);
+	    		adapter.add(artist);
+	    	}
     	}
-    	for (int i = 0; i < artists.getLength(); i++) {
-    		Node artistNode = artists.item(i);
-    		NiceNodeList artistNodeList = new NiceNodeList(artistNode.getChildNodes());
-    		Map<String, Node> artistNodes = artistNodeList.get("name", "mbid", "url", "image");
-    		Artist artist = new Artist();
-    		artist.setName(artistNodes.get("name").getTextContent());
-    		artist.setMbid(artistNodes.get("mbid").getTextContent());
-    		artist.setUrl(artistNodes.get("url").getTextContent());
-    		artist.addImageURL("large", artistNodes.get("image").getTextContent());
-    		adapter.add(artist);
+    	catch (JSONException e) {
+    		throw new RuntimeException(e);
     	}
     }
 
     // Handles the asynchronous request, away from the UI thread.
-    private class RequestTask extends DocumentTask {
+    private class RequestTask extends JSONTask {
     	protected void onPreExecute() {
     		ArtistList.this.createDialog(R.string.searching);
     		ArtistList.this.showDialog();
     	}
-    	protected void onPostExecute(Document result) {
+    	protected void onPostExecute(JSONObject result) {
     		ArtistList.this.dismissDialog();
     		ArtistList.this.loadArtists(result);
     	}
@@ -85,7 +98,7 @@ public class ArtistList extends EyekabobActivity {
 
     public void addBand(View v) {
     	Intent addBandIntent = new Intent(this, AddBand.class);
-    	addBandIntent.putExtra("url", "http://www.last.fm/uploadmusic");
+    	addBandIntent.putExtra("url", "http://www.last.fm/uploadmusic?accountType=artist");
     	startActivity(addBandIntent);
     }
 }
