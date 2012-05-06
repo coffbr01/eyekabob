@@ -21,7 +21,7 @@
     </target>
 
     <target name="android" depends="android-clean">
-        <ant antfile="Android/build.xml" target="debug" inheritall="false"/>
+        <ant antfile="Android/build.xml" target="release" inheritall="false"/>
     </target>
 
     <target name="clean" depends="android-clean, ios-clean">
