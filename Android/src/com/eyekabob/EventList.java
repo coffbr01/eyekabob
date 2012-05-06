@@ -78,11 +78,13 @@ public class EventList extends EyekabobActivity {
     
     protected void loadEvents(JSONObject response) {
     	try {
-	    	JSONArray events = response.getJSONObject("events").getJSONArray("event");
-	    	if (events.length() == 0) {
+	    	JSONObject jsonEvents = response.optJSONObject("events");
+	    	if (jsonEvents == null) {
 	    		Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
 	    		return;
 	    	}
+
+	    	JSONArray events = jsonEvents.getJSONArray("event");
 	
 	    	for (int i = 0; i < events.length(); i++) {
 	    		Event event = new Event();
@@ -114,7 +116,7 @@ public class EventList extends EyekabobActivity {
 	    	}
     	}
     	catch (JSONException e) {
-    		throw new RuntimeException(e);
+    		Log.e(getClass().getName(), "", e);
     	}
     }
 

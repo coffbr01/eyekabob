@@ -72,33 +72,6 @@
         android:layout_gravity="fill_horizontal"
         android:orientation="vertical"
         android:background="@drawable/find_form_bg_big_layout" >
-	    <LinearLayout 
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="fill_horizontal"
-	        android:layout_marginTop="5dp"
-	        android:orientation="horizontal" >
-	        <EditText
-	            android:id="@+id/findByLocationInput"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_gravity="center_vertical"
-	            android:hint="@string/search_by_location"
-	            android:singleLine="true"
-	            android:enabled="false" >
-	        </EditText>
-	
-	        <ImageButton
-	            android:id="@+id/findByLocationButton"
-	            android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:layout_gravity="center_vertical"
-	            android:background="#00000000"
-	            android:onClick="findByLocationHandler"
-	            android:src="@drawable/eye_search_button"
-	            android:contentDescription="@string/find_music_button_desc" />
-        </LinearLayout>
         <CheckBox
             android:id="@+id/useCurrentLocationCheckBox"
             android:layout_width="wrap_content"
@@ -107,19 +80,73 @@
             android:checked="true"
             android:onClick="useCurrentLocationHandler" >
         </CheckBox>
+	    <LinearLayout
+	        android:id="@+id/findByZipLayout"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="fill_horizontal"
+	        android:layout_marginTop="5dp"
+	        android:visibility="gone"
+	        android:orientation="horizontal" >
+	        <EditText
+	            android:id="@+id/findByLocationInput"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_gravity="center_vertical"
+	            android:hint="@string/search_by_location"
+	            android:singleLine="true" >
+	        </EditText>
+
+	        <ImageButton
+	            android:id="@+id/findByZipButton"
+	            android:layout_width="wrap_content"
+	            android:layout_height="fill_parent"
+	            android:layout_gravity="center_vertical"
+	            android:background="#00000000"
+	            android:onClick="findByZipHandler"
+	            android:src="@drawable/eye_search_button"
+	            android:contentDescription="@string/find_music_button_desc" />
+        </LinearLayout>
+	    <LinearLayout
+	        android:id="@+id/findSeekBarLayout"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="fill_horizontal"
+	        android:orientation="horizontal" >
+	        <SeekBar
+	            android:id="@+id/milesSeekBar"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+	            android:max="50" >
+	        </SeekBar>
+            <ImageButton
+                android:id="@+id/findByLocationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="#00000000"
+                android:onClick="findByLocationHandler"
+                android:src="@drawable/eye_search_button"
+                android:contentDescription="@string/find_music_button_desc" />
+	    </LinearLayout>
         <LinearLayout
+            android:id="@+id/findByDistanceLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="fill_horizontal"
             android:orientation="horizontal" >
-	        <TextView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginRight="5dp"
-	            android:text="@string/distance" >
-	        </TextView>
-	        <TextView
-	            android:id="@+id/milesTextView"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="@string/distance" >
+            </TextView>
+            <TextView
+                android:id="@+id/milesTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10" >
@@ -130,13 +157,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="@string/miles" >
             </TextView>
-	    </LinearLayout>
-	    <SeekBar
-	        android:id="@+id/milesSeekBar"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:max="50" >
-	    </SeekBar>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

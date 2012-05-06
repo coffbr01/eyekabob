@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.eyekabob.util.EyekabobHelper;
-
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
@@ -22,10 +20,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
+
+import com.eyekabob.util.EyekabobHelper;
 
 public class FindMusic extends EyekabobActivity {
     @Override
@@ -91,48 +92,50 @@ public class FindMusic extends EyekabobActivity {
     	int km = (int)(miles * 1.609344);
     	params.put("distance", Integer.toString(km));
 
-    	CheckBox useCurrentLocationInput = (CheckBox)findViewById(R.id.useCurrentLocationCheckBox);
+		Location location = EyekabobHelper.getLocation(this);
+		if (location != null) {
+    		params.put("lat", Double.toString(location.getLatitude()));
+    		params.put("long", Double.toString(location.getLongitude()));
+		}
+
+    	find("geo.getEvents", EventList.class, params);
+    }
+
+    public void findByZipHandler(View v) {
     	EditText locationInput = (EditText)findViewById(R.id.findByLocationInput);
-    	if (useCurrentLocationInput.isChecked()) {
-    		Location location = EyekabobHelper.getLocation(this);
-    		if (location != null) {
-	    		params.put("lat", Double.toString(location.getLatitude()));
-	    		params.put("long", Double.toString(location.getLongitude()));
-    		}
-    	}
-    	else if (!"".equals(locationInput.getText().toString().trim())) {
-    		String criterion = locationInput.getText().toString().trim();
-			Pattern pattern = Pattern.compile("^\\d{5}(-\\d{4})?$");
-			Matcher matcher = pattern.matcher(criterion);
-
-			if (matcher.find()) {
-				findByZip(criterion, params.get("distance"));
-			}
-			else {
-				Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
-			}
-
-			return;
-    	}
-    	else {
+    	if ("".equals(locationInput.getText().toString().trim())) {
     		// Nothing entered and not using current location.
     		Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
     		return;
     	}
 
-    	find("geo.getEvents", EventList.class, params);
+		String criterion = locationInput.getText().toString().trim();
+		Pattern pattern = Pattern.compile("^\\d{5}(-\\d{4})?$");
+		Matcher matcher = pattern.matcher(criterion);
+
+		if (matcher.find()) {
+			findByZip(criterion);
+		}
+		else {
+			Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
+		}
+
+		return;
     }
 
     public void useCurrentLocationHandler(View v) {
-    	// When the checkbox is checked, the slider should be enabled and the text input should be disabled.
-    	// When the checkbox is unchecked, the slider should be disabled and the text input should be enabled.
-    	EditText location = (EditText)findViewById(R.id.findByLocationInput);
-    	location.setEnabled(!((CheckBox)v).isChecked());
-    	SeekBar slider = (SeekBar)findViewById(R.id.milesSeekBar);
-    	slider.setEnabled(((CheckBox)v).isChecked());
+    	// When the checkbox is checked, the slider should be visible and the text input should be invisible.
+    	// When the checkbox is unchecked, the slider should be invisible and the text input should be visible.
+    	LinearLayout distanceSeekLayout = (LinearLayout)findViewById(R.id.findSeekBarLayout);
+    	LinearLayout distanceTextLayout = (LinearLayout)findViewById(R.id.findByDistanceLayout);
+    	LinearLayout zipLayout = (LinearLayout)findViewById(R.id.findByZipLayout);
+    	boolean isChecked = ((CheckBox)v).isChecked();
+    	distanceSeekLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+    	distanceTextLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+    	zipLayout.setVisibility(isChecked ? View.GONE : View.VISIBLE);
     }
 
-    private void findByZip(String zip, String distance) {
+    private void findByZip(String zip) {
     	Uri uri = EyekabobHelper.GeoNames.getUri(zip);
     	Intent intent = new Intent(getApplicationContext(), EventList.class);
     	intent.setData(uri);
