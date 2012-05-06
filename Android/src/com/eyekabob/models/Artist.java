@@ -43,6 +43,10 @@ public class Artist implements Serializable {
 		return mbid;
 	}
 	public void setMbid(String mbid) {
+		if ("".equals(mbid)) {
+			// mbid can not be empty. It can be null or a musicbrainz id.
+			return;
+		}
 		this.mbid = mbid;
 	}
 

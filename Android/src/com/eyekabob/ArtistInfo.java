@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eyekabob.models.Artist;
 import com.eyekabob.util.EyekabobHelper;
@@ -33,7 +34,12 @@ public class ArtistInfo extends EyekabobActivity {
 		Log.d(getClass().getName(), "Artist name is: " + artist.getName());
 
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("mbid", artist.getMbid());
+		if (artist.getMbid() == null) {
+			params.put("artist", artist.getName());
+		}
+		else {
+			params.put("mbid", artist.getMbid());
+		}
 		Uri artistInfoUri = EyekabobHelper.LastFM.getUri("artist.getInfo", params);
 
 		// Send the request for artist info.
@@ -47,7 +53,11 @@ public class ArtistInfo extends EyekabobActivity {
 	 */
 	protected void handleArtistResponse(JSONObject response) {
 		try {
-			JSONObject jsonArtist = response.getJSONObject("artist");
+			JSONObject jsonArtist = response.optJSONObject("artist");
+			if (jsonArtist == null) {
+				Toast.makeText(this, R.string.no_results, Toast.LENGTH_SHORT).show();
+				return;
+			}
 			artist.setName(jsonArtist.getString("name"));
 			artist.setMbid(jsonArtist.getString("mbid"));
 			artist.setUrl(jsonArtist.getString("url"));
@@ -57,7 +67,7 @@ public class ArtistInfo extends EyekabobActivity {
 			artist.setContent(bio.getString("content"));
 		}
 		catch (JSONException e) {
-			throw new RuntimeException(e);
+			Log.e(getClass().getName(), "", e);
 		}
 
 		render();

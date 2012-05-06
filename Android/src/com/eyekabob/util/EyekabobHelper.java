@@ -5,6 +5,7 @@
 package com.eyekabob.util;
 
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,12 @@ public class EyekabobHelper {
 		public static final String AUTH_TOKEN = "167550e2be8e2989ab56e63b03dd1db6";
 		public static final String SERVICE_URL = "http://ws.audioscrobbler.com/2.0/";
 
+		/**
+		 * Do not encode params. The param values will be encoded for you.
+		 * @param method
+		 * @param params
+		 * @return
+		 */
 		public static Uri getUri(String method, Map<String, String> params) {
 			if (params == null) {
 				params = new HashMap<String, String>();
@@ -65,7 +72,7 @@ public class EyekabobHelper {
 			String url = SERVICE_URL;
 			url += "?method=" + method;
 			for (String param : params.keySet()) {
-				url += "&" + param + "=" + params.get(param);
+				url += "&" + param + "=" + URLEncoder.encode(params.get(param));
 			}
 			return Uri.parse(url);
 		}
@@ -135,6 +142,12 @@ public class EyekabobHelper {
 		public static final void setAccessToken(String accessToken) {
 			ACCESS_TOKEN = accessToken;
 		}
+		/**
+		 * Do not encode params. This will encode the param values for you.
+		 * @param api
+		 * @param params
+		 * @return
+		 */
 		public static final String getUri(String api, Map<String, String> params) {
 			if (params == null) {
 				params = new HashMap<String, String>();
@@ -152,7 +165,7 @@ public class EyekabobHelper {
 			String url = SERVICE_URL + "/" + api;
 			url += "?oauth_token=" + ACCESS_TOKEN;
 			for (String param : params.keySet()) {
-				url += "&" + param + "=" + params.get(param);
+				url += "&" + param + "=" + URLEncoder.encode(params.get(param));
 			}
 			return url;
 		}
