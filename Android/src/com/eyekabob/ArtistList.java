@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -50,12 +51,14 @@ public class ArtistList extends EyekabobActivity {
 
     protected void loadArtists(JSONObject response) {
     	try {
-	    	JSONArray artists = response.getJSONObject("results").getJSONObject("artistmatches").getJSONArray("artist");
-	    	if (artists.length() == 0) {
+	    	JSONObject results = response.getJSONObject("results");
+	    	Object artistMatchesObj = results.get("artistmatches");
+	    	if (artistMatchesObj instanceof String) {
 	    		LinearLayout noResultsLayout = (LinearLayout)findViewById(R.id.noResults);
 	    		noResultsLayout.setVisibility(View.VISIBLE);
 	    		return;
 	    	}
+	    	JSONArray artists = ((JSONObject)artistMatchesObj).getJSONArray("artist");
 	    	for (int i = 0; i < artists.length(); i++) {
 	    		JSONObject artistNode = artists.getJSONObject(i);
 	    		String name = artistNode.getString("name");
@@ -80,7 +83,7 @@ public class ArtistList extends EyekabobActivity {
 	    	}
     	}
     	catch (JSONException e) {
-    		throw new RuntimeException(e);
+    		Log.e(getClass().getName(),"", e);
     	}
     }
 

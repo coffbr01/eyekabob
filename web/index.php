@@ -3,25 +3,20 @@
     header("Content-type: application/json");
 ?>
 <?php
-    $con = connect_to_db();
+    $json = array(
+        "results" => array()
+    );
     if ($_GET["method"] === "artist") {
+        $con = connect_to_db();
         $query = mysql_query("SELECT * FROM artist WHERE name='" . $_GET["name"] . "%'");
-        $json = [];
         while ($row = mysql_fetch_array($query)) {
-            array_push($json, $row["name"]);
+            array_push($json["results"], $row["name"]);
         }
+        mysql_close($con);
     }
     else {
-        $json = [
-            "abc" => 12,
-            "foo" => "bar",
-            "bool0" => false,
-            "bool1" => true,
-            "arr" => array(1, 2, 3, null, 5),
-            "float" => 1.2345
-        ];
+        $json["error"] = "TODO: make nice messaging for invalid service request";
     }
-    mysql_close($con);
 ?>
 <?php
     echo json_encode($json);

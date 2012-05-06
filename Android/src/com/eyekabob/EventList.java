@@ -52,7 +52,7 @@ public class EventList extends EyekabobActivity {
         	if (EyekabobHelper.zipToNameMap.containsKey(zip)) {
         		Log.d(getClass().getName(), "Using cached zip");
         		Uri lastFMURI = getLastFMURI(EyekabobHelper.zipToNameMap.get("zip"));
-        		sendDocumentRequest(lastFMURI.toString());
+        		sendLastFMRequest(lastFMURI.toString());
         	}
         	else {
         		Log.d(getClass().getName(), "Getting zip from geonames service");
@@ -64,7 +64,7 @@ public class EventList extends EyekabobActivity {
         }
         else {
         	Log.d(getClass().getName(), "Searching for events using current location");
-        	sendDocumentRequest(uri.toString());
+        	sendLastFMRequest(uri.toString());
         }
 
         lv.setOnItemClickListener(listItemListener);
@@ -122,8 +122,8 @@ public class EventList extends EyekabobActivity {
     	new JSONRequestTask().execute(uri);
     }
 
-    protected void sendDocumentRequest(String uri) {
-    	new DocumentRequestTask().execute(uri);
+    protected void sendLastFMRequest(String uri) {
+    	new LastFMRequestTask().execute(uri);
     }
 
     protected Uri getLastFMURI(String location) {
@@ -154,12 +154,12 @@ public class EventList extends EyekabobActivity {
     		}
 
     		Uri uri = EventList.this.getLastFMURI(location);
-    		EventList.this.sendDocumentRequest(uri.toString());
+    		EventList.this.sendLastFMRequest(uri.toString());
     	}
     }
 
     // Handles the asynchronous request, away from the UI thread.
-    private class DocumentRequestTask extends JSONTask {
+    private class LastFMRequestTask extends JSONTask {
     	protected void onPreExecute() {
     		EventList.this.createDialog(R.string.searching);
     		EventList.this.showDialog();
