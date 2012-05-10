@@ -84,15 +84,23 @@ public class EventList extends EyekabobActivity {
 	    		return;
 	    	}
 
-	    	JSONArray events = jsonEvents.getJSONArray("event");
+	    	Object eventsObj = jsonEvents.get("event");
+	    	JSONArray events = null;
+	    	if (eventsObj instanceof JSONArray) {
+	    		events = (JSONArray)eventsObj;
+	    	}
+	    	else {
+	    		// For some incredibly stupid reason, a one item list is not a list.
+	    		// So create a list and stick the one item in it.
+	    		events = new JSONArray();
+	    		events.put(eventsObj);
+	    	}
 	
 	    	for (int i = 0; i < events.length(); i++) {
 	    		Event event = new Event();
 	    		Venue venue = new Venue();
 	    		event.setVenue(venue);
 	    		JSONObject jsonEvent = events.getJSONObject(i);
-	    		jsonEvent.getString("title");
-	    		jsonEvent.getString("id");
 	    		JSONObject jsonVenue = jsonEvent.getJSONObject("venue");
 	    		JSONObject jsonLocation = jsonVenue.getJSONObject("location");
 	    		JSONObject jsonGeo = jsonLocation.optJSONObject("geo:point");

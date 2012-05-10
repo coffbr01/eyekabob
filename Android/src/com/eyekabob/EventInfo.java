@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -75,8 +76,7 @@ public class EventInfo extends EyekabobActivity {
 			}
 		}
     	catch (JSONException e) {
-    		e.printStackTrace();
-    		throw new RuntimeException(e);
+    		Log.e(getClass().getName(), "", e);
     	}
 
 		ImageView iv = (ImageView)findViewById(R.id.eventImageView);
