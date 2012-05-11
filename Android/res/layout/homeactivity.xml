@@ -44,7 +44,7 @@
 		        android:layout_gravity="top"
 		        android:background="#00000000"
 		        android:src="@drawable/home_pics_button"
-		        android:onClick="homePicsHandler"
+		        android:onClick="homeGalleryHandler"
 		        android:contentDescription="@string/home_button_desc" >
 		    </ImageButton>
 		    <ImageButton
@@ -54,7 +54,7 @@
 	            android:layout_gravity="top"
 	            android:background="#00000000"
 	            android:src="@drawable/home_friends_button"
-	            android:onClick="homeFriendsHandler"
+	            android:onClick="homeStatusHandler"
 	            android:contentDescription="@string/home_button_desc" >
 	        </ImageButton>
 	        <ImageButton

@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.eyekabob.util.EyekabobHelper;
-
 public class Home extends EyekabobActivity {
 
     @Override
@@ -23,25 +21,41 @@ public class Home extends EyekabobActivity {
         startActivity(findMusicIntent);
     }
 
-    public void homePicsHandler(View v) {
+    public void homeGalleryHandler(View v) {
+    	Intent prototypeIntent = new Intent(this, Prototype.class);
+    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_gallery);
+    	startActivity(prototypeIntent);
     }
 
-    public void homeFriendsHandler(View v) {
+    public void homeStatusHandler(View v) {
+    	Intent prototypeIntent = new Intent(this, Prototype.class);
+    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_status);
+    	startActivity(prototypeIntent);
     }
 
     public void homeCheckinHandler(View v) {
-    	EyekabobHelper.Foursquare.searchNearby(this);
+    	Intent prototypeIntent = new Intent(this, Prototype.class);
+    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_checkin);
+    	startActivity(prototypeIntent);
+    	// TODO this was commented out. the prototype replaced it
+    	//EyekabobHelper.Foursquare.searchNearby(this);
     }
 
     public void homeSettingsHandler(View v) {
+    	Intent prototypeIntent = new Intent(this, Prototype.class);
+    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_settings);
+    	startActivity(prototypeIntent);
     }
 
     public void homeBandHandler(View v) {
+    	Intent prototypeIntent = new Intent(this, Prototype.class);
+    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_bands);
+    	startActivity(prototypeIntent);
     }
 
     public void homeForumHandler(View v) {
-    }
-
-    public void homeAdHandler(View v) {
+    	Intent prototypeIntent = new Intent(this, Prototype.class);
+    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_forums);
+    	startActivity(prototypeIntent);
     }
 }
