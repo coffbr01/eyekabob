@@ -76,6 +76,7 @@ public class EyekabobHelper {
 			}
 			return Uri.parse(url);
 		}
+
 		public static String toReadableDate(String unparsedDate) {
 			String result = unparsedDate;
 			try {
@@ -90,6 +91,7 @@ public class EyekabobHelper {
 			}
 			return result;
 		}
+
 		public static JSONObject getJSONImage(String size, JSONArray images) throws JSONException {
 			JSONObject image = null;
 			for (int i = 0; i < images.length(); i++) {
@@ -101,6 +103,7 @@ public class EyekabobHelper {
 			return image;
 		}
 	}
+
 	public static class GeoNames {
 		public static final String SERVICE_URL = "http://api.geonames.org/postalCodeLookupJSON";
 		public static Uri getUri(String zip) {
@@ -108,12 +111,14 @@ public class EyekabobHelper {
 			return Uri.parse(url);
 		}
 	}
+
 	public static class Facebook {
 		private static com.eyekabob.util.facebook.Facebook facebook;
 		public static final String SERVICE_URL = "https://graph.facebook.com";
 		public static final String APP_ID = "328167973871652";
 		public static final String APP_SECRET = "6d2e4d3a73a78117e46d95540ce6d24e";
 		public static final String APP_NAMESPACE = "eyekabob";
+
 		public static com.eyekabob.util.facebook.Facebook getInstance() {
 			if (facebook == null) {
 				facebook = new com.eyekabob.util.facebook.Facebook(APP_ID);
@@ -121,6 +126,7 @@ public class EyekabobHelper {
 			return facebook;
 		}
 	}
+
 	public static class Foursquare {
 		public static final String CLIENT_ID = "WCRBSK0WI3HTK0OCLECBWKKJPNEJVATUOVZ0PHI0ONFUP145";
 		public static final String SECRET = "0ASOSBCQZHRRYRXQCD1CWX3BLSXTNTFR50DYR5TODVE32FHY";
@@ -130,18 +136,22 @@ public class EyekabobHelper {
 		public static final String SERVICE_URL = "https://api.foursquare.com/v2";
 		public static final String CALLBACK_URL = "http://bcoffield.dyndns.org/eyekabob/foursquare";
 		public static String ACCESS_TOKEN;
+
 		public static final void authenticate(Context context, Class<?> callbackClass) {
 			Intent oAuthIntent = new Intent(context, OAuthWebView.class);
 			oAuthIntent.putExtra("callbackClass", callbackClass);
 			oAuthIntent.putExtra("url", getAuthUrl());
 			context.startActivity(oAuthIntent);
 		}
+
 		public static final String getAuthUrl() {
 			return AUTHENTICATE_URL + "?client_id=" + CLIENT_ID + "&response_type=token" + "&redirect_uri=" + CALLBACK_URL;
 		}
+
 		public static final void setAccessToken(String accessToken) {
 			ACCESS_TOKEN = accessToken;
 		}
+
 		/**
 		 * Do not encode params. This will encode the param values for you.
 		 * @param api
@@ -169,6 +179,7 @@ public class EyekabobHelper {
 			}
 			return url;
 		}
+
 		public static final void searchNearby(Context context) {
 			if (ACCESS_TOKEN == null) {
 				Log.d(EyekabobHelper.class.getName(), "Foursquare access token was null");
@@ -191,9 +202,11 @@ public class EyekabobHelper {
 	 */
     public static long getDistance(double lat, double lon, Context context) {
     	Location location = EyekabobHelper.getLocation(context);
+
     	if (location == null) {
     		return -1;
     	}
+
     	double currentLat = location.getLatitude();
     	double currentLon = location.getLongitude();
     	int R = 3959; // Earth radius in miles.
