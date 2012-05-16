@@ -101,7 +101,6 @@ public class ArtistList extends EyekabobActivity {
 
     public void addBand(View v) {
     	Intent addBandIntent = new Intent(this, AddBand.class);
-    	addBandIntent.putExtra("url", "http://www.last.fm/uploadmusic?accountType=artist");
     	startActivity(addBandIntent);
     }
 }

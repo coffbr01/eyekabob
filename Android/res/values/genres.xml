@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="genres_array">
+        <item>Genre</item>
+        <item>Alternative</item>
+        <item>Blues</item>
+        <item>Christian</item>
+        <item>Classical</item>
+        <item>Country</item>
+        <item>Dance</item>
+        <item>Easy Listening</item>
+        <item>Electronic</item>
+        <item>Folk</item>
+        <item>Hip Hop</item>
+        <item>Instrumental</item>
+        <item>Jazz</item>
+        <item>Karaoke</item>
+        <item>Latino</item>
+        <item>Metal</item>
+        <item>Neptune</item>
+        <item>New Age</item>
+        <item>Opera</item>
+        <item>Other</item>
+        <item>Pop</item>
+        <item>R&amp;B</item>
+        <item>Raggae</item>
+        <item>Rap</item>
+        <item>Rock</item>
+        <item>Soul</item>
+        <item>Vocal</item>
+        <item>World</item>
+    </string-array>
+</resources>

@@ -4,6 +4,7 @@
  */
 package com.eyekabob.util;
 
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -191,6 +192,23 @@ public class EyekabobHelper {
 			Intent checkinSearchIntent = new Intent(context, CheckinSearchList.class);
 			context.startActivity(checkinSearchIntent);
 		}
+	}
+
+	/**
+	 * Eyekabob web service helper class
+	 */
+	public static class WebService {
+	    private static final String SERVICE_URL = "http://bcoffield.dyndns.org/eyekabob";
+	    public static URI getURI(String method, Map<String, String> params) {
+	        String url = SERVICE_URL + "?" + method;
+
+	        for (String key : params.keySet()) {
+	            String param = params.get(key);
+	            url += "&" + key + "=" + URLEncoder.encode(param);
+	        }
+
+	        return URI.create(url);
+	    }
 	}
 
 	/**

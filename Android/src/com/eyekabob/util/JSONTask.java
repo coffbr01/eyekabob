@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 public abstract class JSONTask extends AsyncTask<String, Void, JSONObject> {
 	private String requestType;
@@ -56,13 +57,14 @@ public abstract class JSONTask extends AsyncTask<String, Void, JSONObject> {
     		e.printStackTrace();
     	}
 
+    	// should this be initialized to an empty json object?
         JSONObject result = null;
 
         try {
         	result = new JSONObject(sb.toString());
         }
         catch (JSONException e) {
-        	e.printStackTrace();
+            Log.e(getClass().getName(), "Error parsing json response", e);
         }
 
         return result;

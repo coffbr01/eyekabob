@@ -3,15 +3,32 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <TextView
+    <Spinner
+        android:id="@+id/genreSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/choose_genre" />
+    <EditText
+        android:id="@+id/artistNameEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="EYEKABOB! WOOT! NEED LOGO"/>
-
-    <WebView
-        android:id="@+id/addBandWebView"
+        android:hint="@string/name" />
+    <EditText
+        android:id="@+id/urlEditText"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
-
+        android:layout_height="wrap_content"
+        android:hint="@string/website_url" />
+    <EditText
+        android:id="@+id/artistDescriptionEditText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/description"
+        android:minLines="3"
+        android:gravity="top" />
+    <Button
+        android:id="@+id/addArtistSubmitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"
+        android:onClick="submit" />
 </LinearLayout>
