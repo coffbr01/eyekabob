@@ -17,6 +17,7 @@
     }
     elseif ($_POST["method"] === "artist") {
         mysql_query("INSERT INTO artist (genre, name, url, bio) VALUES ('" . $_POST["genre"] . "', " . $_POST["name"] . "', '" . $_POST["url"] ."', '" . $_POST["bio"] .  "')");
+        array_push($json["results"], $_POST["name"]);
     }
     else {
         $json["error"] = "Unrecognized request";
