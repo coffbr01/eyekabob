@@ -20,7 +20,6 @@ public class Main {
     private static final String QUERY = "query";
     private static final String GET = "GET";
     private static final String POST = "POST";
-    private static Object DB_DRIVER;
 
     public static JSONObject processRequest(HttpServletRequest request) {
         JSONObject result = null;
@@ -112,19 +111,17 @@ public class Main {
         connectionProps.put("user", "eyekabob");
         connectionProps.put("password", "privateeye");
 
-        if (DB_DRIVER == null) {
-            try {
-                DB_DRIVER = Class.forName("com.mysql.jdbc.Driver").newInstance();
-            }
-            catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            catch (InstantiationException e) {
-                e.printStackTrace();
-            }
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        }
+        catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (InstantiationException e) {
+            e.printStackTrace();
         }
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/eyekabob", connectionProps);
     }
