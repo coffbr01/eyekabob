@@ -49,13 +49,30 @@
 
     <target name="build-web" depends="clean-web">
         <mkdir dir="web/bin"/>
-        <javac srcdir="web/src" destdir="web/bin" classpath="web/3rd/json-lib.jar:web/3rd/servlet-api.jar"/>
+        <mkdir dir="web/bin/WEB-INF"/>
+        <mkdir dir="web/bin/WEB-INF/classes"/>
+        <mkdir dir="web/bin/WEB-INF/lib"/>
+        <javac
+            srcdir="web/src"
+            destdir="web/bin/WEB-INF/classes"
+            debug="true"
+            includeAntRuntime="true"
+            includeJavaRuntime="true"
+            classpath="web/3rd/json-lib.jar:web/3rd/servlet-api.jar:web/3rd/commons-lang.jar:web/3rd/ezmorph.jar:web/3rd/commons-logging.jar:web/3rd/commons-collections.jar"
+        />
         <copy file="web/src/index.jsp" todir="web/bin"/>
+        <copy todir="web/bin/WEB-INF/lib">
+            <fileset dir="web/3rd"/>
+        </copy>
     </target>
 
     <target name="war" depends="build-web">
         <war destfile="web/eyekabob.war" webxml="web/eyekabob.xml">
             <fileset dir="web/bin"/>
         </war>
+    </target>
+
+    <target name="web" depends="war">
+        <copy file="web/eyekabob.war" todir="/var/lib/tomcat6/webapps"/>
     </target>
 </project>
