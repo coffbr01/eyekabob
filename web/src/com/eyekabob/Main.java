@@ -123,6 +123,6 @@ public class Main {
         catch (InstantiationException e) {
             e.printStackTrace();
         }
-        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/eyekabob", connectionProps);
+        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/eyekabob?autoReconnect=true", connectionProps);
     }
 }
