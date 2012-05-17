@@ -47,7 +47,7 @@ public class Main {
                     Statement stmt = null;
                     try {
                         stmt = conn.createStatement();
-                        ResultSet rs = stmt.executeQuery(query);
+                        stmt.executeUpdate(query);
                     }
                     catch (SQLException e ) {
                         e.printStackTrace();
