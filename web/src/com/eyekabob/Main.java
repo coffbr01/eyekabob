@@ -40,11 +40,32 @@ public class Main {
 
             if (ARTIST.equals(apiParam)) {
                 if (POST.equals(method)) {
-                    // TODO: add to the artist table
+                    String genre = request.getParameter("genre");
+                    String name = request.getParameter("name");
+                    String url = request.getParameter("url");
+                    String bio = request.getParameter("bio");
+                    String query = "INSERT INTO artist (genre, name, url, bio) VALUES ('" + genre + "', '" + name + "', '" + url + "', '" + bio + "')";
+                    Statement stmt = null;
+                    try {
+                        stmt = conn.createStatement();
+                        ResultSet rs = stmt.executeQuery(query);
+                    }
+                    catch (SQLException e ) {
+                        e.printStackTrace();
+                    }
+                    finally {
+                        if (stmt != null) {
+                            try {
+                                stmt.close();
+                            }
+                            catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 }
                 else {
                     // Assume GET.
-                    // TODO: select from artist table
                     String queryParam = request.getParameter(QUERY);
                     Statement stmt = null;
                     String query = "SELECT * FROM artist WHERE name LIKE '" + queryParam + "'";
