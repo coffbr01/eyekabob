@@ -198,9 +198,9 @@ public class EyekabobHelper {
 	 * Eyekabob web service helper class
 	 */
 	public static class WebService {
-	    private static final String SERVICE_URL = "http://bcoffield.dyndns.org/eyekabob";
-	    public static URI getURI(String method, Map<String, String> params) {
-	        String url = SERVICE_URL + "?method=" + method;
+	    private static final String SERVICE_URL = "http://bcoffield.dyndns.org:8080/eyekabob";
+	    public static URI getURI(String api, Map<String, String> params) {
+	        String url = SERVICE_URL + "?api=" + api;
 
 	        for (String key : params.keySet()) {
 	            String param = params.get(key);
