@@ -41,4 +41,21 @@
     <target name="ios-clean">
         <delete dir="iOS/Eyekabob/www"/>
     </target>
+
+    <target name="clean-web">
+        <delete dir="web/bin"/>
+        <delete file="web/eyekabob.war"/>
+    </target>
+
+    <target name="build-web" depends="clean-web">
+        <mkdir dir="web/bin"/>
+        <javac srcdir="web/src" destdir="web/bin" classpath="web/3rd/json-lib.jar:web/3rd/servlet-api.jar"/>
+        <copy file="web/src/index.jsp" todir="web/bin"/>
+    </target>
+
+    <target name="war" depends="build-web">
+        <war destfile="web/eyekabob.war" webxml="web/eyekabob.xml">
+            <fileset dir="web/bin"/>
+        </war>
+    </target>
 </project>
