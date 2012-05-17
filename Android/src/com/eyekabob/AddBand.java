@@ -78,14 +78,14 @@ public class AddBand extends EyekabobActivity {
 	    @Override
         protected void onPostExecute(JSONObject result) {
             AddBand.this.dismissDialog();
-            String artist = result.optString("artist");
+            String error = result.optString("error");
 
-            if (artist == null) {
+            if (error != null) {
                 Toast.makeText(AddBand.this, "Artist could not be added", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            Toast.makeText(AddBand.this, "Artist " + artist + " added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddBand.this, "Artist added!!", Toast.LENGTH_SHORT).show();
             AddBand.this.startActivity(new Intent(AddBand.this, Home.class));
             AddBand.this.finish();
         }

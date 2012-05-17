@@ -34,6 +34,7 @@ public class Main {
                 conn = getConnection();
             }
             catch (SQLException e) {
+                result.put("error", "Could not establish a database connection. See server logs.");
                 e.printStackTrace();
             }
 
