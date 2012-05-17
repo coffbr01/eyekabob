@@ -1,1 +1,2 @@
-<%=com.eyekabob.webservice.Main.processRequest(request)%>
+<%@page contentType="application/json; charset=UTF-8"%>
+<%=com.eyekabob.Main.processRequest(request)%>

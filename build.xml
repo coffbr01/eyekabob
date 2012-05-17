@@ -58,7 +58,7 @@
             debug="true"
             includeAntRuntime="true"
             includeJavaRuntime="true"
-            classpath="web/3rd/json-lib.jar:web/3rd/servlet-api.jar:web/3rd/commons-lang.jar:web/3rd/ezmorph.jar:web/3rd/commons-logging.jar:web/3rd/commons-collections.jar"
+            classpath="web/3rd/json-lib.jar:web/3rd/servlet-api.jar:web/3rd/commons-lang.jar:web/3rd/ezmorph.jar:web/3rd/commons-logging.jar:web/3rd/commons-collections.jar:web/3rd/commons-beanutils.jar:web/3rd/mysql-connector.jar"
         />
         <copy file="web/src/index.jsp" todir="web/bin"/>
         <copy todir="web/bin/WEB-INF/lib">
