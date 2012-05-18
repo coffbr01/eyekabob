@@ -63,7 +63,7 @@ public class AddBand extends EyekabobActivity {
 	    params.put("name", name);
 	    params.put("url", url);
 	    params.put("bio", bio);
-	    URI uri = EyekabobHelper.WebService.getURI("artist", params);
+	    URI uri = EyekabobHelper.WebService.getURI("artist", "addArtist", params);
 	    new AddArtistTask().execute(uri);
 	}
 
