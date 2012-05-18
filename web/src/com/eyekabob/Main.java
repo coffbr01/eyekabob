@@ -103,6 +103,13 @@ public class Main {
             result.put(METHOD, method);
         }
         catch (JSONException e) {
+            try {
+                result.put("error", "JSONException occured: " + e.getMessage());
+            }
+            catch (JSONException ex) {
+                // Totally boned. Can't do anything about it.
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
 
