@@ -79,7 +79,7 @@ public class AddBand extends EyekabobActivity {
             AddBand.this.dismissDialog();
             String error = result.optString("error");
 
-            if (error != null) {
+            if (error != null && !"".equals(error)) {
                 Toast.makeText(AddBand.this, error, Toast.LENGTH_SHORT).show();
                 Toast.makeText(AddBand.this, result.optString("api"), Toast.LENGTH_SHORT).show();
                 Toast.makeText(AddBand.this, result.optString("method"), Toast.LENGTH_SHORT).show();
