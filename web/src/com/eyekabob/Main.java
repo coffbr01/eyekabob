@@ -51,6 +51,7 @@ public class Main {
                         stmt.executeUpdate(query);
                     }
                     catch (SQLException e ) {
+                        result.put("error", e.getMessage());
                         e.printStackTrace();
                     }
                     finally {
@@ -59,6 +60,7 @@ public class Main {
                                 stmt.close();
                             }
                             catch (SQLException e) {
+                                result.put("error", e.getMessage());
                                 e.printStackTrace();
                             }
                         }

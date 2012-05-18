@@ -81,7 +81,7 @@ public class AddBand extends EyekabobActivity {
             String error = result.optString("error");
 
             if (error != null) {
-                Toast.makeText(AddBand.this, "Artist could not be added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddBand.this, error, Toast.LENGTH_SHORT).show();
                 return;
             }
 
