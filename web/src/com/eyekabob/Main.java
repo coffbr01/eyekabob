@@ -16,7 +16,9 @@ import net.sf.json.JSONObject;
 public class Main {
     private static final String API = "api";
     private static final String ARTIST = "artist";
+    private static final String ADD_ARTIST = "addArtist";
     private static final String METHOD = "method";
+    private static final String SEARCH = "search";
     private static final String QUERY = "query";
     private static final String GET = "GET";
     private static final String POST = "POST";
@@ -26,7 +28,7 @@ public class Main {
 
         try {
             result = new JSONObject();
-            String method = request.getMethod(); // GET, POST, etc.
+            String method = request.getParameter(METHOD);
             String apiParam = request.getParameter(API);
 
             Connection conn = null;
@@ -39,7 +41,7 @@ public class Main {
             }
 
             if (ARTIST.equals(apiParam)) {
-                if (POST.equals(method)) {
+                if (ADD_ARTIST.equals(method)) {
                     String genre = request.getParameter("genre");
                     String name = request.getParameter("name");
                     String url = request.getParameter("url");
@@ -66,11 +68,10 @@ public class Main {
                         }
                     }
                 }
-                else {
-                    // Assume GET.
+                else if (SEARCH.equals(method)) {
                     String queryParam = request.getParameter(QUERY);
                     Statement stmt = null;
-                    String query = "SELECT * FROM artist WHERE name LIKE '" + queryParam + "'";
+                    String query = "SELECT * FROM artist";// WHERE name LIKE '%" + queryParam + "%'";
                     try {
                         stmt = conn.createStatement();
                         ResultSet rs = stmt.executeQuery(query);

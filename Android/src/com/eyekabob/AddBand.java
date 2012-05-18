@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,6 +81,8 @@ public class AddBand extends EyekabobActivity {
 
             if (error != null) {
                 Toast.makeText(AddBand.this, error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddBand.this, result.optString("api"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddBand.this, result.optString("method"), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -93,7 +94,7 @@ public class AddBand extends EyekabobActivity {
 	    @Override
         protected JSONObject doInBackground(URI... uri) {
 	        HttpClient client = new DefaultHttpClient();
-	        HttpRequestBase request = new HttpPost(uri[0]);
+	        HttpPost request = new HttpPost(uri[0]);
 	        StringBuffer sb = null;
 
 	        try {
