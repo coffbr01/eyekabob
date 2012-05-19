@@ -16,9 +16,9 @@ import net.sf.json.JSONObject;
 public class Main {
     private static final String API = "api";
     private static final String ARTIST = "artist";
-    private static final String ADD_ARTIST = "addArtist";
+    private static final String ARTIST_ADD = "addArtist";
+    private static final String ARTIST_SEARCH = "search";
     private static final String METHOD = "method";
-    private static final String SEARCH = "search";
     private static final String QUERY = "query";
     private static final String GET = "GET";
     private static final String POST = "POST";
@@ -41,7 +41,7 @@ public class Main {
             }
 
             if (ARTIST.equals(apiParam)) {
-                if (ADD_ARTIST.equals(method)) {
+                if (ARTIST_ADD.equals(method)) {
                     String genre = request.getParameter("genre");
                     String name = request.getParameter("name");
                     String url = request.getParameter("url");
@@ -68,21 +68,32 @@ public class Main {
                         }
                     }
                 }
-                else if (SEARCH.equals(method)) {
+                else if (ARTIST_SEARCH.equals(method)) {
                     String queryParam = request.getParameter(QUERY);
                     Statement stmt = null;
-                    String query = "SELECT * FROM artist";// WHERE name LIKE '%" + queryParam + "%'";
+                    String query = "SELECT * FROM artist WHERE name LIKE '%" + queryParam + "%'";
                     try {
                         stmt = conn.createStatement();
                         ResultSet rs = stmt.executeQuery(query);
                         JSONArray artists = new JSONArray();
-                        result.put("artists", artists);
                         while (rs.next()) {
-                            String name = rs.getString("name");
                             JSONObject artist = new JSONObject();
+
+                            String name = rs.getString("name");
+                            String mbid = rs.getString("mbid");
+                            String genre = rs.getString("genre");
+                            String bio = rs.getString("bio");
+                            String url = rs.getString("url");
+
                             artist.put("name", name);
+                            artist.put("mbid", mbid);
+                            artist.put("genre", genre);
+                            artist.put("bio", bio);
+                            artist.put("url", url);
+
                             artists.add(artist);
                         }
+                        result.put("artists", artists);
                     }
                     catch (SQLException e ) {
                         e.printStackTrace();
