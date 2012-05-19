@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -63,11 +64,11 @@ public class AddBand extends EyekabobActivity {
 	    params.put("name", name);
 	    params.put("url", url);
 	    params.put("bio", bio);
-	    URI uri = EyekabobHelper.WebService.getURI("artist", "addArtist", params);
+	    Uri uri = EyekabobHelper.WebService.getURI("artist", "addArtist", params);
 	    new AddArtistTask().execute(uri);
 	}
 
-	public class AddArtistTask extends AsyncTask<URI, Void, JSONObject> {
+	public class AddArtistTask extends AsyncTask<Uri, Void, JSONObject> {
 	    @Override
 	    protected void onPreExecute() {
             AddBand.this.createDialog(R.string.adding_artist);
@@ -92,9 +93,9 @@ public class AddBand extends EyekabobActivity {
         }
 
 	    @Override
-        protected JSONObject doInBackground(URI... uri) {
+        protected JSONObject doInBackground(Uri... uri) {
 	        HttpClient client = new DefaultHttpClient();
-	        HttpPost request = new HttpPost(uri[0]);
+	        HttpPost request = new HttpPost(URI.create(uri[0].toString()));
 	        StringBuffer sb = null;
 
 	        try {

@@ -69,7 +69,7 @@ public class Main {
                     }
                 }
                 else if (ARTIST_SEARCH.equals(method)) {
-                    String queryParam = request.getParameter(QUERY);
+                    String queryParam = request.getParameter(ARTIST);
                     Statement stmt = null;
                     String query = "SELECT * FROM artist WHERE name LIKE '%" + queryParam + "%'";
                     try {

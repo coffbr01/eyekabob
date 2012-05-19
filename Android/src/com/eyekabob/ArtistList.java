@@ -4,6 +4,9 @@
  */
 package com.eyekabob;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,8 +20,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.eyekabob.models.Artist;
+import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
 
 public class ArtistList extends EyekabobActivity {
@@ -38,9 +43,20 @@ public class ArtistList extends EyekabobActivity {
         adapter = new ArtistListAdapter(getApplicationContext());
         ListView lv = (ListView)findViewById(R.id.adList);
         lv.setAdapter(adapter);
-        Uri uri = this.getIntent().getData();
-        new RequestTask().execute(uri.toString());
         lv.setOnItemClickListener(listItemListener);
+        String artist = getIntent().getExtras().getString("artist");
+
+        // Send last.fm request.
+        Map<String, String> lastFMParams = new HashMap<String, String>();
+        lastFMParams.put("artist", artist);
+        Uri lastFMUri = EyekabobHelper.LastFM.getUri("artist.search", lastFMParams);
+        new LastFMRequestTask().execute(lastFMUri.toString());
+
+        // Send eyekabob request.
+        Map<String, String> eyekabobParams = new HashMap<String, String>();
+        eyekabobParams.put("artist", artist);
+        Uri eyekabobUri = EyekabobHelper.WebService.getURI("artist", "search", eyekabobParams);
+        new EyekabobRequestTask().execute(eyekabobUri.toString());
     }
 
     @Override
@@ -49,7 +65,7 @@ public class ArtistList extends EyekabobActivity {
     	super.onDestroy();
     }
 
-    protected void loadArtists(JSONObject response) {
+    protected void loadLastFMArtists(JSONObject response) {
     	try {
 	    	JSONObject results = response.getJSONObject("results");
 	    	Object artistMatchesObj = results.get("artistmatches");
@@ -83,20 +99,54 @@ public class ArtistList extends EyekabobActivity {
 	    	}
     	}
     	catch (JSONException e) {
-    		Log.e(getClass().getName(),"", e);
+    		Log.e(getClass().getName(), "", e);
     	}
     }
 
-    // Handles the asynchronous request, away from the UI thread.
-    private class RequestTask extends JSONTask {
+    protected void loadEyekabobArtists(JSONObject response) {
+        try {
+            String error = response.getString("error");
+
+            if (!"".equals(error)) {
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            JSONArray artists = response.getJSONArray("artists");
+            for (int i = 0; i < artists.length(); i++) {
+                Artist artist = new Artist();
+                JSONObject jsonArtist = artists.getJSONObject(i);
+                artist.setName(jsonArtist.optString("name"));
+                artist.setMbid(jsonArtist.optString("mbid"));
+                artist.setUrl(jsonArtist.optString("url"));
+                adapter.add(artist);
+            }
+        }
+        catch (JSONException e) {
+            Log.e(getClass().getName(), "", e);
+        }
+    }
+
+    private class LastFMRequestTask extends JSONTask {
     	protected void onPreExecute() {
     		ArtistList.this.createDialog(R.string.searching);
     		ArtistList.this.showDialog();
     	}
     	protected void onPostExecute(JSONObject result) {
     		ArtistList.this.dismissDialog();
-    		ArtistList.this.loadArtists(result);
+    		ArtistList.this.loadLastFMArtists(result);
     	}
+    }
+
+    private class EyekabobRequestTask extends JSONTask {
+        protected void onPreExecute() {
+            ArtistList.this.createDialog(R.string.searching);
+            ArtistList.this.showDialog();
+        }
+        protected void onPostExecute(JSONObject result) {
+            ArtistList.this.dismissDialog();
+            ArtistList.this.loadEyekabobArtists(result);
+        }
     }
 
     public void addBand(View v) {

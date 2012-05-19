@@ -4,7 +4,6 @@
  */
 package com.eyekabob.util;
 
-import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -199,7 +198,7 @@ public class EyekabobHelper {
 	 */
 	public static class WebService {
 	    private static final String SERVICE_URL = "http://bcoffield.dyndns.org:8080/eyekabob";
-	    public static URI getURI(String api, String method, Map<String, String> params) {
+	    public static Uri getURI(String api, String method, Map<String, String> params) {
 	        String url = SERVICE_URL + "?api=" + api;
 	        url += "&method=" + method;
 
@@ -208,7 +207,7 @@ public class EyekabobHelper {
 	            url += "&" + key + "=" + URLEncoder.encode(param);
 	        }
 
-	        return URI.create(url);
+	        return Uri.parse(url);
 	    }
 	}
 

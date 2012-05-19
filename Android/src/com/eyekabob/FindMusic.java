@@ -4,7 +4,6 @@
  */
 package com.eyekabob;
 
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -14,16 +13,12 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.eyekabob.util.EyekabobHelper;
@@ -35,23 +30,6 @@ public class FindMusic extends EyekabobActivity {
         setContentView(R.layout.findmusicactivity);
 
         EditText findByArtist = (EditText)findViewById(R.id.findByArtistInput);
-        findByArtist.setOnEditorActionListener(new OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ((ImageButton)findViewById(R.id.findByArtistButton)).performClick();
-                }
-                return false;
-            }
-        });
-        EditText findByVenue = (EditText)findViewById(R.id.findByVenueInput);
-        findByVenue.setOnEditorActionListener(new OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ((ImageButton)findViewById(R.id.findByVenueButton)).performClick();
-                }
-                return false;
-            }
-        });
         findByArtist.requestFocus();
 
         SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
@@ -76,7 +54,15 @@ public class FindMusic extends EyekabobActivity {
 
     public void findByArtistHandler(View v) {
         EditText findByArtist = (EditText)findViewById(R.id.findByArtistInput);
-        find("artist.search", ArtistList.class, "artist", findByArtist.getText().toString());
+        String artist = findByArtist.getText().toString();
+
+        if ("".equals(artist)) {
+            return;
+        }
+
+        Intent artistListIntent = new Intent(this, ArtistList.class);
+        artistListIntent.putExtra("artist", artist);
+        startActivity(artistListIntent);
     }
 
     public void findByVenueHandler(View v) {
@@ -158,7 +144,8 @@ public class FindMusic extends EyekabobActivity {
         Map<String, String> params = null;
         if (paramKey != null) {
         	params = new HashMap<String, String>();
-            params.put(paramKey, URLEncoder.encode(paramValue));
+        	// paramValue will be encoded in LastFM.getUri.
+            params.put(paramKey, paramValue);
         }
 
         find(restAPI, intentClass, params);
