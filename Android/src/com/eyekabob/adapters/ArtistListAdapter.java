@@ -2,7 +2,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
-package com.eyekabob;
+package com.eyekabob.adapters;
 
 import java.lang.ref.SoftReference;
 import java.net.URL;
@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.eyekabob.R;
 import com.eyekabob.models.Artist;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.ImageTask;

@@ -21,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.eyekabob.adapters.EventListAdapter;
 import com.eyekabob.models.Event;
 import com.eyekabob.models.Venue;
 import com.eyekabob.util.EyekabobHelper;

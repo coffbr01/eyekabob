@@ -2,7 +2,7 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
-package com.eyekabob;
+package com.eyekabob.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.eyekabob.R;
 import com.eyekabob.models.Venue;
 import com.eyekabob.util.EyekabobHelper;
 

@@ -22,12 +22,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.eyekabob.adapters.ArtistListAdapter;
 import com.eyekabob.models.Artist;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
 
 public class ArtistList extends EyekabobActivity {
 	ArtistListAdapter adapter;
+
 	private OnItemClickListener listItemListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Artist artist = (Artist)parent.getAdapter().getItem(position);
@@ -36,6 +38,7 @@ public class ArtistList extends EyekabobActivity {
 			startActivity(intent);
 		}
 	};
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
