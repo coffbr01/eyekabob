@@ -4,6 +4,8 @@
  */
 package com.eyekabob;
 
+import com.eyekabob.util.EyekabobHelper;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -12,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.view.Menu;
+import android.view.View;
 
 public class EyekabobActivity extends Activity {
 	private Dialog alertDialog;
@@ -50,4 +53,7 @@ public class EyekabobActivity extends Activity {
 		alertDialog.dismiss();
     }
 
+    public void adHandler(View v) {
+        EyekabobHelper.launchEmail(this);
+    }
 }

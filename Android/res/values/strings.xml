@@ -40,4 +40,5 @@
     <string name="venue_info_label">Artist</string>
     <string name="venue_list">Venues</string>
     <string name="website_url">Website URL</string>
+    <string name="write_email">Write email with:</string>
 </resources>

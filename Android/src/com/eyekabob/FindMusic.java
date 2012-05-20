@@ -150,8 +150,4 @@ public class FindMusic extends EyekabobActivity {
 
         find(restAPI, intentClass, params);
     }
-
-    public void adHandler(View v) {
-    	EyekabobHelper.launchEmail(this);
-    }
 }

@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.DOMException;
 
+import com.eyekabob.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -247,7 +248,8 @@ public class EyekabobHelper {
     	String to[] = {"create@philipjordandesign.com", "christopherrobertfarrow@gmail.com", "coffbr01@gmail.com"};
     	emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
     	emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Eyekabob Advertising");
-    	activity.startActivity(Intent.createChooser(emailIntent, "Write email with:"));
+    	String label = activity.getResources().getString(R.string.write_email);
+    	activity.startActivity(Intent.createChooser(emailIntent, label));
     }
 
     public static URL getLargestImageURL(Map<String, URL> imageURLs) {
