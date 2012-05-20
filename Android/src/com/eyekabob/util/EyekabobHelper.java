@@ -251,18 +251,22 @@ public class EyekabobHelper {
     }
 
     public static URL getLargestImageURL(Map<String, URL> imageURLs) {
-		URL result = imageURLs.get("large");
+        if (imageURLs == null) {
+            return null;
+        }
 
-		if (result != null) {
-			return result;
-		}
+        URL result = imageURLs.get("large");
 
-		result = imageURLs.get("medium");
+        if (result != null) {
+            return result;
+        }
 
-		if (result != null) {
-			return result;
-		}
+        result = imageURLs.get("medium");
 
-		return imageURLs.get("small");
+        if (result != null) {
+            return result;
+        }
+
+        return imageURLs.get("small");
     }
 }

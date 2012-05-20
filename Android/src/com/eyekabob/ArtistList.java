@@ -105,7 +105,7 @@ public class ArtistList extends EyekabobActivity {
 
     protected void loadEyekabobArtists(JSONObject response) {
         try {
-            String error = response.getString("error");
+            String error = response.optString("error");
 
             if (!"".equals(error)) {
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
