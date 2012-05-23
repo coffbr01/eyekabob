@@ -22,35 +22,35 @@ public class Home extends EyekabobActivity {
     }
 
     public void homeGalleryHandler(View v) {
-    	Intent prototypeIntent = new Intent(this, Prototype.class);
-    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_gallery);
-    	startActivity(prototypeIntent);
+        Intent prototypeIntent = new Intent(this, Prototype.class);
+        prototypeIntent.putExtra("resourceId", R.drawable.prototype_gallery);
+        startActivity(prototypeIntent);
     }
 
     public void homeStatusHandler(View v) {
-    	Intent prototypeIntent = new Intent(this, Prototype.class);
-    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_status);
-    	startActivity(prototypeIntent);
+        Intent prototypeIntent = new Intent(this, Prototype.class);
+        prototypeIntent.putExtra("resourceId", R.drawable.prototype_status);
+        startActivity(prototypeIntent);
     }
 
     public void homeCheckinHandler(View v) {
-    	Intent prototypeIntent = new Intent(this, Prototype.class);
-    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_checkin);
-    	startActivity(prototypeIntent);
-    	// TODO this was commented out. the prototype replaced it
-    	//EyekabobHelper.Foursquare.searchNearby(this);
+        Intent prototypeIntent = new Intent(this, Prototype.class);
+        prototypeIntent.putExtra("resourceId", R.drawable.prototype_checkin);
+        startActivity(prototypeIntent);
+        // TODO this was commented out. the prototype replaced it
+        //EyekabobHelper.Foursquare.searchNearby(this);
     }
 
     public void homeSettingsHandler(View v) {
-    	Intent prototypeIntent = new Intent(this, Prototype.class);
-    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_settings);
-    	startActivity(prototypeIntent);
+        Intent prototypeIntent = new Intent(this, Prototype.class);
+        prototypeIntent.putExtra("resourceId", R.drawable.prototype_settings);
+        startActivity(prototypeIntent);
     }
 
     public void homeBandHandler(View v) {
-    	Intent prototypeIntent = new Intent(this, Prototype.class);
-    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_bands);
-    	startActivity(prototypeIntent);
+        Intent prototypeIntent = new Intent(this, Prototype.class);
+        prototypeIntent.putExtra("resourceId", R.drawable.prototype_bands);
+        startActivity(prototypeIntent);
     }
 
     public void homeCalendarHandler(View v) {

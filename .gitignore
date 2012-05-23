@@ -1,10 +1,11 @@
-eyekabob.git
 Android/bin
 Android/gen
 Android/local.properties
 Android/assets/www/*
+eyekabob.git
 iOS/Eyekabob/www
 iOS/Eyekabob/build
+out
 web/bin
 web/eyekabob.war
 .DS_Store
