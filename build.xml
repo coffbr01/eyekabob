@@ -5,6 +5,7 @@
     <!-- set global properties for this build -->
     <property name="src" location="src"/>
     <property name="lib" location="lib"/>
+    <property environment="env"/>
 
     <!-- Extraneous target, calls copy-files. -->
     <target name="all" depends="copy-files">
@@ -73,6 +74,6 @@
     </target>
 
     <target name="web" depends="war">
-        <copy file="web/eyekabob.war" todir="/var/lib/tomcat6/webapps"/>
+        <copy file="web/eyekabob.war" todir="${env.CATALINA_HOME}/webapps"/>
     </target>
 </project>
