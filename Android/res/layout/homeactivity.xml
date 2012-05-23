@@ -100,8 +100,8 @@
 	            android:layout_height="fill_parent"
 	            android:layout_gravity="top"
 	            android:background="#00000000"
-	            android:src="@drawable/home_forum_button"
-	            android:onClick="homeForumHandler"
+	            android:src="@drawable/home_calendar_button"
+	            android:onClick="homeCalendarHandler"
 	            android:contentDescription="@string/home_button_desc" >
 	        </ImageButton>
 	    </LinearLayout>

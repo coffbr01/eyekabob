@@ -53,9 +53,9 @@ public class Home extends EyekabobActivity {
     	startActivity(prototypeIntent);
     }
 
-    public void homeForumHandler(View v) {
-    	Intent prototypeIntent = new Intent(this, Prototype.class);
-    	prototypeIntent.putExtra("resourceId", R.drawable.prototype_forums);
-    	startActivity(prototypeIntent);
+    public void homeCalendarHandler(View v) {
+        Intent calendarIntent = new Intent(Intent.ACTION_VIEW);
+        calendarIntent.setType("vnd.android.cursor.item/event");
+        startActivity(calendarIntent);
     }
 }
