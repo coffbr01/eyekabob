@@ -8,3 +8,5 @@ iOS/Eyekabob/build
 web/bin
 web/eyekabob.war
 .DS_Store
+*.iml
+.idea
