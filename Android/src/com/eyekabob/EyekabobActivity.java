@@ -10,10 +10,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.view.Menu;
 import android.view.View;
 
 public class EyekabobActivity extends Activity {
@@ -23,13 +21,6 @@ public class EyekabobActivity extends Activity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-    	Intent signInIntent = new Intent(this, SignInView.class);
-    	startActivity(signInIntent);
-    	return true;
     }
 
     // TODO: use dialogfragment to show dialog

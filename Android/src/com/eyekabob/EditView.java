@@ -18,4 +18,10 @@ public class EditView extends EyekabobActivity {
 	public void addArtistButtonHandler(View v) {
 		startActivity(new Intent(this, AddBand.class));
 	}
+
+    public void viewPrototype(View v) {
+        Intent prototypeIntent = new Intent(this, Prototype.class);
+        prototypeIntent.putExtra("resourceId", R.drawable.prototype_bands);
+        startActivity(prototypeIntent);
+    }
 }

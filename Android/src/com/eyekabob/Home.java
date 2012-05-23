@@ -48,9 +48,8 @@ public class Home extends EyekabobActivity {
     }
 
     public void homeBandHandler(View v) {
-        Intent prototypeIntent = new Intent(this, Prototype.class);
-        prototypeIntent.putExtra("resourceId", R.drawable.prototype_bands);
-        startActivity(prototypeIntent);
+        Intent signInIntent = new Intent(this, SignInView.class);
+        startActivity(signInIntent);
     }
 
     public void homeCalendarHandler(View v) {
