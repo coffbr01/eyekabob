@@ -67,10 +67,10 @@ public final class Util {
         StringBuilder sb = new StringBuilder();
 
         for (String key : parameters.keySet()) {
-        	Object value = parameters.get(key);
-        	if (value instanceof byte[]) {
-        		continue;
-        	}
+            Object value = parameters.get(key);
+            if (value instanceof byte[]) {
+                continue;
+            }
 
             sb.append("Content-Disposition: form-data; name=\"" + key +
                     "\"\r\n\r\n" + value);
@@ -161,7 +161,7 @@ public final class Util {
         if (!method.equals("GET")) {
             Bundle dataparams = new Bundle();
             for (String key : params.keySet()) {
-            	Object value = params.get(key);
+                Object value = params.get(key);
                 if (value instanceof byte[]) {
                     dataparams.putByteArray(key, (byte[])value);
                 }

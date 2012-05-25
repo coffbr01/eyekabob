@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class OAuthWebView extends Activity {
 
-	public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         Bundle extras = getIntent().getExtras();
@@ -32,11 +32,11 @@ public class OAuthWebView extends Activity {
         webview.getSettings().setJavaScriptEnabled(true);
         webview.setWebViewClient(new WebViewClient() {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        		// TODO: this contains foursquare stuff. probably should get it out of this generic class.
-            	if (EyekabobHelper.Foursquare.ACCESS_TOKEN != null) {
-            		Log.d(OAuthWebView.class.getName(), "Already authenticated. No need to re-set access token");
-            		return;
-            	}
+                // TODO: this contains foursquare stuff. probably should get it out of this generic class.
+                if (EyekabobHelper.Foursquare.ACCESS_TOKEN != null) {
+                    Log.d(OAuthWebView.class.getName(), "Already authenticated. No need to re-set access token");
+                    return;
+                }
 
                 String fragment = "#access_token=";
                 int start = url.indexOf(fragment);
@@ -50,9 +50,9 @@ public class OAuthWebView extends Activity {
 
                     Object callbackClass = OAuthWebView.this.getIntent().getExtras().get("callbackClass");
                     if (callbackClass instanceof Class<?>) {
-	                    Intent callbackIntent = new Intent(OAuthWebView.this, (Class<?>)callbackClass);
-	                    Log.d(OAuthWebView.class.getName(), "Starting callback activity [" + callbackClass + "]");
-	                    OAuthWebView.this.startActivity(callbackIntent);
+                        Intent callbackIntent = new Intent(OAuthWebView.this, (Class<?>)callbackClass);
+                        Log.d(OAuthWebView.class.getName(), "Starting callback activity [" + callbackClass + "]");
+                        OAuthWebView.this.startActivity(callbackIntent);
                     }
                     OAuthWebView.this.finish();
                 }

@@ -35,21 +35,21 @@ public class FindMusic extends EyekabobActivity {
         SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
         distance.setProgress(10);
         distance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			public void onStopTrackingTouch(SeekBar seekBar) {}
-			public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				TextView miles = (TextView)findViewById(R.id.milesTextView);
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                TextView miles = (TextView)findViewById(R.id.milesTextView);
 
-				if (progress < 1) {
-					progress = 1;
-					SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
-					distance.setProgress(progress);
-				}
+                if (progress < 1) {
+                    progress = 1;
+                    SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
+                    distance.setProgress(progress);
+                }
 
-				miles.setText(Integer.toString(progress));
-			}
-		});
+                miles.setText(Integer.toString(progress));
+            }
+        });
     }
 
     public void findByArtistHandler(View v) {
@@ -71,62 +71,62 @@ public class FindMusic extends EyekabobActivity {
     }
 
     public void findByLocationHandler(View v) {
-    	Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<String, String>();
 
-    	SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
-    	int miles = distance.getProgress();
-    	int km = (int)(miles * 1.609344);
-    	params.put("distance", Integer.toString(km));
+        SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
+        int miles = distance.getProgress();
+        int km = (int)(miles * 1.609344);
+        params.put("distance", Integer.toString(km));
 
-		Location location = EyekabobHelper.getLocation(this);
-		if (location != null) {
-    		params.put("lat", Double.toString(location.getLatitude()));
-    		params.put("long", Double.toString(location.getLongitude()));
-		}
+        Location location = EyekabobHelper.getLocation(this);
+        if (location != null) {
+            params.put("lat", Double.toString(location.getLatitude()));
+            params.put("long", Double.toString(location.getLongitude()));
+        }
 
-    	find("geo.getEvents", EventList.class, params);
+        find("geo.getEvents", EventList.class, params);
     }
 
     public void findByZipHandler(View v) {
-    	EditText locationInput = (EditText)findViewById(R.id.findByLocationInput);
-    	if ("".equals(locationInput.getText().toString().trim())) {
-    		// Nothing entered and not using current location.
-    		Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
-    		return;
-    	}
+        EditText locationInput = (EditText)findViewById(R.id.findByLocationInput);
+        if ("".equals(locationInput.getText().toString().trim())) {
+            // Nothing entered and not using current location.
+            Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-		String criterion = locationInput.getText().toString().trim();
-		Pattern pattern = Pattern.compile("^\\d{5}(-\\d{4})?$");
-		Matcher matcher = pattern.matcher(criterion);
+        String criterion = locationInput.getText().toString().trim();
+        Pattern pattern = Pattern.compile("^\\d{5}(-\\d{4})?$");
+        Matcher matcher = pattern.matcher(criterion);
 
-		if (matcher.find()) {
-			findByZip(criterion);
-		}
-		else {
-			Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
-		}
+        if (matcher.find()) {
+            findByZip(criterion);
+        }
+        else {
+            Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
+        }
 
-		return;
+        return;
     }
 
     public void useCurrentLocationHandler(View v) {
-    	// When the checkbox is checked, the slider should be visible and the text input should be invisible.
-    	// When the checkbox is unchecked, the slider should be invisible and the text input should be visible.
-    	LinearLayout distanceSeekLayout = (LinearLayout)findViewById(R.id.findSeekBarLayout);
-    	LinearLayout distanceTextLayout = (LinearLayout)findViewById(R.id.findByDistanceLayout);
-    	LinearLayout zipLayout = (LinearLayout)findViewById(R.id.findByZipLayout);
-    	boolean isChecked = ((CheckBox)v).isChecked();
-    	distanceSeekLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-    	distanceTextLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-    	zipLayout.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+        // When the checkbox is checked, the slider should be visible and the text input should be invisible.
+        // When the checkbox is unchecked, the slider should be invisible and the text input should be visible.
+        LinearLayout distanceSeekLayout = (LinearLayout)findViewById(R.id.findSeekBarLayout);
+        LinearLayout distanceTextLayout = (LinearLayout)findViewById(R.id.findByDistanceLayout);
+        LinearLayout zipLayout = (LinearLayout)findViewById(R.id.findByZipLayout);
+        boolean isChecked = ((CheckBox)v).isChecked();
+        distanceSeekLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        distanceTextLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        zipLayout.setVisibility(isChecked ? View.GONE : View.VISIBLE);
     }
 
     private void findByZip(String zip) {
-    	Uri uri = EyekabobHelper.GeoNames.getUri(zip);
-    	Intent intent = new Intent(getApplicationContext(), EventList.class);
-    	intent.setData(uri);
-    	intent.putExtra("zip", zip);
-    	startActivity(intent);
+        Uri uri = EyekabobHelper.GeoNames.getUri(zip);
+        Intent intent = new Intent(getApplicationContext(), EventList.class);
+        intent.setData(uri);
+        intent.putExtra("zip", zip);
+        startActivity(intent);
     }
 
     private void find(String restAPI, Class<?> intentClass, Map<String, String> params) {
@@ -138,13 +138,13 @@ public class FindMusic extends EyekabobActivity {
 
     private void find(String restAPI, Class<?> intentClass, String paramKey, String paramValue) {
         if ("".equals(paramValue)) {
-        	return;
+            return;
         }
 
         Map<String, String> params = null;
         if (paramKey != null) {
-        	params = new HashMap<String, String>();
-        	// paramValue will be encoded in LastFM.getUri.
+            params = new HashMap<String, String>();
+            // paramValue will be encoded in LastFM.getUri.
             params.put(paramKey, paramValue);
         }
 

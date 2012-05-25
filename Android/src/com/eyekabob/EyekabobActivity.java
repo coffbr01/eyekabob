@@ -15,7 +15,7 @@ import android.content.res.Configuration;
 import android.view.View;
 
 public class EyekabobActivity extends Activity {
-	private Dialog alertDialog;
+    private Dialog alertDialog;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -25,23 +25,23 @@ public class EyekabobActivity extends Activity {
 
     // TODO: use dialogfragment to show dialog
     protected void createDialog(int message) {
-    	if (alertDialog != null) {
-    		alertDialog.setTitle(message);
-    		return;
-    	}
+        if (alertDialog != null) {
+            alertDialog.setTitle(message);
+            return;
+        }
 
-	    Builder builder = new AlertDialog.Builder(this);
-	    builder.setMessage(message);
-	    alertDialog = builder.create();
-	    alertDialog.setOwnerActivity(this);
+        Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message);
+        alertDialog = builder.create();
+        alertDialog.setOwnerActivity(this);
     }
 
     protected void showDialog() {
-		alertDialog.show();
+        alertDialog.show();
     }
 
     protected void dismissDialog() {
-		alertDialog.dismiss();
+        alertDialog.dismiss();
     }
 
     public void adHandler(View v) {

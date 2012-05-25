@@ -9,15 +9,15 @@ import android.os.Bundle;
 import android.view.View;
 
 public class EditView extends EyekabobActivity {
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.edit_view);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.edit_view);
+    }
 
-	public void addArtistButtonHandler(View v) {
-		startActivity(new Intent(this, AddBand.class));
-	}
+    public void addArtistButtonHandler(View v) {
+        startActivity(new Intent(this, AddBand.class));
+    }
 
     public void viewPrototype(View v) {
         Intent prototypeIntent = new Intent(this, Prototype.class);

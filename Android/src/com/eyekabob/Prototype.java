@@ -11,12 +11,12 @@ import android.widget.ImageView;
 // This class just displays a mockup image
 public class Prototype extends Activity {
 
-	public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.prototype_image_fullscreen);
         ImageView iv = (ImageView)findViewById(R.id.prototypeImageView);
         int resourceId = getIntent().getExtras().getInt("resourceId");
         iv.setImageResource(resourceId);
-	}
+    }
 
 }

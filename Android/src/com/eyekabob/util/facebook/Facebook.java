@@ -259,7 +259,7 @@ public class Facebook {
      * @param context
      * @param intent
      * @return true if the service intent resolution happens successfully and the
-     * 	signatures match.
+     *     signatures match.
      */
     private boolean validateActivityIntent(Context context, Intent intent) {
         ResolveInfo resolveInfo =
@@ -281,7 +281,7 @@ public class Facebook {
      * @param context
      * @param intent
      * @return true if the service intent resolution happens successfully and the
-     * 	signatures match.
+     *     signatures match.
      */
     private boolean validateServiceIntent(Context context, Intent intent) {
         ResolveInfo resolveInfo =
@@ -334,7 +334,7 @@ public class Facebook {
      *            A list of permissions required for this application. If you do
      *            not require any permissions, pass an empty String array.
      */
-	private void startDialogAuth(Activity activity, String[] permissions) {
+    private void startDialogAuth(Activity activity, String[] permissions) {
         Bundle params = new Bundle();
         if (permissions.length > 0) {
             params.putString("scope", TextUtils.join(",", permissions));

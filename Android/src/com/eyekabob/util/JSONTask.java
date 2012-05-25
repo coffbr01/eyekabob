@@ -21,47 +21,47 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public abstract class JSONTask extends AsyncTask<String, Void, JSONObject> {
-	private String requestType;
-	public JSONTask() {
-		super();
-	}
-	public JSONTask(String requestType) {
-		super();
-		this.requestType = requestType;
-	}
-	protected JSONObject doInBackground(String... uris) {
-		return doRequest(uris[0]);
-	}
+    private String requestType;
+    public JSONTask() {
+        super();
+    }
+    public JSONTask(String requestType) {
+        super();
+        this.requestType = requestType;
+    }
+    protected JSONObject doInBackground(String... uris) {
+        return doRequest(uris[0]);
+    }
     public JSONObject doRequest(String uri) {
-    	HttpClient client = new DefaultHttpClient();
-    	HttpRequestBase request = null;
-    	if ("POST".equals(requestType)) {
-    		request = new HttpPost(uri);
-    	}
-    	else {
-    		request = new HttpGet(uri);
-    	}
-    	StringBuffer sb = null;
+        HttpClient client = new DefaultHttpClient();
+        HttpRequestBase request = null;
+        if ("POST".equals(requestType)) {
+            request = new HttpPost(uri);
+        }
+        else {
+            request = new HttpGet(uri);
+        }
+        StringBuffer sb = null;
 
-    	try {
-	    	HttpResponse response = client.execute(request);
-	    	BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-	        sb = new StringBuffer();
-	        String line = null;
-	        while ((line = in.readLine()) != null) {
-	            sb.append(line);
-	        }
-	        in.close();
-    	}
-    	catch (IOException e) {
-    		e.printStackTrace();
-    	}
+        try {
+            HttpResponse response = client.execute(request);
+            BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            sb = new StringBuffer();
+            String line = null;
+            while ((line = in.readLine()) != null) {
+                sb.append(line);
+            }
+            in.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
-    	// should this be initialized to an empty json object?
+        // should this be initialized to an empty json object?
         JSONObject result = null;
 
         try {
-        	result = new JSONObject(sb.toString());
+            result = new JSONObject(sb.toString());
         }
         catch (JSONException e) {
             Log.e(getClass().getName(), "Error parsing json response", e);

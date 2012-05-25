@@ -28,16 +28,16 @@ import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
 
 public class ArtistList extends EyekabobActivity {
-	ArtistListAdapter adapter;
+    ArtistListAdapter adapter;
 
-	private OnItemClickListener listItemListener = new OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			Artist artist = (Artist)parent.getAdapter().getItem(position);
-			Intent intent = new Intent(getApplicationContext(), ArtistInfo.class);
-			intent.putExtra("artist", artist);
-			startActivity(intent);
-		}
-	};
+    private OnItemClickListener listItemListener = new OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Artist artist = (Artist)parent.getAdapter().getItem(position);
+            Intent intent = new Intent(getApplicationContext(), ArtistInfo.class);
+            intent.putExtra("artist", artist);
+            startActivity(intent);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,46 +64,46 @@ public class ArtistList extends EyekabobActivity {
 
     @Override
     public void onDestroy() {
-    	adapter.clearCache();
-    	super.onDestroy();
+        adapter.clearCache();
+        super.onDestroy();
     }
 
     protected void loadLastFMArtists(JSONObject response) {
-    	try {
-	    	JSONObject results = response.getJSONObject("results");
-	    	Object artistMatchesObj = results.get("artistmatches");
-	    	if (artistMatchesObj instanceof String) {
-	    		LinearLayout noResultsLayout = (LinearLayout)findViewById(R.id.noResults);
-	    		noResultsLayout.setVisibility(View.VISIBLE);
-	    		return;
-	    	}
-	    	JSONArray artists = ((JSONObject)artistMatchesObj).getJSONArray("artist");
-	    	for (int i = 0; i < artists.length(); i++) {
-	    		JSONObject artistNode = artists.getJSONObject(i);
-	    		String name = artistNode.getString("name");
-	    		String mbid = artistNode.getString("mbid");
-	    		String url = artistNode.getString("url");
+        try {
+            JSONObject results = response.getJSONObject("results");
+            Object artistMatchesObj = results.get("artistmatches");
+            if (artistMatchesObj instanceof String) {
+                LinearLayout noResultsLayout = (LinearLayout)findViewById(R.id.noResults);
+                noResultsLayout.setVisibility(View.VISIBLE);
+                return;
+            }
+            JSONArray artists = ((JSONObject)artistMatchesObj).getJSONArray("artist");
+            for (int i = 0; i < artists.length(); i++) {
+                JSONObject artistNode = artists.getJSONObject(i);
+                String name = artistNode.getString("name");
+                String mbid = artistNode.getString("mbid");
+                String url = artistNode.getString("url");
 
-	    		String image = "";
-	    		JSONArray images = artistNode.getJSONArray("image");
-	    		for (int j = 0; j < images.length(); j++) {
-	    			JSONObject imageJson = images.getJSONObject(j);
-	    			if ("large".equals(imageJson.getString("size"))) {
-	    				image = imageJson.getString("#text");
-	    			}
-	    		}
+                String image = "";
+                JSONArray images = artistNode.getJSONArray("image");
+                for (int j = 0; j < images.length(); j++) {
+                    JSONObject imageJson = images.getJSONObject(j);
+                    if ("large".equals(imageJson.getString("size"))) {
+                        image = imageJson.getString("#text");
+                    }
+                }
 
-	    		Artist artist = new Artist();
-	    		artist.setName(name);
-	    		artist.setMbid(mbid);
-	    		artist.setUrl(url);
-	    		artist.addImageURL("large", image);
-	    		adapter.add(artist);
-	    	}
-    	}
-    	catch (JSONException e) {
-    		Log.e(getClass().getName(), "", e);
-    	}
+                Artist artist = new Artist();
+                artist.setName(name);
+                artist.setMbid(mbid);
+                artist.setUrl(url);
+                artist.addImageURL("large", image);
+                adapter.add(artist);
+            }
+        }
+        catch (JSONException e) {
+            Log.e(getClass().getName(), "", e);
+        }
     }
 
     protected void loadEyekabobArtists(JSONObject response) {
@@ -131,14 +131,14 @@ public class ArtistList extends EyekabobActivity {
     }
 
     private class LastFMRequestTask extends JSONTask {
-    	protected void onPreExecute() {
-    		ArtistList.this.createDialog(R.string.searching);
-    		ArtistList.this.showDialog();
-    	}
-    	protected void onPostExecute(JSONObject result) {
-    		ArtistList.this.dismissDialog();
-    		ArtistList.this.loadLastFMArtists(result);
-    	}
+        protected void onPreExecute() {
+            ArtistList.this.createDialog(R.string.searching);
+            ArtistList.this.showDialog();
+        }
+        protected void onPostExecute(JSONObject result) {
+            ArtistList.this.dismissDialog();
+            ArtistList.this.loadLastFMArtists(result);
+        }
     }
 
     private class EyekabobRequestTask extends JSONTask {
@@ -153,7 +153,7 @@ public class ArtistList extends EyekabobActivity {
     }
 
     public void addBand(View v) {
-    	Intent addBandIntent = new Intent(this, AddBand.class);
-    	startActivity(addBandIntent);
+        Intent addBandIntent = new Intent(this, AddBand.class);
+        startActivity(addBandIntent);
     }
 }
