@@ -1,54 +1,28 @@
 <project name="Eyekabob" default="all" basedir=".">
     <description>
-        Copy the Eyekabob src files in the respective platform directories
+        Build file for the Eyekabob project
     </description>
     <!-- set global properties for this build -->
     <property name="src" location="src"/>
     <property name="lib" location="lib"/>
     <property environment="env"/>
 
-    <!-- Extraneous target, calls copy-files. -->
-    <target name="all" depends="copy-files">
-    </target>
+    <target name="all" depends="android,web"/>
 
-    <target name="init" depends="ios-init">
-    </target>
-
-    <target name="copy-files" depends="ios-copy-files">
-    </target>
-
-    <target name="android-clean">
+    <target name="android.clean">
         <ant antfile="Android/build.xml" target="clean" inheritall="false"/>
     </target>
 
-    <target name="android" depends="android-clean">
+    <target name="android" depends="android.clean">
         <ant antfile="Android/build.xml" target="debug" inheritall="false"/>
     </target>
 
-    <target name="clean" depends="android-clean, ios-clean">
-    </target>
-
-    <target name="ios-init" depends="ios-clean">
-        <mkdir dir="iOS/Eyekabob/www"/>
-    </target>
-
-    <target name="ios-copy-files" depends="ios-init">
-        <copy todir="iOS/Eyekabob/www">
-            <fileset dir="${src}">
-            </fileset>
-        </copy>
-    </target>
-
-    <target name="ios-clean">
-        <delete dir="iOS/Eyekabob/www"/>
-    </target>
-
-    <target name="clean-web">
+    <target name="web.clean">
         <delete dir="web/bin"/>
         <delete file="web/eyekabob.war"/>
     </target>
 
-    <target name="build-web" depends="clean-web">
+    <target name="web.build" depends="web.clean">
         <mkdir dir="web/bin"/>
         <mkdir dir="web/bin/WEB-INF"/>
         <mkdir dir="web/bin/WEB-INF/classes"/>
@@ -68,13 +42,13 @@
         </copy>
     </target>
 
-    <target name="war" depends="build-web">
+    <target name="web.war" depends="web.build">
         <war destfile="web/eyekabob.war" webxml="web/eyekabob.xml">
             <fileset dir="web/bin"/>
         </war>
     </target>
 
-    <target name="web" depends="war">
+    <target name="web" depends="web.war">
         <copy file="web/eyekabob.war" todir="${env.CATALINA_HOME}/webapps"/>
     </target>
 </project>
