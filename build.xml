@@ -53,6 +53,7 @@
         <mkdir dir="web/bin/WEB-INF"/>
         <mkdir dir="web/bin/WEB-INF/classes"/>
         <mkdir dir="web/bin/WEB-INF/lib"/>
+        <!-- TODO: move these deps into ivy -->
         <javac
             srcdir="web/src"
             destdir="web/bin/WEB-INF/classes"
