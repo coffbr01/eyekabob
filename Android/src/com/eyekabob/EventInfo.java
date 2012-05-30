@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +39,11 @@ public class EventInfo extends EyekabobActivity {
     private String imageUrl = "";
     private String title = "";
     private String venue = "";
+    private String venueCity = "";
+    private String venueStreet = "";
+    private String venueUrl = "";
     private String description = "";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +64,6 @@ public class EventInfo extends EyekabobActivity {
 
             artists = new ArrayList<String>();
             title = jsonEvent.getString("title");
-            JSONObject jsonVenue = jsonEvent.getJSONObject("venue");
-            venue = jsonVenue.optString("name");
-            startDate = EyekabobHelper.LastFM.toReadableDate(jsonEvent.getString("startDate"));
-            JSONObject image = EyekabobHelper.LastFM.getJSONImage("large", jsonEvent.getJSONArray("image"));
-            imageUrl = image.getString("#text");
-            description = jsonEvent.getString("description");
-
             JSONObject jsonAllArtists = jsonEvent.getJSONObject("artists");
             headliner = jsonAllArtists.getString("headliner");
             JSONArray jsonOpeners = jsonAllArtists.getJSONArray("artist");
@@ -74,6 +73,16 @@ public class EventInfo extends EyekabobActivity {
                     artists.add(artistName);
                 }
             }
+
+            JSONObject jsonVenue = jsonEvent.getJSONObject("venue");
+            venue = jsonVenue.optString("name");
+            venueCity = jsonVenue.optString("city");
+            venueStreet = jsonVenue.optString("street");
+            venueUrl = jsonVenue.optString("url");
+            startDate = EyekabobHelper.LastFM.toReadableDate(jsonEvent.getString("startDate"));
+            JSONObject image = EyekabobHelper.LastFM.getJSONImage("large", jsonEvent.getJSONArray("image"));
+            imageUrl = image.getString("#text");
+            description = jsonEvent.getString("description");
         }
         catch (JSONException e) {
             Log.e(getClass().getName(), "", e);
@@ -91,19 +100,49 @@ public class EventInfo extends EyekabobActivity {
         Bitmap img = BitmapFactory.decodeStream(is);
         iv.setImageBitmap(img);
 
-        String rendered = "Title: " + title + "\nHeadliner: " + headliner;
+        TextView titleView = (TextView)findViewById(R.id.eventTitle);
+        titleView.setText(title);
+
+        TextView headlinerView = (TextView)findViewById(R.id.eventHeadliner);
+        headlinerView.setText(headliner);
+
+        String openers = "";
+        TextView artistsView = (TextView)findViewById(R.id.eventArtists);
         if (!artists.isEmpty()) {
-            rendered += "\n  also with:";
+            openers += "\nAlso Performing:";
+            for (String artist : artists) {
+                openers += "\n        " + artist;
+            }
         }
-        for (String artist : artists) {
-            rendered += "\n    " + artist;
+        artistsView.setText(openers);
+
+        String venueDesc = "";
+        TextView venueView = (TextView)findViewById(R.id.eventVenue);
+        venueDesc += "         " + venue;
+        if (!venueCity.equals("") && !venueStreet.equals("")) {
+            venueDesc += "\n         Address: " + venueStreet + "\n" + venueCity;
         }
-        rendered += "\n\nWhere: " + venue;
-        rendered += "\n" + startDate;
+        venueDesc += "\n         " + startDate;
 
-        TextView tv = (TextView)findViewById(R.id.eventText);
-        tv.append(rendered);
+        TextView venueTitleView = (TextView)findViewById(R.id.venue_title);
+        if (!venue.equals("") || !venueCity.equals("") || !venueStreet.equals("")) {
+            venueTitleView.setText("Venue Details:");
+        } else {
+            venueTitleView.setText("No Venue details at this time");
+        }
+        venueView.setText(venueDesc);
 
+        TextView websiteView = (TextView)findViewById(R.id.eventVenueWebsite);
+        if (!venueUrl.equals("")) {
+            websiteView.setText(Html.fromHtml("<a href=\""
+                    + venueUrl + "\">More Information</a>"));
+            websiteView.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+
+        if (!description.equals("")) {
+            TextView descriptionTitleView = (TextView)findViewById(R.id.description_title);
+            descriptionTitleView.setText("Description:");
+        }
         WebView wv = (WebView)findViewById(R.id.eventDescription);
         description = "<div style='color:white'>" + description + "</div>";
         wv.loadData(description, "text/html", "UTF8");

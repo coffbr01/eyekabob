@@ -46,13 +46,17 @@ public class VenueList extends EyekabobActivity {
     
     protected void loadVenues(JSONObject response) {
         try {
-            JSONArray venues = response.getJSONObject("results").getJSONObject("venuematches").getJSONArray("venue");
-            if (venues.length() == 0) {
+            // TODO: jsonVenue is not an Array - it is an Object
+            JSONObject venues = response.getJSONObject("results");
+            JSONObject matches = venues.getJSONObject("venuematches");
+            JSONArray jsonVenue = matches.getJSONArray("venue");
+
+            if (jsonVenue.length() == 0) {
                 Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
                 return;
             }
-            for (int i = 0; i < venues.length(); i++) {
-                JSONObject venue = venues.getJSONObject(i);
+            for (int i = 0; i < jsonVenue.length(); i++) {
+                JSONObject venue = jsonVenue.getJSONObject(i);
                 JSONObject location = venue.getJSONObject("location");
     
                 Venue venueRow = new Venue();
