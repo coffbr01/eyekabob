@@ -1,4 +1,6 @@
-/*
+/**
+ * © 2012 Brien Coffield
+ *
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
@@ -43,7 +45,7 @@ public class VenueList extends EyekabobActivity {
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(listItemListener);
     }
-    
+
     protected void loadVenues(JSONObject response) {
         try {
             // TODO: jsonVenue is not an Array - it is an Object
@@ -58,17 +60,17 @@ public class VenueList extends EyekabobActivity {
             for (int i = 0; i < jsonVenue.length(); i++) {
                 JSONObject venue = jsonVenue.getJSONObject(i);
                 JSONObject location = venue.getJSONObject("location");
-    
+
                 Venue venueRow = new Venue();
-    
+
                 venueRow.setId(venue.optString("id"));
                 venueRow.setName(venue.optString("name"));
                 venueRow.setUrl(venue.optString("url"));
-    
+
                 venueRow.setCity(location.optString("city"));
                 venueRow.setCountry(location.optString("country"));
                 venueRow.setStreet(location.optString("street"));
-    
+
                 JSONObject geoPoint = venue.optJSONObject("geo:point");
                 if (geoPoint != null) {
                     venueRow.setLat(geoPoint.optString("geo:lat"));

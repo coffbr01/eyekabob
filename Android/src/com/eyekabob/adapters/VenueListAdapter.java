@@ -1,4 +1,6 @@
-/*
+/**
+ * © 2012 Brien Coffield
+ *
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
@@ -47,7 +49,7 @@ public class VenueListAdapter extends ArrayAdapter<Venue> {
         }
 
         if (venueRow.getLat() != null && venueRow.getLon() != null) {
-            long dist = EyekabobHelper.getDistance(venueRow.getLat(), venueRow.getLon(), convertView.getContext().getApplicationContext()); 
+            long dist = EyekabobHelper.getDistance(venueRow.getLat(), venueRow.getLon(), convertView.getContext().getApplicationContext());
             if (dist > -1) {
                 rendered += "\n" + String.valueOf(dist) + " mi";
             }

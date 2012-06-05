@@ -1,4 +1,6 @@
-/*
+/**
+ * © 2012 Brien Coffield
+ *
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
@@ -37,7 +39,7 @@ public class Checkin extends EyekabobActivity {
             return;
         }
 
-        Map<String, String> params = new HashMap<String, String>();    
+        Map<String, String> params = new HashMap<String, String>();
         Venue venue = (Venue)getIntent().getExtras().get("venue");
         params.put("venueId", String.valueOf(venue.getId()));
         params.put("venue", URLEncoder.encode(venueName));

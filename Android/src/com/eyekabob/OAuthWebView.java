@@ -1,4 +1,6 @@
-/*
+/**
+ * © 2012 Brien Coffield
+ *
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
@@ -23,7 +25,7 @@ public class OAuthWebView extends Activity {
         Bundle extras = getIntent().getExtras();
         String url = extras.getString("url");
 
-        // If authentication works, we'll get redirected to a url with a pattern like:  
+        // If authentication works, we'll get redirected to a url with a pattern like:
         //
         //    http://YOUR_REGISTERED_REDIRECT_URI/#access_token=ACCESS_TOKEN
         //

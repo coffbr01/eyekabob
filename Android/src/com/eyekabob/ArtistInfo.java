@@ -1,4 +1,6 @@
-/*
+/**
+ * © 2012 Brien Coffield
+ *
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
@@ -61,7 +63,7 @@ public class ArtistInfo extends EyekabobActivity {
             artist.setName(jsonArtist.getString("name"));
             artist.setMbid(jsonArtist.getString("mbid"));
             artist.setUrl(jsonArtist.getString("url"));
-    
+
             JSONObject bio = jsonArtist.getJSONObject("bio");
             artist.setSummary(bio.getString("summary"));
             artist.setContent(bio.getString("content"));
