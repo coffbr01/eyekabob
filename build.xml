@@ -10,11 +10,11 @@
     <target name="all" depends="android,web"/>
 
     <target name="android.clean">
-        <ant antfile="Android/build.xml" target="clean" inheritall="false"/>
+        <ant antfile="android/build.xml" target="clean" inheritall="false"/>
     </target>
 
     <target name="android" depends="android.clean">
-        <ant antfile="Android/build.xml" target="debug" inheritall="false"/>
+        <ant antfile="android/build.xml" target="debug" inheritall="false"/>
     </target>
 
     <target name="web.clean">
