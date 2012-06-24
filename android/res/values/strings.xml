@@ -12,6 +12,8 @@ file 'LICENSE.txt', which is part of this source code package.
     <string name="adding_artist">Adding Artist...</string>
     <string name="app_name">Eyekabob</string>
     <string name="artist_info_label">Artist</string>
+    <string name="artist_detail_label">Artist Detail</string>
+    <string name="artist_img_desc">Image for an Artist</string>
     <string name="artist_list">Artists</string>
     <string name="checkin_label">Check in</string>
     <string name="checkin_search_label">Nearby Places</string>

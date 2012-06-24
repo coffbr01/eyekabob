@@ -17,6 +17,7 @@ file 'LICENSE.txt', which is part of this source code package.
 
         <TextView
             android:id="@+id/eventTitle"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="30dp"
             android:gravity="center_horizontal"
@@ -37,6 +38,7 @@ file 'LICENSE.txt', which is part of this source code package.
             android:id="@+id/eventHeadliner"
             android:layout_below="@+id/eventImageView"
             android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="20dp"
             android:layout_marginTop="4dp"
@@ -45,12 +47,14 @@ file 'LICENSE.txt', which is part of this source code package.
 
         <TextView
             android:id="@+id/eventArtists"
+            android:textColor="@android:color/white"
             android:layout_below="@+id/eventHeadliner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/venue_title"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:layout_below="@+id/eventArtists"
             android:layout_marginTop="6dp"
@@ -59,12 +63,14 @@ file 'LICENSE.txt', which is part of this source code package.
 
         <TextView
             android:id="@+id/eventVenue"
+            android:textColor="@android:color/white"
             android:layout_below="@+id/venue_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/eventVenueWebsite"
+            android:textColor="@android:color/white"
             android:layout_below="@+id/eventVenue"
             android:layout_marginLeft="30dp"
             android:layout_width="wrap_content"
@@ -72,6 +78,7 @@ file 'LICENSE.txt', which is part of this source code package.
 
         <TextView
             android:id="@+id/description_title"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:layout_marginTop="6dp"
             android:layout_below="@+id/eventVenueWebsite"

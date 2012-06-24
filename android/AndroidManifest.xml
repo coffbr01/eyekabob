@@ -68,7 +68,8 @@
         <activity
             android:name=".EventInfo"
             android:label="@string/event_activity"
-            android:configChanges="keyboardHidden|orientation" >
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/EyekabobTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -76,7 +77,17 @@
         <activity
             android:name="ArtistInfo"
             android:label="@string/artist_info_label"
-            android:configChanges="keyboardHidden|orientation" >
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/EyekabobTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ArtistDetailInfo"
+            android:label="@string/artist_detail_label"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/EyekabobTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -84,7 +95,8 @@
         <activity
             android:name="VenueInfo"
             android:label="@string/venue_info_label"
-            android:configChanges="keyboardHidden|orientation" >
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/EyekabobTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

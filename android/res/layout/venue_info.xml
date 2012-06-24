@@ -13,5 +13,6 @@ file 'LICENSE.txt', which is part of this source code package.
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:textColor="@android:color/white"
         android:text="Placeholder for venue info. Work still needed here." />
 </LinearLayout>

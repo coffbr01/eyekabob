@@ -5,17 +5,50 @@
 This file is subject to the terms and conditions defined in
 file 'LICENSE.txt', which is part of this source code package.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/artistHeader"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-    <WebView
-        android:id="@+id/artistSummary"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/artistHeader"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/artistImageView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/artistHeader"
+            android:contentDescription="@string/artist_img_desc"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_margin="3dp"
+            android:layout_below="@+id/artistImageView"
+            android:background="@android:color/darker_gray"/>
+
+        <WebView
+            android:id="@+id/artistSummary"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/artistImageView"/>
+
+        <Button android:id="@+id/artistDetailsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/artistSummary"/>
+
+    </RelativeLayout>
+</ScrollView>
