@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+© 2012 Brien Coffield
+
+This file is subject to the terms and conditions defined in
+file 'LICENSE.txt', which is part of this source code package.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="bottom"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_live_music"
+        android:textColor="#8d0000"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
+        android:background="@drawable/find_form_bg_layout" >
+
+        <EditText
+            android:id="@+id/findByArtistInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:hint="@string/search_by_artist"
+            android:singleLine="true" >
+            <requestFocus />
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/searchByArtistButton"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:background="#00000000"
+            android:contentDescription="@string/find_music_button_desc"
+            android:onClick="findByArtistHandler"
+            android:src="@drawable/eye_search_button" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom"
+        android:orientation="vertical" >
+        <com.eyekabob.AdBanner
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/home_button_desc"
+            android:onClick="adHandler" />
+    </LinearLayout>
+
+</LinearLayout>

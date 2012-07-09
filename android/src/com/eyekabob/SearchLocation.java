@@ -6,33 +6,27 @@
  */
 package com.eyekabob;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.eyekabob.util.EyekabobHelper;
 
-public class FindMusic extends EyekabobActivity {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class SearchLocation extends EyekabobActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.findmusicactivity);
+        setContentView(R.layout.searchlocationactivity);
 
-        EditText findByArtist = (EditText)findViewById(R.id.findByArtistInput);
-        findByArtist.requestFocus();
+        EditText findByLocation = (EditText)findViewById(R.id.findByLocationInput);
+        findByLocation.requestFocus();
 
         SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
         distance.setProgress(10);
@@ -52,24 +46,6 @@ public class FindMusic extends EyekabobActivity {
                 miles.setText(Integer.toString(progress));
             }
         });
-    }
-
-    public void findByArtistHandler(View v) {
-        EditText findByArtist = (EditText)findViewById(R.id.findByArtistInput);
-        String artist = findByArtist.getText().toString();
-
-        if ("".equals(artist)) {
-            return;
-        }
-
-        Intent artistListIntent = new Intent(this, ArtistList.class);
-        artistListIntent.putExtra("artist", artist);
-        startActivity(artistListIntent);
-    }
-
-    public void findByVenueHandler(View v) {
-        EditText findByVenue = (EditText)findViewById(R.id.findByVenueInput);
-        find("venue.search", VenueList.class, "venue", findByVenue.getText().toString());
     }
 
     public void findByLocationHandler(View v) {

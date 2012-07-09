@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="FindMusic"
+            android:name=".SearchIntermediate"
             android:label="@string/find_music"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
@@ -136,6 +136,27 @@
         </activity>
         <activity
             android:name="EditView"
+            android:configChanges="keyboardHidden|orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="SearchArtist"
+            android:configChanges="keyboardHidden|orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="SearchVenue"
+            android:configChanges="keyboardHidden|orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="SearchLocation"
             android:configChanges="keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

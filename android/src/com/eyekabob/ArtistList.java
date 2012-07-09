@@ -6,13 +6,6 @@
  */
 package com.eyekabob;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,11 +16,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.eyekabob.adapters.ArtistListAdapter;
 import com.eyekabob.models.Artist;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ArtistList extends EyekabobActivity {
     ArtistListAdapter adapter;
@@ -57,11 +55,12 @@ public class ArtistList extends EyekabobActivity {
         Uri lastFMUri = EyekabobHelper.LastFM.getUri("artist.search", lastFMParams);
         new LastFMRequestTask().execute(lastFMUri.toString());
 
+        // TODO: Re-enable eyekabob requests when a reliable server is available.
         // Send eyekabob request.
-        Map<String, String> eyekabobParams = new HashMap<String, String>();
-        eyekabobParams.put("artist", artist);
-        Uri eyekabobUri = EyekabobHelper.WebService.getURI("artist", "search", eyekabobParams);
-        new EyekabobRequestTask().execute(eyekabobUri.toString());
+        //Map<String, String> eyekabobParams = new HashMap<String, String>();
+        //eyekabobParams.put("artist", artist);
+        //Uri eyekabobUri = EyekabobHelper.WebService.getURI("artist", "search", eyekabobParams);
+        //new EyekabobRequestTask().execute(eyekabobUri.toString());
     }
 
     @Override

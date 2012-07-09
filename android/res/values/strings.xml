@@ -34,7 +34,7 @@ file 'LICENSE.txt', which is part of this source code package.
     <string name="no_zip_entered">Enter a zip code</string>
     <string name="preferences">Eyekabob Preferences</string>
     <string name="scaled_img_desc">An image scaled to be the correct horizontal width without stretching</string>
-    <string name="search_by_band">SEARCH BY BAND</string>
+    <string name="search_by_artist">SEARCH BY ARTIST</string>
     <string name="search_by_location">SEARCH BY ZIP</string>
     <string name="search_by_venue">SEARCH BY VENUE</string>
     <string name="search_live_music">search live music</string>

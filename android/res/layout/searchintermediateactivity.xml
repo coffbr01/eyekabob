@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+© 2012 Brien Coffield
+
+This file is subject to the terms and conditions defined in
+file 'LICENSE.txt', which is part of this source code package.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <Button
+        android:id="@+id/searchByArtistButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_by_artist"
+        android:onClick="searchByArtistHandler" />
+    <Button
+        android:id="@+id/searchByVenueButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_by_venue"
+        android:onClick="searchByVenueHandler" />
+    <Button
+        android:id="@+id/addArtistSubmitButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_by_location"
+        android:onClick="searchByLocationHandler" />
+</LinearLayout>

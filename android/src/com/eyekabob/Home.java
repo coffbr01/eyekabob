@@ -19,7 +19,7 @@ public class Home extends EyekabobActivity {
     }
 
     public void findMusicHandler(View v) {
-        Intent findMusicIntent = new Intent(this, FindMusic.class);
+        Intent findMusicIntent = new Intent(this, SearchIntermediate.class);
         startActivity(findMusicIntent);
     }
 
