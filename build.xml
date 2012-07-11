@@ -13,7 +13,7 @@
         <ant antfile="android/build.xml" target="clean" inheritall="false"/>
     </target>
 
-    <target name="android" depends="android.clean">
+    <target name="android">
         <ant antfile="android/build.xml" target="debug" inheritall="false"/>
     </target>
 

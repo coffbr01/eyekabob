@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 import com.eyekabob.adapters.ArtistListAdapter;
 import com.eyekabob.models.Artist;
 import com.eyekabob.util.EyekabobHelper;
@@ -54,13 +53,6 @@ public class ArtistList extends EyekabobActivity {
         lastFMParams.put("artist", artist);
         Uri lastFMUri = EyekabobHelper.LastFM.getUri("artist.search", lastFMParams);
         new LastFMRequestTask().execute(lastFMUri.toString());
-
-        // TODO: Re-enable eyekabob requests when a reliable server is available.
-        // Send eyekabob request.
-        //Map<String, String> eyekabobParams = new HashMap<String, String>();
-        //eyekabobParams.put("artist", artist);
-        //Uri eyekabobUri = EyekabobHelper.WebService.getURI("artist", "search", eyekabobParams);
-        //new EyekabobRequestTask().execute(eyekabobUri.toString());
     }
 
     @Override
@@ -69,15 +61,26 @@ public class ArtistList extends EyekabobActivity {
         super.onDestroy();
     }
 
+    protected void showNoResultsLabel() {
+        LinearLayout noResultsLayout = (LinearLayout)findViewById(R.id.noResults);
+        noResultsLayout.setVisibility(View.VISIBLE);
+    }
+
     protected void loadLastFMArtists(JSONObject response) {
         try {
-            JSONObject results = response.getJSONObject("results");
-            Object artistMatchesObj = results.get("artistmatches");
-            if (artistMatchesObj instanceof String) {
-                LinearLayout noResultsLayout = (LinearLayout)findViewById(R.id.noResults);
-                noResultsLayout.setVisibility(View.VISIBLE);
+            if (response == null || !response.has("results")) {
+                showNoResultsLabel();
                 return;
             }
+
+            JSONObject results = response.getJSONObject("results");
+            Object artistMatchesObj = results.get("artistmatches");
+
+            if (artistMatchesObj instanceof String) {
+                showNoResultsLabel();
+                return;
+            }
+
             JSONArray artists = ((JSONObject)artistMatchesObj).getJSONArray("artist");
             for (int i = 0; i < artists.length(); i++) {
                 JSONObject artistNode = artists.getJSONObject(i);
@@ -103,31 +106,7 @@ public class ArtistList extends EyekabobActivity {
             }
         }
         catch (JSONException e) {
-            Log.e(getClass().getName(), "", e);
-        }
-    }
-
-    protected void loadEyekabobArtists(JSONObject response) {
-        try {
-            String error = response.optString("error");
-
-            if (!"".equals(error)) {
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            JSONArray artists = response.getJSONArray("artists");
-            for (int i = 0; i < artists.length(); i++) {
-                Artist artist = new Artist();
-                JSONObject jsonArtist = artists.getJSONObject(i);
-                artist.setName(jsonArtist.optString("name"));
-                artist.setMbid(jsonArtist.optString("mbid"));
-                artist.setUrl(jsonArtist.optString("url"));
-                adapter.add(artist);
-            }
-        }
-        catch (JSONException e) {
-            Log.e(getClass().getName(), "", e);
+            Log.e(getClass().getName(), "JSON was not in the expected format", e);
         }
     }
 
@@ -140,21 +119,5 @@ public class ArtistList extends EyekabobActivity {
             ArtistList.this.dismissDialog();
             ArtistList.this.loadLastFMArtists(result);
         }
-    }
-
-    private class EyekabobRequestTask extends JSONTask {
-        protected void onPreExecute() {
-            ArtistList.this.createDialog(R.string.searching);
-            ArtistList.this.showDialog();
-        }
-        protected void onPostExecute(JSONObject result) {
-            ArtistList.this.dismissDialog();
-            ArtistList.this.loadEyekabobArtists(result);
-        }
-    }
-
-    public void addBand(View v) {
-        Intent addBandIntent = new Intent(this, AddBand.class);
-        startActivity(addBandIntent);
     }
 }
