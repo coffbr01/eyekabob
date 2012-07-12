@@ -1,0 +1,5 @@
+<ivy-module version="2.0">
+    <info organisation="com.eyekabob" module="web"/>
+    <dependencies>
+    </dependencies>
+</ivy-module>

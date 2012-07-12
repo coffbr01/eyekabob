@@ -1,4 +1,4 @@
-<project name="Eyekabob" default="web" basedir=".">
+<project name="Eyekabob" default="deploy" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
     <description>
         Build file for the Eyekabob project
     </description>
@@ -12,24 +12,20 @@
         <delete file="eyekabob.war"/>
     </target>
 
-    <target name="build">
+    <target name="ivy.clean">
+        <ivy:cleancache/>
+    </target>
+
+    <target name="ivy.resolve">
+        <ivy:retrieve/>
+    </target>
+
+    <target name="build" depends="ivy.resolve">
         <mkdir dir="${bin}"/>
         <mkdir dir="${bin}/WEB-INF"/>
         <mkdir dir="${bin}/WEB-INF/classes"/>
         <mkdir dir="${bin}/WEB-INF/lib"/>
-        <!-- TODO: move these deps into ivy -->
-        <javac
-            srcdir="${src}"
-            destdir="${bin}/WEB-INF/classes"
-            debug="true"
-            includeAntRuntime="true"
-            includeJavaRuntime="true"
-            classpath="3rd/json-lib.jar:3rd/servlet-api.jar:3rd/commons-lang.jar:3rd/ezmorph.jar:3rd/commons-logging.jar:3rd/commons-collections.jar:3rd/commons-beanutils.jar:3rd/mysql-connector.jar"
-        />
-        <copy file="${src}/index.jsp" todir="${bin}"/>
-        <copy todir="${bin}/WEB-INF/lib">
-            <fileset dir="3rd"/>
-        </copy>
+        <javac srcdir="${src}" destdir="${bin}/WEB-INF/classes"/>
     </target>
 
     <target name="war" depends="build">
