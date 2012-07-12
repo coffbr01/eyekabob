@@ -1,4 +1,4 @@
-<project name="Eyekabob" default="deploy" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="Eyekabob" default="deploy" basedir=".">
     <description>
         Build file for the Eyekabob project
     </description>
@@ -12,17 +12,7 @@
         <delete file="eyekabob.war"/>
     </target>
 
-    <target name="ivy.clean">
-        <ivy:cleancache/>
-    </target>
-
-    <target name="ivy.resolve">
-        <ivy:retrieve/>
-    </target>
-
-    <target name="build" depends="ivy.resolve">
-        <mkdir dir="${bin}"/>
-        <mkdir dir="${bin}/WEB-INF"/>
+    <target name="build">
         <mkdir dir="${bin}/WEB-INF/classes"/>
         <mkdir dir="${bin}/WEB-INF/lib"/>
         <javac srcdir="${src}" destdir="${bin}/WEB-INF/classes"/>
