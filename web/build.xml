@@ -1,0 +1,53 @@
+<project name="Eyekabob" default="web" basedir=".">
+    <description>
+        Build file for the Eyekabob project
+    </description>
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="bin" location="bin"/>
+    <property environment="env"/>
+
+    <target name="clean">
+        <delete dir="${bin}"/>
+        <delete file="eyekabob.war"/>
+    </target>
+
+    <target name="build">
+        <mkdir dir="${bin}"/>
+        <mkdir dir="${bin}/WEB-INF"/>
+        <mkdir dir="${bin}/WEB-INF/classes"/>
+        <mkdir dir="${bin}/WEB-INF/lib"/>
+        <!-- TODO: move these deps into ivy -->
+        <javac
+            srcdir="${src}"
+            destdir="${bin}/WEB-INF/classes"
+            debug="true"
+            includeAntRuntime="true"
+            includeJavaRuntime="true"
+            classpath="3rd/json-lib.jar:3rd/servlet-api.jar:3rd/commons-lang.jar:3rd/ezmorph.jar:3rd/commons-logging.jar:3rd/commons-collections.jar:3rd/commons-beanutils.jar:3rd/mysql-connector.jar"
+        />
+        <copy file="${src}/index.jsp" todir="${bin}"/>
+        <copy todir="${bin}/WEB-INF/lib">
+            <fileset dir="3rd"/>
+        </copy>
+    </target>
+
+    <target name="war" depends="build">
+        <war destfile="eyekabob.war" webxml="eyekabob.xml">
+            <fileset dir="${bin}"/>
+        </war>
+        <antcall target="catalina.exists"/>
+    </target>
+
+    <target name="deploy" depends="war" if="catalina.exists">
+        <copy file="eyekabob.war" todir="${env.CATALINA_HOME}/webapps"/>
+    </target>
+
+    <target name="catalina.exists">
+        <condition property="catalina.exists">
+            <not>
+                <equals arg1="${env.CATALINA_HOME}" arg2=""/>
+            </not>
+        </condition>
+    </target>
+</project>

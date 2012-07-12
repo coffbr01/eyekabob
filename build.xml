@@ -18,37 +18,20 @@
     </target>
 
     <target name="web.clean">
-        <delete dir="web/bin"/>
-        <delete file="web/eyekabob.war"/>
+        <ant antfile="web/build.xml" target="clean" inheritall="false"/>
     </target>
 
-    <target name="web.build" depends="web.clean">
-        <mkdir dir="web/bin"/>
-        <mkdir dir="web/bin/WEB-INF"/>
-        <mkdir dir="web/bin/WEB-INF/classes"/>
-        <mkdir dir="web/bin/WEB-INF/lib"/>
-        <!-- TODO: move these deps into ivy -->
-        <javac
-            srcdir="web/src"
-            destdir="web/bin/WEB-INF/classes"
-            debug="true"
-            includeAntRuntime="true"
-            includeJavaRuntime="true"
-            classpath="web/3rd/json-lib.jar:web/3rd/servlet-api.jar:web/3rd/commons-lang.jar:web/3rd/ezmorph.jar:web/3rd/commons-logging.jar:web/3rd/commons-collections.jar:web/3rd/commons-beanutils.jar:web/3rd/mysql-connector.jar"
-        />
-        <copy file="web/src/index.jsp" todir="web/bin"/>
-        <copy todir="web/bin/WEB-INF/lib">
-            <fileset dir="web/3rd"/>
-        </copy>
+    <target name="web.build">
+        <ant antfile="web/build.xml" target="build" inheritall="false"/>
     </target>
 
     <target name="web.war" depends="web.build">
-        <war destfile="web/eyekabob.war" webxml="web/eyekabob.xml">
-            <fileset dir="web/bin"/>
-        </war>
+        <ant antfile="web/build.xml" target="war" inheritall="false"/>
     </target>
 
-    <target name="web" depends="web.war">
-        <copy file="web/eyekabob.war" todir="${env.CATALINA_HOME}/webapps"/>
+    <target name="web.deploy" depends="web.war">
+        <ant antfile="web/build.xml" target="deploy" inheritall="false"/>
     </target>
+
+    <target name="web" depends="web.deploy"/>
 </project>
