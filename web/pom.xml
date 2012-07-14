@@ -6,13 +6,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.eyekabob</groupId>
-    <artifactId>web</artifactId>
+    <artifactId>eyekabobweb</artifactId>
     <packaging>war</packaging>
     <dependencies>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
             <version>1.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20090211</version>
         </dependency>
     </dependencies>
 </project>
