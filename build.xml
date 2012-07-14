@@ -5,7 +5,6 @@
     <!-- set global properties for this build -->
     <property name="src" location="src"/>
     <property name="lib" location="lib"/>
-    <property environment="env"/>
 
     <target name="all" depends="android,web"/>
 
@@ -16,22 +15,4 @@
     <target name="android">
         <ant antfile="android/build.xml" target="debug" inheritall="false"/>
     </target>
-
-    <target name="web.clean">
-        <ant antfile="web/build.xml" target="clean" inheritall="false"/>
-    </target>
-
-    <target name="web.build">
-        <ant antfile="web/build.xml" target="build" inheritall="false"/>
-    </target>
-
-    <target name="web.war" depends="web.build">
-        <ant antfile="web/build.xml" target="war" inheritall="false"/>
-    </target>
-
-    <target name="web.deploy" depends="web.war">
-        <ant antfile="web/build.xml" target="deploy" inheritall="false"/>
-    </target>
-
-    <target name="web" depends="web.deploy"/>
 </project>

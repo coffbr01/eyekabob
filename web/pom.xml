@@ -1,0 +1,11 @@
+<project>
+    <parent>
+        <groupId>com.eyekabob</groupId>
+        <artifactId>root</artifactId>
+        <version>0.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.eyekabob</groupId>
+    <artifactId>web</artifactId>
+    <packaging>war</packaging>
+</project>

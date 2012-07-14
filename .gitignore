@@ -7,7 +7,7 @@ iOS/Eyekabob/www
 iOS/Eyekabob/build
 out
 web/bin
-web/eyekabob.war
+web/target
 .DS_Store
 *.iml
 .idea
