@@ -6,7 +6,7 @@
     <property name="src" location="src"/>
     <property name="lib" location="lib"/>
 
-    <target name="all" depends="android,web"/>
+    <target name="all" depends="android"/>
 
     <target name="android.clean">
         <ant antfile="android/build.xml" target="clean" inheritall="false"/>
