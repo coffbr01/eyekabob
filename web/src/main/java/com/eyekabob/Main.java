@@ -1,7 +1,14 @@
-package com.eyekabob.web;
+package com.eyekabob;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+@Path("/rest/main")
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("HELLO WORLD");
+    @GET
+    @Produces("text/plain")
+    public String helloWorldMethod() {
+        return "Hello, world!";
     }
 }

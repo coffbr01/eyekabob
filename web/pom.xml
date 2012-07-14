@@ -8,4 +8,11 @@
     <groupId>com.eyekabob</groupId>
     <artifactId>web</artifactId>
     <packaging>war</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>1.12</version>
+        </dependency>
+    </dependencies>
 </project>
