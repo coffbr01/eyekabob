@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
  * © Copyright 2012 Brien Coffield
@@ -18,9 +19,9 @@ import javax.ws.rs.Produces;
 public class Main {
     @GET
     @Produces("application/json")
-    public String helloWorld() throws JSONException {
+    public String helloWorld(@QueryParam("param") String param) throws JSONException {
         JSONObject response = new JSONObject();
-        response.put("response", "Hello, world!");
+        response.put("response", "Hello, world! " + param);
         return response.toString();
     }
 }
