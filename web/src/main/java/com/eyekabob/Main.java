@@ -1,12 +1,13 @@
 package com.eyekabob;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Scanner;
 
 /**
  * © Copyright 2012 Brien Coffield
@@ -18,10 +19,12 @@ import javax.ws.rs.QueryParam;
 @Path("")
 public class Main {
     @GET
-    @Produces("application/json")
-    public String helloWorld(@QueryParam("param") String param) throws JSONException {
-        JSONObject response = new JSONObject();
-        response.put("response", "Hello, world! " + param);
-        return response.toString();
+    @Produces("text/html")
+    public String getHandler() throws IOException {
+        URL url = getClass().getClassLoader().getResource("index.html");
+        InputStream is = url.openStream();
+        Scanner scanner = new Scanner(is);
+        scanner = scanner.useDelimiter("\\A");
+        return scanner.next();
     }
 }
