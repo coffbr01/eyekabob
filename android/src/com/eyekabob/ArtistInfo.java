@@ -13,9 +13,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,22 +37,43 @@ import com.eyekabob.models.Artist;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
 
-public class ArtistInfo extends EyekabobActivity implements View.OnClickListener {
+import static android.graphics.Bitmap.createScaledBitmap;
+
+public class ArtistInfo extends EyekabobActivity {
     private Artist artist;
     private String imageUrl;
     private Button detailsButton;
+
+    private View.OnClickListener linksListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == R.id.findLiveMusicButton) {
+                Intent findMusicIntent = new Intent(ArtistInfo.this, SearchIntermediate.class);
+                startActivity(findMusicIntent);
+            } else if (view.getId() == R.id.aboutButton) {
+                // TODO: Implement ABOUT page.
+                Toast.makeText(ArtistInfo.this, "We are awesome!", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (view.getId() == R.id.contactButton) {
+                EyekabobHelper.launchEmail(ArtistInfo.this);
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_info);
-        WebView summaryWebView = (WebView)findViewById(R.id.artistSummary);
-        summaryWebView.setBackgroundColor(0x00000000);
+        WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
+        contentWebView.setBackgroundColor(0x00000000);
         artist = (Artist)getIntent().getExtras().get("artist");
         Log.d(getClass().getName(), "Artist name is: " + artist.getName());
-        findViewById(R.id.artistDetailsButton).setOnClickListener(this);
-        detailsButton = (Button)findViewById(R.id.artistDetailsButton);
-        detailsButton.setVisibility(View.GONE);
+        findViewById(R.id.findLiveMusicButton).setOnClickListener(linksListener);
+        findViewById(R.id.aboutButton).setOnClickListener(linksListener);
+        findViewById(R.id.contactButton).setOnClickListener(linksListener);
+//        findViewById(R.id.artistDetailsButton).setOnClickListener(this);
+//        detailsButton = (Button)findViewById(R.id.artistDetailsButton);
+//        detailsButton.setVisibility(View.GONE);
 
         Map<String, String> params = new HashMap<String, String>();
         if (artist.getMbid() == null) {
@@ -95,14 +120,18 @@ public class ArtistInfo extends EyekabobActivity implements View.OnClickListener
      * Puts attributes from the Artist object into the views.
      */
     private void render() {
-        // TODO: Phil to put rendering code here.
+        TextView artistNameView = (TextView)findViewById(R.id.infoMainHeader);
+        artistNameView.setText(artist.getName());
 
-        // Example:
-        // ------------------------------------------------------------------------------------
-        TextView headerTextView = (TextView)findViewById(R.id.artistHeader);
-        headerTextView.setText(artist.getName());
+        //TODO: Get actual concert date
+        TextView nextConcertDateView = (TextView)findViewById(R.id.infoSubHeaderOne);
+        nextConcertDateView.setText("Next Concert: December 13 @");
 
-        ImageView iv = (ImageView)findViewById(R.id.artistImageView);
+        //TODO: Get actual concert location
+        TextView nextConcertLocationView = (TextView)findViewById(R.id.infoSubHeaderTwo);
+        nextConcertLocationView.setText("Somewhere Badass!!");
+
+        ImageView iv = (ImageView)findViewById(R.id.infoImageView);
         InputStream is = null;
         try {
             is = (InputStream) new URL(imageUrl).getContent();
@@ -111,18 +140,33 @@ public class ArtistInfo extends EyekabobActivity implements View.OnClickListener
         } catch (IOException e) {
             e.printStackTrace();
         }
+        View topLine = (View)findViewById(R.id.infoDividerLineTop);
+        topLine.setVisibility(View.VISIBLE);
+        View bottomLine = (View)findViewById(R.id.infoDividerLineBottom);
+        bottomLine.setVisibility(View.VISIBLE);
+
+        // Get the image and re-size it to fit the screen
         Bitmap img = BitmapFactory.decodeStream(is);
-        iv.setImageBitmap(img);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int ratio = metrics.widthPixels / img.getWidth();
+        Bitmap rescaledImg = createScaledBitmap(img, img.getWidth() * ratio, img.getHeight() * ratio, false);
+        iv.setImageBitmap(rescaledImg);
 
-        WebView summaryWebView = (WebView)findViewById(R.id.artistSummary);
-        String summaryHtml = "<div style='color:white'>" + artist.getSummary() + "</div>";
-        summaryWebView.loadData(summaryHtml, "text/html", "UTF8");
-
-        if (!("").equals(artist.getContent())) {
-            detailsButton.setVisibility(View.VISIBLE);
-            detailsButton.setText("More Info...");
+        if (!artist.getSummary().equals("")) {
+            TextView bioHeaderView = (TextView)findViewById(R.id.infoBioHeader);
+            bioHeaderView.setText("Bio");
         }
-        // ------------------------------------------------------------------------------------
+
+        WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
+        String contentHtml = "<div style='color:white'>" + artist.getContent() + "</div>";
+        contentWebView.loadData(contentHtml, "text/html", "UTF8");
+
+        // TODO: Something similar to Bio above
+//        if (!artist.getFutureEvents().equals("")) {
+//            TextView futureEventsHeaderView = (TextView)findViewById(R.id.infoFutureEventsHeader);
+//            futureEventsHeaderView.setText("Future Events");
+//        }
     }
 
     // Handles the asynchronous request, away from the UI thread.
@@ -134,17 +178,6 @@ public class ArtistInfo extends EyekabobActivity implements View.OnClickListener
         protected void onPostExecute(JSONObject result) {
             ArtistInfo.this.dismissDialog();
             ArtistInfo.this.handleArtistResponse(result);
-        }
-    }
-
-    public void onClick(View v) {
-        if (v.getId() == R.id.artistDetailsButton) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("artist", artist);
-            Intent intent = new Intent();
-            intent.setClass(ArtistInfo.this, ArtistDetailInfo.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
         }
     }
 }
