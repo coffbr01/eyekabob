@@ -105,7 +105,6 @@ public class EventList extends EyekabobActivity {
                 JSONObject jsonVenue = jsonEvent.getJSONObject("venue");
                 JSONObject jsonLocation = jsonVenue.getJSONObject("location");
                 JSONObject jsonGeo = jsonLocation.optJSONObject("geo:point");
-                event.setDate(EyekabobHelper.LastFM.toReadableDate(jsonEvent.getString("startDate")));
     
                 event.setId(jsonEvent.getString("id"));
                 event.setName(jsonEvent.getString("title"));

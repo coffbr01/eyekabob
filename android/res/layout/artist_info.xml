@@ -41,7 +41,7 @@ file 'LICENSE.txt', which is part of this source code package.
 
     <ScrollView android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="25dp"
                 android:layout_below="@+id/eyekabobLinks">
 
         <RelativeLayout android:layout_width="fill_parent"
@@ -106,14 +106,28 @@ file 'LICENSE.txt', which is part of this source code package.
 
             <TextView
                     android:id="@+id/infoBioHeader"
-                    android:textColor="@android:color/white"
+                    android:textColor="#B0B0B0"
                     android:textSize="24dp"
                     android:textStyle="bold"
                     android:gravity="left"
                     android:layout_marginLeft="6dp"
-                    android:layout_width="fill_parent"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/infoDividerLineBottom"/>
+
+            <ToggleButton
+                    android:id="@+id/infoBioToggleButton"
+                    android:textOff="More Info..."
+                    android:textOn="Less Info..."
+                    android:textColor="#B0B0B0"
+                    android:gravity="bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:visibility="gone"
+                    android:layout_below="@+id/infoDividerLineBottom"
+                    android:layout_toRightOf="@+id/infoBioHeader"/>
 
             <WebView
                     android:id="@+id/infoBioContent"
@@ -123,7 +137,7 @@ file 'LICENSE.txt', which is part of this source code package.
 
             <TextView
                     android:id="@+id/infoFutureEventsHeader"
-                    android:textColor="@android:color/white"
+                    android:textColor="#B0B0B0"
                     android:textSize="24dp"
                     android:textStyle="bold"
                     android:gravity="left"
@@ -132,11 +146,16 @@ file 'LICENSE.txt', which is part of this source code package.
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/infoBioContent"/>
 
-            <WebView
-                    android:id="@+id/infoFuterEventsContent"
-                    android:layout_width="wrap_content"
+            <TextView
+                    android:id="@+id/infoFutureEventsContent"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14dp"
+                    android:gravity="left"
+                    android:layout_marginLeft="6dp"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/infoFutureEventsHeader"/>
+
         </RelativeLayout>
     </ScrollView>
 
