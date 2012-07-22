@@ -17,11 +17,25 @@ import java.util.Scanner;
  */
 @Path("")
 public class Root {
+    /**
+     * Handles requests made to the web service root. This should respond with
+     * branding and Eyekabob Web Service API documentation.
+     * @return
+     */
     @GET
-    @Produces("text/html")
-    public String getResponse() throws IOException {
+    @Produces({"text/html", "text/plain"})
+    public String getResponse() {
         URL url = getClass().getClassLoader().getResource("index.html");
-        InputStream is = url.openStream();
+
+        InputStream is;
+        try {
+            is = url.openStream();
+        }
+        catch (IOException e) {
+            // No index.html. Return some generic text.
+            return "Eyekabob Web Services root";
+        }
+
         Scanner scanner = new Scanner(is);
         scanner = scanner.useDelimiter("\\A");
         return scanner.next();

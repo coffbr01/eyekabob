@@ -18,15 +18,29 @@ import javax.ws.rs.QueryParam;
  */
 @Path("/event")
 public class Event {
+
+    /**
+     * Either id or search is required. If both are provided, id will be used.
+     * If given an id, the event that matches the id will be returned.
+     * If given a search term, a list of events that match the query will be returned.
+     *
+     * The number of results returned from a search query is 50 by default, although that
+     * can be increased by specifying limit. Use limit in conjunction with the search parameter.
+     *
+     * @param id The unique ID of an event.
+     * @param search A search term to use against the events table.
+     * @param limit The maximum number of event records to return. Use in conjunction with the search parameter.
+     * @return
+     */
     @GET
     @Produces("application/json")
-    public String getResponse(@QueryParam("id") String id, @QueryParam("search") String search) {
+    public String getResponse(@QueryParam("id") String id, @QueryParam("search") String search, @QueryParam("limit") String limit) {
         if (id != null && !"".equals(id)) {
             return getResponseByID(id);
         }
 
         if (search != null && !"".equals(search)) {
-            return getResponseBySearchTerm(search);
+            return getResponseBySearchTerm(search, limit);
         }
 
         return "{error:\"Unable to retrieve event(s). Did you specify either 'id' or 'search'?\"}";
@@ -47,7 +61,7 @@ public class Event {
         }
     }
 
-    protected String getResponseBySearchTerm(String search) {
+    protected String getResponseBySearchTerm(String search, String limit) {
         try {
             JSONObject response = new JSONObject();
             response.put("search", search);
