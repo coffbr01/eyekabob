@@ -16,6 +16,7 @@ public class EyekabobApplication extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<Class<?>>();
         classes.add(Main.class);
+        classes.add(Event.class);
         return classes;
     }
 }
