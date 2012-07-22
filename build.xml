@@ -8,6 +8,10 @@
 
     <target name="all" depends="android"/>
 
+    <target name="clean">
+        <antcall target="android.clean"/>
+    </target>
+
     <target name="android.clean">
         <ant antfile="android/build.xml" target="clean" inheritall="false"/>
     </target>
