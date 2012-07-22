@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class Root {
     @GET
     @Produces("text/html")
-    public String getHandler() throws IOException {
+    public String getResponse() throws IOException {
         URL url = getClass().getClassLoader().getResource("index.html");
         InputStream is = url.openStream();
         Scanner scanner = new Scanner(is);
