@@ -18,6 +18,7 @@ import javax.ws.rs.QueryParam;
  */
 @Path("/event")
 public class Event {
+    private static final String DEFAULT_SEARCH_LIMIT = "50";
 
     /**
      * Either id or search is required. If both are provided, id will be used.
@@ -62,11 +63,20 @@ public class Event {
     }
 
     protected String getResponseBySearchTerm(String search, String limit) {
+        if (limit == null) {
+            limit = DEFAULT_SEARCH_LIMIT;
+        }
+
         try {
             JSONObject response = new JSONObject();
             response.put("search", search);
 
             JSONArray events = new JSONArray();
+            if (events.length() < Integer.parseInt(limit)) {
+                JSONObject event = new JSONObject();
+                event.put("title", "some " + search + " name");
+                events.put(event);
+            }
             response.put("events", events);
 
             return response.toString();

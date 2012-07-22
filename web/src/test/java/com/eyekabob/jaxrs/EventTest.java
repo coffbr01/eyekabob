@@ -23,26 +23,26 @@ public class EventTest {
 
     @Test
     public void testGetResponseNoIDNoSearch() throws Exception {
-        String result = eventService.getResponse(null, null);
+        String result = eventService.getResponse(null, null, null);
         JSONObject jsonResult = new JSONObject(result);
         assertTrue(jsonResult.has("error"));
 
-        result = eventService.getResponse("", null);
+        result = eventService.getResponse("", null, null);
         jsonResult = new JSONObject(result);
         assertTrue(jsonResult.has("error"));
 
-        result = eventService.getResponse(null, "");
+        result = eventService.getResponse(null, "", null);
         jsonResult = new JSONObject(result);
         assertTrue(jsonResult.has("error"));
 
-        result = eventService.getResponse("", "");
+        result = eventService.getResponse("", "", null);
         jsonResult = new JSONObject(result);
         assertTrue(jsonResult.has("error"));
     }
 
     @Test
     public void testGetResponseID() throws Exception {
-        String result = eventService.getResponse("anID", null);
+        String result = eventService.getResponse("anID", null, null);
         JSONObject jsonResult = new JSONObject(result);
         assertTrue(jsonResult.has("event"));
 
@@ -54,19 +54,19 @@ public class EventTest {
 
     @Test
     public void testGetResponseSearch() throws Exception {
-        String result = eventService.getResponse(null, "aSearchTerm");
+        String result = eventService.getResponse(null, "aSearchTerm", null);
         JSONObject jsonResult = new JSONObject(result);
         assertTrue(jsonResult.has("search"));
         assertEquals("aSearchTerm", jsonResult.get("search"));
 
         assertTrue(jsonResult.has("events"));
         JSONArray resultEvents = jsonResult.getJSONArray("events");
-        assertEquals(0, resultEvents.length());
+        assertEquals(1, resultEvents.length());
     }
 
     @Test
     public void testGetResponseIDSearch() throws Exception {
-        String result = eventService.getResponse("anID", "aSearchTerm");
+        String result = eventService.getResponse("anID", "aSearchTerm", null);
         JSONObject jsonResult = new JSONObject(result);
         assertTrue(jsonResult.has("event"));
         assertFalse(jsonResult.has("search"));
@@ -91,7 +91,19 @@ public class EventTest {
 
     @Test
     public void testGetResponseBySearchTerm() throws Exception {
-        String result = eventService.getResponseBySearchTerm("aSearchTerm");
+        String result = eventService.getResponseBySearchTerm("aSearchTerm", null);
+        JSONObject jsonResult = new JSONObject(result);
+        assertTrue(jsonResult.has("search"));
+        assertEquals("aSearchTerm", jsonResult.get("search"));
+
+        assertTrue(jsonResult.has("events"));
+        JSONArray resultEvents = jsonResult.getJSONArray("events");
+        assertEquals(1, resultEvents.length());
+    }
+
+    @Test
+    public void testLimit() throws Exception {
+        String result = eventService.getResponseBySearchTerm("aSearchTerm", "0");
         JSONObject jsonResult = new JSONObject(result);
         assertTrue(jsonResult.has("search"));
         assertEquals("aSearchTerm", jsonResult.get("search"));
