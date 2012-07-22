@@ -2,7 +2,7 @@ package com.eyekabob.jaxrs;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static junit.framework.Assert.*;
 
 /**
  * © Copyright 2012 Brien Coffield
