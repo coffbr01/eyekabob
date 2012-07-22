@@ -24,20 +24,20 @@ file 'LICENSE.txt', which is part of this source code package.
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp" >
-	    <TextView
-	        android:id="@+id/rowHeader"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/rowHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"/>
         <TextView
             android:id="@+id/rowDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp" />
-		<TextView
-		    android:id="@+id/rowText"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="16sp" />
-	</LinearLayout>
+        <TextView
+            android:id="@+id/rowText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+    </LinearLayout>
 </LinearLayout>

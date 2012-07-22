@@ -10,17 +10,17 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-	<ImageButton
-	    android:id="@+id/findMusicButton"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="center_horizontal"
-	    android:layout_marginTop="5dp"
-	    android:background="#00000000"
-	    android:src="@drawable/find_music_button"
+    <ImageButton
+        android:id="@+id/findMusicButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:background="#00000000"
+        android:src="@drawable/find_music_button"
         android:onClick="findMusicHandler"
         android:contentDescription="@string/find_music_button_desc" >
-	</ImageButton>
+    </ImageButton>
 
     <ImageButton
         android:layout_width="fill_parent"
@@ -37,79 +37,79 @@
         android:gravity="bottom"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical" >
-	    <LinearLayout
-		    android:id="@+id/firstRow"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="center_horizontal"
-		    android:orientation="horizontal" >
-		    <ImageButton
-		        android:id="@+id/homePicsButton"
-		        android:layout_width="wrap_content"
-		        android:layout_height="fill_parent"
-		        android:layout_gravity="top"
-		        android:background="#00000000"
-		        android:src="@drawable/home_pics_button"
-		        android:onClick="homeGalleryHandler"
-		        android:contentDescription="@string/home_button_desc" >
-		    </ImageButton>
-		    <ImageButton
-	            android:id="@+id/homeFriendsButton"
-	            android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:layout_gravity="top"
-	            android:background="#00000000"
-	            android:src="@drawable/home_friends_button"
-	            android:onClick="homeStatusHandler"
-	            android:contentDescription="@string/home_button_desc" >
-	        </ImageButton>
-	        <ImageButton
-	            android:id="@+id/homeCheckinButton"
-	            android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:layout_gravity="top"
-	            android:background="#00000000"
-	            android:src="@drawable/home_checkin_button"
-	            android:onClick="homeCheckinHandler"
-	            android:contentDescription="@string/home_button_desc" >
-	        </ImageButton>
-		</LinearLayout>
-	    <LinearLayout
-	        android:id="@+id/secondRow"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/firstRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-	        android:orientation="horizontal" >
-	        <ImageButton
-	            android:id="@+id/homeSettingsButton"
-	            android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:layout_gravity="top"
-	            android:background="#00000000"
-	            android:src="@drawable/home_settings_button"
-	            android:onClick="homeSettingsHandler"
-	            android:contentDescription="@string/home_button_desc" >
-	        </ImageButton>
-	        <ImageButton
-	            android:id="@+id/homeBandButton"
-	            android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:layout_gravity="top"
-	            android:background="#00000000"
-	            android:src="@drawable/home_band_button"
-	            android:onClick="homeBandHandler"
-	            android:contentDescription="@string/home_button_desc" >
-	        </ImageButton>
-	        <ImageButton
-	            android:id="@+id/homeForumButton"
-	            android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:layout_gravity="top"
-	            android:background="#00000000"
-	            android:src="@drawable/home_calendar_button"
-	            android:onClick="homeCalendarHandler"
-	            android:contentDescription="@string/home_button_desc" >
-	        </ImageButton>
-	    </LinearLayout>
-	</LinearLayout>
+            android:orientation="horizontal" >
+            <ImageButton
+                android:id="@+id/homePicsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="top"
+                android:background="#00000000"
+                android:src="@drawable/home_pics_button"
+                android:onClick="homeGalleryHandler"
+                android:contentDescription="@string/home_button_desc" >
+            </ImageButton>
+            <ImageButton
+                android:id="@+id/homeFriendsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="top"
+                android:background="#00000000"
+                android:src="@drawable/home_friends_button"
+                android:onClick="homeStatusHandler"
+                android:contentDescription="@string/home_button_desc" >
+            </ImageButton>
+            <ImageButton
+                android:id="@+id/homeCheckinButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="top"
+                android:background="#00000000"
+                android:src="@drawable/home_checkin_button"
+                android:onClick="homeCheckinHandler"
+                android:contentDescription="@string/home_button_desc" >
+            </ImageButton>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/secondRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal" >
+            <ImageButton
+                android:id="@+id/homeSettingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="top"
+                android:background="#00000000"
+                android:src="@drawable/home_settings_button"
+                android:onClick="homeSettingsHandler"
+                android:contentDescription="@string/home_button_desc" >
+            </ImageButton>
+            <ImageButton
+                android:id="@+id/homeBandButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="top"
+                android:background="#00000000"
+                android:src="@drawable/home_band_button"
+                android:onClick="homeBandHandler"
+                android:contentDescription="@string/home_button_desc" >
+            </ImageButton>
+            <ImageButton
+                android:id="@+id/homeForumButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="top"
+                android:background="#00000000"
+                android:src="@drawable/home_calendar_button"
+                android:onClick="homeCalendarHandler"
+                android:contentDescription="@string/home_button_desc" >
+            </ImageButton>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
