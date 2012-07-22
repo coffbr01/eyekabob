@@ -20,19 +20,19 @@ import javax.ws.rs.QueryParam;
 public class Event {
     @GET
     @Produces("application/json")
-    public String getEventByID(@QueryParam("id") String id, @QueryParam("search") String search) {
+    public String getResponse(@QueryParam("id") String id, @QueryParam("search") String search) {
         if (id != null && !"".equals(id)) {
-            return generateGetEventByIDResponse(id);
+            return getResponseByID(id);
         }
 
         if (search != null && !"".equals(search)) {
-            return generateGetEventBySearchResponse(search);
+            return getResponseBySearchTerm(search);
         }
 
         return "{error:\"Unable to retrieve event(s). Did you specify either 'id' or 'search'?\"}";
     }
 
-    protected String generateGetEventByIDResponse(String id) {
+    protected String getResponseByID(String id) {
         try {
             JSONObject event = new JSONObject();
             event.put("id", id);
@@ -47,7 +47,7 @@ public class Event {
         }
     }
 
-    protected String generateGetEventBySearchResponse(String search) {
+    protected String getResponseBySearchTerm(String search) {
         try {
             JSONObject response = new JSONObject();
             response.put("search", search);
