@@ -1,4 +1,4 @@
-package com.eyekabob;
+package com.eyekabob.jaxrs;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,7 +16,7 @@ import java.util.Scanner;
  * file 'LICENSE.txt', which is part of this source code package.
  */
 @Path("")
-public class Main {
+public class Root {
     @GET
     @Produces("text/html")
     public String getHandler() throws IOException {
