@@ -37,17 +37,15 @@ file 'LICENSE.txt', which is part of this source code package.
         android:fadingEdge="vertical" >
     </ListView>
 
-    <com.eyekabob.ListFadeImage
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/scaled_img_desc"
-        android:layout_above="@+id/adBanner" />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="bottom"
-        android:orientation="vertical" >
+        android:orientation="vertical">
+        <com.eyekabob.ListFadeImage
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/scaled_img_desc"/>
         <com.google.ads.AdView
             android:id="@+id/adView"
             android:layout_width="fill_parent"
