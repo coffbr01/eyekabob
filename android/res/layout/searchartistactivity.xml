@@ -28,7 +28,7 @@ file 'LICENSE.txt', which is part of this source code package.
 
         <EditText
             android:id="@+id/findByArtistInput"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
