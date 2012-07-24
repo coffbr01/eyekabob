@@ -43,6 +43,7 @@ public class ArtistInfo extends EyekabobActivity {
     private ArrayList<Event> futureEvents = new ArrayList<Event>(){};
     private boolean artistInfoReturned = false;
     private boolean futureEventsInfoReturned = false;
+    private boolean imageInfoReturned = false;
 
     private View.OnClickListener linksListener = new View.OnClickListener() {
         @Override
@@ -130,6 +131,7 @@ public class ArtistInfo extends EyekabobActivity {
         if (futureEventsInfoReturned) {
             render();
         }
+        dismissDialogIfReady();
     }
 
     /**
@@ -181,6 +183,7 @@ public class ArtistInfo extends EyekabobActivity {
         if (artistInfoReturned)  {
             render();
         }
+        dismissDialogIfReady();
     }
 
     /**
@@ -234,7 +237,7 @@ public class ArtistInfo extends EyekabobActivity {
         }
     }
 
-    private void loadArtistImage(Bitmap img) {
+    private void handleImageResponse(Bitmap img) {
         // Get the image and re-size it to fit the screen
         ImageView iv = (ImageView)findViewById(R.id.infoImageView);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -242,6 +245,14 @@ public class ArtistInfo extends EyekabobActivity {
         int ratio = metrics.widthPixels / img.getWidth();
         Bitmap rescaledImg = createScaledBitmap(img, img.getWidth() * ratio, img.getHeight() * ratio, false);
         iv.setImageBitmap(rescaledImg);
+        imageInfoReturned = true;
+        dismissDialogIfReady();
+    }
+
+    private void dismissDialogIfReady() {
+        if (imageInfoReturned && artistInfoReturned && futureEventsInfoReturned) {
+            dismissDialog();
+        }
     }
 
     private void toggleBioText (boolean detailed) {
@@ -262,6 +273,10 @@ public class ArtistInfo extends EyekabobActivity {
 
     // Handles the asynchronous request, away from the UI thread.
     private class ArtistRequestTask extends JSONTask {
+        protected void onPreExecute() {
+            ArtistInfo.this.createDialog(R.string.loading);
+            ArtistInfo.this.showDialog();
+        }
         protected void onPostExecute(JSONObject result) {
             ArtistInfo.this.handleArtistResponse(result);
         }
@@ -269,12 +284,7 @@ public class ArtistInfo extends EyekabobActivity {
 
     // Handles the asynchronous request, away from the UI thread.
     private class FutureEventsRequestTask extends JSONTask {
-        protected void onPreExecute() {
-            ArtistInfo.this.createDialog(R.string.loading);
-            ArtistInfo.this.showDialog();
-        }
         protected void onPostExecute(JSONObject result) {
-            ArtistInfo.this.dismissDialog();
             ArtistInfo.this.handleFutureEventsResponse(result);
         }
     }
@@ -295,7 +305,7 @@ public class ArtistInfo extends EyekabobActivity {
         }
 
         protected void onPostExecute(Bitmap img) {
-            ArtistInfo.this.loadArtistImage(img);
+            ArtistInfo.this.handleImageResponse(img);
         }
     }
 }
