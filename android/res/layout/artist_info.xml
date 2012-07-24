@@ -6,14 +6,16 @@ This file is subject to the terms and conditions defined in
 file 'LICENSE.txt', which is part of this source code package.
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
     <LinearLayout
-            android:id="@+id/eyekabobLinks"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="top|center">
+        android:id="@+id/eyekabobLinks"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center">
         <Button
             android:id="@+id/findLiveMusicButton"
             android:text="find live music "
@@ -44,17 +46,18 @@ file 'LICENSE.txt', which is part of this source code package.
                 android:layout_marginBottom="25dp"
                 android:layout_below="@+id/eyekabobLinks">
 
-        <RelativeLayout android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
             <TextView
-                    android:id="@+id/infoMainHeader"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    android:textSize="24dp"
-                    android:gravity="left"
-                    android:layout_marginLeft="6dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                android:id="@+id/infoMainHeader"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="24dp"
+                android:gravity="left"
+                android:layout_marginLeft="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <TextView
                     android:id="@+id/infoSubHeaderOne"
@@ -160,14 +163,16 @@ file 'LICENSE.txt', which is part of this source code package.
     </ScrollView>
 
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom"
+        android:orientation="vertical" >
+        <com.google.ads.AdView
+            android:id="@+id/adView"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:gravity="bottom"
-            android:orientation="vertical" >
-        <com.eyekabob.AdBanner
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/home_button_desc"
-                android:onClick="adHandler" />
+            android:layout_height="wrap_content"
+            ads:adUnitId="a1500dd36468af5"
+            ads:adSize="BANNER"
+            ads:loadAdOnCreate="false"/>
     </LinearLayout>
 </RelativeLayout>

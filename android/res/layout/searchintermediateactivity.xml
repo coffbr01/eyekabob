@@ -5,7 +5,9 @@
 This file is subject to the terms and conditions defined in
 file 'LICENSE.txt', which is part of this source code package.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -27,4 +29,17 @@ file 'LICENSE.txt', which is part of this source code package.
         android:layout_height="wrap_content"
         android:text="@string/search_by_location"
         android:onClick="searchByLocationHandler" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom"
+        android:orientation="vertical" >
+        <com.google.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            ads:adUnitId="a1500dd36468af5"
+            ads:adSize="BANNER"
+            ads:loadAdOnCreate="false"/>
+    </LinearLayout>
 </LinearLayout>

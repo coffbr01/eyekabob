@@ -17,6 +17,7 @@ import java.util.Map;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.*;
@@ -40,7 +41,6 @@ import static android.graphics.Bitmap.createScaledBitmap;
 public class ArtistInfo extends EyekabobActivity {
     private Artist artist;
     private ArrayList<Event> futureEvents = new ArrayList<Event>(){};
-    private String imageUrl;
     private boolean artistInfoReturned = false;
     private boolean futureEventsInfoReturned = false;
 
@@ -53,7 +53,6 @@ public class ArtistInfo extends EyekabobActivity {
             } else if (view.getId() == R.id.aboutButton) {
                 // TODO: Implement ABOUT page.
                 Toast.makeText(ArtistInfo.this, "We are awesome!", Toast.LENGTH_SHORT).show();
-                return;
             } else if (view.getId() == R.id.contactButton) {
                 EyekabobHelper.launchEmail(ArtistInfo.this);
             } else if (view.getId() == R.id.infoBioToggleButton) {
@@ -91,6 +90,7 @@ public class ArtistInfo extends EyekabobActivity {
         // Send last.fm request.
         Map<String, String> lastFMParams = new HashMap<String, String>();
         lastFMParams.put("artist", artist.getName());
+        lastFMParams.put("limit", "10");
         Uri lastFMUri = EyekabobHelper.LastFM.getUri("artist.getEvents", lastFMParams);
         new FutureEventsRequestTask().execute(lastFMUri.toString());
     }
@@ -111,13 +111,18 @@ public class ArtistInfo extends EyekabobActivity {
             artist.setMbid(jsonArtist.getString("mbid"));
             artist.setUrl(jsonArtist.getString("url"));
             JSONObject image = EyekabobHelper.LastFM.getJSONImage("large", jsonArtist.getJSONArray("image"));
-            imageUrl = image.getString("#text");
+
+            // Get artist image.
+            new ImageRequestTask().execute(new URL(image.getString("#text")));
 
             JSONObject bio = jsonArtist.getJSONObject("bio");
             artist.setSummary(bio.getString("summary"));
             artist.setContent(bio.getString("content"));
         }
         catch (JSONException e) {
+            Log.e(getClass().getName(), "", e);
+        }
+        catch (MalformedURLException e) {
             Log.e(getClass().getName(), "", e);
         }
 
@@ -164,7 +169,7 @@ public class ArtistInfo extends EyekabobActivity {
                     venue.setLat(jsonGeo.optString("geo:lat"));
                     venue.setLon(jsonGeo.getString("geo:long"));
                 }
-                
+
                 futureEvents.add(event);
             }
         }
@@ -174,7 +179,7 @@ public class ArtistInfo extends EyekabobActivity {
 
         futureEventsInfoReturned = true;
         if (artistInfoReturned)  {
-            render();    
+            render();
         }
     }
 
@@ -196,27 +201,10 @@ public class ArtistInfo extends EyekabobActivity {
             nextConcertDateView.setText("Next Concert: UNKNOWN");
         }
 
-        ImageView iv = (ImageView)findViewById(R.id.infoImageView);
-        InputStream is = null;
-        try {
-            is = (InputStream) new URL(imageUrl).getContent();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        View topLine = (View)findViewById(R.id.infoDividerLineTop);
+        View topLine = findViewById(R.id.infoDividerLineTop);
         topLine.setVisibility(View.VISIBLE);
-        View bottomLine = (View)findViewById(R.id.infoDividerLineBottom);
+        View bottomLine = findViewById(R.id.infoDividerLineBottom);
         bottomLine.setVisibility(View.VISIBLE);
-
-        // Get the image and re-size it to fit the screen
-        Bitmap img = BitmapFactory.decodeStream(is);
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int ratio = metrics.widthPixels / img.getWidth();
-        Bitmap rescaledImg = createScaledBitmap(img, img.getWidth() * ratio, img.getHeight() * ratio, false);
-        iv.setImageBitmap(rescaledImg);
 
         if (!artist.getSummary().equals("")) {
             TextView bioHeaderView = (TextView)findViewById(R.id.infoBioHeader);
@@ -228,14 +216,15 @@ public class ArtistInfo extends EyekabobActivity {
         }
 
         WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
-        String contentHtml = "<div style='color:white'>" + artist.getSummary() + "</div>";
+        String contentHtml = artist.getSummary();
         contentWebView.loadData(contentHtml, "text/html", "UTF8");
 
         if (futureEvents.size() > 0) {
             TextView futureEventsHeaderView = (TextView)findViewById(R.id.infoFutureEventsHeader);
             futureEventsHeaderView.setText("Future Events");
             String futureText = "";
-            for (int i = 0; i < futureEvents.size(); i++) {
+            int i;
+            for (i = 0; i < futureEvents.size(); i++) {
                 Event event = futureEvents.get(i);
                 futureText += event.getDate() + "\n";
                 futureText += "@ " + event.getVenue().getName() + " in " + event.getVenue().getCity() + "\n\n";
@@ -245,26 +234,35 @@ public class ArtistInfo extends EyekabobActivity {
         }
     }
 
+    private void loadArtistImage(Bitmap img) {
+        // Get the image and re-size it to fit the screen
+        ImageView iv = (ImageView)findViewById(R.id.infoImageView);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int ratio = metrics.widthPixels / img.getWidth();
+        Bitmap rescaledImg = createScaledBitmap(img, img.getWidth() * ratio, img.getHeight() * ratio, false);
+        iv.setImageBitmap(rescaledImg);
+    }
+
     private void toggleBioText (boolean detailed) {
-        if (detailed && !artist.getContent().equals("")) {
-            WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
-            String contentHtml = "<div style='color:white'>" + artist.getContent() + "</div>";
-            contentWebView.loadData(contentHtml, "text/html", "UTF8");
-        } else if (!detailed && !artist.getSummary().equals("")) {
-            WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
-            String contentHtml = "<div style='color:white'>" + artist.getSummary() + "</div>";
-            contentWebView.loadData(contentHtml, "text/html", "UTF8");
+        WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
+
+        String contentHtml = "";
+        if (artist != null && !"".equals(artist.getContent())) {
+            if (detailed) {
+                contentHtml = artist.getContent();
+            }
+            else {
+                contentHtml = artist.getSummary();
+            }
         }
+
+        contentWebView.loadData(contentHtml, "text/html", "UTF8");
     }
 
     // Handles the asynchronous request, away from the UI thread.
     private class ArtistRequestTask extends JSONTask {
-        protected void onPreExecute() {
-//            ArtistInfo.this.createDialog(R.string.loading);
-//            ArtistInfo.this.showDialog();
-        }
         protected void onPostExecute(JSONObject result) {
-//            ArtistInfo.this.dismissDialog();
             ArtistInfo.this.handleArtistResponse(result);
         }
     }
@@ -278,6 +276,26 @@ public class ArtistInfo extends EyekabobActivity {
         protected void onPostExecute(JSONObject result) {
             ArtistInfo.this.dismissDialog();
             ArtistInfo.this.handleFutureEventsResponse(result);
+        }
+    }
+
+    private class ImageRequestTask extends AsyncTask<URL, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(URL... urls) {
+            InputStream is = null;
+            try {
+                is = (InputStream) urls[0].getContent();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return BitmapFactory.decodeStream(is);
+        }
+
+        protected void onPostExecute(Bitmap img) {
+            ArtistInfo.this.loadArtistImage(img);
         }
     }
 }
