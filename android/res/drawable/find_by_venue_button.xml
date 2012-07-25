@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+© 2012 Brien Coffield
+
+This file is subject to the terms and conditions defined in
+file 'LICENSE.txt', which is part of this source code package.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/venue_magnifier_btn_down"
+          android:state_pressed="true" />
+    <item android:drawable="@drawable/venue_magnifier_btn" />
+</selector>

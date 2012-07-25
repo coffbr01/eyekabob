@@ -80,24 +80,24 @@ file 'LICENSE.txt', which is part of this source code package.
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"/>
 
-    <Button
-        android:id="@+id/searchByLocationButton"
+    <ImageButton
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/search_by_location"
-        android:onClick="searchByLocationHandler" />
-    <Button
-        android:id="@+id/searchByArtistButton"
+        android:src="@drawable/find_by_location_button"
+        android:onClick="searchByLocationHandler"
+        android:background="@drawable/find_form_bg_big_layout"/>
+    <ImageButton
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/search_by_artist"
-        android:onClick="searchByArtistHandler" />
-    <Button
-        android:id="@+id/searchByVenueButton"
+        android:src="@drawable/find_by_artist_button"
+        android:onClick="searchByArtistHandler"
+        android:background="@drawable/find_form_bg_big_layout"/>
+    <ImageButton
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/search_by_venue"
-        android:onClick="searchByVenueHandler" />
+        android:src="@drawable/find_by_venue_button"
+        android:onClick="searchByVenueHandler"
+        android:background="@drawable/find_form_bg_big_layout"/>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
