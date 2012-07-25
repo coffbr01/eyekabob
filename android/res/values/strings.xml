@@ -7,9 +7,11 @@ file 'LICENSE.txt', which is part of this source code package.
 -->
 <resources>
 
+    <string name="about_eyekabob">about eyekabob</string>
     <string name="ad_desc">Advertisement</string>
     <string name="add_artist">Add Artist</string>
     <string name="adding_artist">Adding Artist...</string>
+    <string name="advertise">advertise</string>
     <string name="app_name">Eyekabob</string>
     <string name="artist_info_label">Artist</string>
     <string name="artist_detail_label">Artist Detail</string>
@@ -20,6 +22,7 @@ file 'LICENSE.txt', which is part of this source code package.
     <string name="checkin_shout_hint">Comments about checkin (not required)</string>
     <string name="checking_in">Checking in ...</string>
     <string name="choose_genre">Choose a genre</string>
+    <string name="contact">contact</string>
     <string name="description">Description</string>
     <string name="distance">DISTANCE:</string>
     <string name="event_activity">Event</string>
@@ -34,12 +37,14 @@ file 'LICENSE.txt', which is part of this source code package.
     <string name="name">Name</string>
     <string name="no_results">No results found!</string>
     <string name="no_zip_entered">Enter a zip code</string>
+    <string name="pipe_char">|</string>
     <string name="preferences">Eyekabob Preferences</string>
     <string name="scaled_img_desc">An image scaled to be the correct horizontal width without stretching</string>
     <string name="search_by_artist">SEARCH BY ARTIST</string>
     <string name="search_by_location">SEARCH BY LOCATION</string>
     <string name="search_by_venue">SEARCH BY VENUE</string>
     <string name="search_live_music">search live music</string>
+    <string name="search_live_music_by">search live music by</string>
     <string name="searching">Searching &#8230;</string>
     <string name="sign_in">Sign In</string>
     <string name="signed_in">Signed In</string>
