@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 /**
  * © Copyright 2012 Brien Coffield
@@ -23,6 +24,7 @@ import java.sql.SQLException;
  */
 @Path("/event")
 public class Event {
+    private static final Logger log = Logger.getLogger(Event.class.getName());
     private static final int DEFAULT_SEARCH_LIMIT = 50;
 
     /**
@@ -68,6 +70,7 @@ public class Event {
         }
 
         Connection conn = null;
+        String error = null;
         try {
             String query = "SELECT id,name FROM event WHERE id='?'";
             conn = DBUtils.getConn();
@@ -80,14 +83,19 @@ public class Event {
                 event.put("id", resultSet.getInt("id"));
                 event.put("name", resultSet.getString("name"));
             }
+            else {
+                String message = "Query for event id [" + intId + "] did not return a result.";
+                log.severe(message);
+                error = getJSONError(Event.class.getSimpleName(), message);
+            }
 
             response.put("event", event);
         }
         catch (SQLException e) {
-            return getJSONError(SQLException.class.getSimpleName(), e.getMessage());
+            error = getJSONError(SQLException.class.getSimpleName(), e.getMessage());
         }
         catch (JSONException e) {
-            return getJSONError(JSONException.class.getSimpleName(), e.getMessage());
+            error = getJSONError(JSONException.class.getSimpleName(), e.getMessage());
         }
         finally {
             if (conn != null) {
@@ -95,9 +103,13 @@ public class Event {
                     conn.close();
                 }
                 catch (SQLException e) {
-                    return getJSONError(SQLException.class.getSimpleName(), e.getMessage());
+                    error = getJSONError(SQLException.class.getSimpleName(), e.getMessage());
                 }
             }
+        }
+
+        if (error != null) {
+            return error;
         }
 
         return response.toString();
@@ -115,6 +127,7 @@ public class Event {
         }
 
         Connection conn = null;
+        String error = null;
         try {
             response.put("search", search);
 
@@ -136,10 +149,10 @@ public class Event {
             response.put("events", events);
         }
         catch (SQLException e) {
-            return getJSONError(SQLException.class.getSimpleName(), e.getMessage());
+            error = getJSONError(SQLException.class.getSimpleName(), e.getMessage());
         }
         catch (JSONException e) {
-            return getJSONError(JSONException.class.getSimpleName(), e.getMessage());
+            error = getJSONError(JSONException.class.getSimpleName(), e.getMessage());
         }
         finally {
             if (conn != null) {
@@ -147,9 +160,13 @@ public class Event {
                     conn.close();
                 }
                 catch (SQLException e) {
-                    return getJSONError(SQLException.class.getSimpleName(), e.getMessage());
+                    error = getJSONError(SQLException.class.getSimpleName(), e.getMessage());
                 }
             }
+        }
+
+        if (error != null) {
+            return error;
         }
 
         return response.toString();
