@@ -1,8 +1,10 @@
 package com.eyekabob.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * © Copyright 2012 Brien Coffield
@@ -20,7 +22,34 @@ public class DBUtils {
     private static final String MYSQL = "mysql";
     private static final String CONNECTION = JDBC + ":" + MYSQL + "://" + DB_HOST + "/" + DB_NAME;
 
-    public static final Connection getConn() throws SQLException {
+    public static Connection getConn() throws SQLException {
         return DriverManager.getConnection(CONNECTION, USER, PASS);
+    }
+
+    public static List<Map<String, Object>> query(String preparedStatementStr, Object... preparedArgs) throws SQLException {
+        Connection conn = getConn();
+        PreparedStatement preparedStatement = conn.prepareStatement(preparedStatementStr);
+        int argCount = 1;
+        for (Object arg : preparedArgs) {
+            if (arg instanceof Integer) {
+                preparedStatement.setInt(argCount, (Integer)arg);
+            }
+            argCount++;
+        }
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = metaData.getColumnCount();
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        while (resultSet.next()) {
+            Map<String, Object> row = new HashMap<String, Object>();
+            for (int colIndex = 0; colIndex < columnCount; colIndex++) {
+                String columnName = metaData.getColumnName(colIndex);
+                row.put(columnName, resultSet.getObject(colIndex));
+            }
+            result.add(row);
+        }
+
+        return result;
     }
 }

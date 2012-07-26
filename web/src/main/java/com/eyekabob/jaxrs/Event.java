@@ -13,6 +13,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import static com.eyekabob.db.DBUtils.*;
 
 /**
  * © Copyright 2012 Brien Coffield
@@ -70,14 +74,11 @@ public class Event {
         Connection conn = null;
         String error = null;
         try {
-            JSONObject event = new JSONObject();
             String query = "SELECT id,name FROM event WHERE id='?'";
-            conn = DBUtils.getConn();
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setInt(1, intId);
+            List<Map<String, Object>> eventResults = query(query, intId);
 
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+            List<Map<String, Object>> eventResults =
+            while (resul tSet.next()) {
                 // There will only be one row for an event ID query, so the while loop means nothing.
                 event.put("id", resultSet.getInt("id"));
                 event.put("name", resultSet.getString("name"));
@@ -125,7 +126,7 @@ public class Event {
         try {
             response.put("search", search);
 
-            conn = DBUtils.getConn();
+            conn = getConn();
             String query = "SELECT id,name FROM event WHERE name LIKE '%?%' LIMIT ?";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, search);
