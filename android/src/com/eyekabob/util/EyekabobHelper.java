@@ -105,6 +105,30 @@ public class EyekabobHelper {
             }
             return image;
         }
+
+        public static JSONObject getLargestJSONImage(JSONArray images) throws JSONException {
+            JSONObject image = getJSONImage("mega", images);
+            if (image != null) {
+                return image;
+            }
+
+            image = getJSONImage("extralarge", images);
+            if (image != null) {
+                return image;
+            }
+
+            image = getJSONImage("large", images);
+            if (image != null) {
+                return image;
+            }
+
+            image = getJSONImage("medium", images);
+            if (image != null) {
+                return image;
+            }
+
+            return getJSONImage("small", images);
+        }
     }
 
     public static class GeoNames {
@@ -218,7 +242,7 @@ public class EyekabobHelper {
      * Gets distance from current location to given lat/lon.
      * @param lat
      * @param lon
-     * @param activity
+     * @param context
      * @return
      */
     public static long getDistance(double lat, double lon, Context context) {

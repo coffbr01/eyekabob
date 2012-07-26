@@ -48,18 +48,18 @@ public class ArtistInfo extends EyekabobActivity {
     private View.OnClickListener linksListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (view.getId() == R.id.findLiveMusicButton) {
-                Intent findMusicIntent = new Intent(ArtistInfo.this, SearchIntermediate.class);
-                startActivity(findMusicIntent);
-            } else if (view.getId() == R.id.aboutButton) {
-                // TODO: Implement ABOUT page.
-                Toast.makeText(ArtistInfo.this, "We are awesome!", Toast.LENGTH_SHORT).show();
-            } else if (view.getId() == R.id.contactButton) {
-                EyekabobHelper.launchEmail(ArtistInfo.this);
-            } else if (view.getId() == R.id.infoBioToggleButton) {
-                ToggleButton tb = (ToggleButton) findViewById(R.id.infoBioToggleButton);
-                toggleBioText(tb.isChecked());
-            }
+        if (view.getId() == R.id.findLiveMusicButton) {
+            Intent findMusicIntent = new Intent(ArtistInfo.this, SearchIntermediate.class);
+            startActivity(findMusicIntent);
+        } else if (view.getId() == R.id.aboutButton) {
+            // TODO: Implement ABOUT page.
+            Toast.makeText(ArtistInfo.this, "We are awesome!", Toast.LENGTH_SHORT).show();
+        } else if (view.getId() == R.id.contactButton) {
+            EyekabobHelper.launchEmail(ArtistInfo.this);
+        } else if (view.getId() == R.id.infoBioToggleButton) {
+            ToggleButton tb = (ToggleButton) findViewById(R.id.infoBioToggleButton);
+            toggleBioText(tb.isChecked());
+        }
         }
     };
 
@@ -111,7 +111,7 @@ public class ArtistInfo extends EyekabobActivity {
             artist.setName(jsonArtist.getString("name"));
             artist.setMbid(jsonArtist.getString("mbid"));
             artist.setUrl(jsonArtist.getString("url"));
-            JSONObject image = EyekabobHelper.LastFM.getJSONImage("large", jsonArtist.getJSONArray("image"));
+            JSONObject image = EyekabobHelper.LastFM.getLargestJSONImage(jsonArtist.getJSONArray("image"));
 
             // Get artist image.
             new ImageRequestTask().execute(new URL(image.getString("#text")));
