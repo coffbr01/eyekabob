@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 /**
  * © Copyright 2012 Brien Coffield
@@ -24,7 +23,6 @@ import java.util.logging.Logger;
  */
 @Path("/event")
 public class Event {
-    private static final Logger log = Logger.getLogger(Event.class.getName());
     private static final int DEFAULT_SEARCH_LIMIT = 50;
 
     /**
@@ -72,21 +70,17 @@ public class Event {
         Connection conn = null;
         String error = null;
         try {
+            JSONObject event = new JSONObject();
             String query = "SELECT id,name FROM event WHERE id='?'";
             conn = DBUtils.getConn();
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setInt(1, intId);
-            ResultSet resultSet = statement.executeQuery();
 
-            JSONObject event = new JSONObject();
-            if (resultSet.next()) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                // There will only be one row for an event ID query, so the while loop means nothing.
                 event.put("id", resultSet.getInt("id"));
                 event.put("name", resultSet.getString("name"));
-            }
-            else {
-                String message = "Query for event id [" + intId + "] did not return a result.";
-                log.severe(message);
-                error = getJSONError(Event.class.getSimpleName(), message);
             }
 
             response.put("event", event);
