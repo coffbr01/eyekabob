@@ -7,6 +7,7 @@ file 'LICENSE.txt', which is part of this source code package.
 -->
 <resources>
 
+    <string name="about">about</string>
     <string name="about_eyekabob">about eyekabob</string>
     <string name="ad_desc">Advertisement</string>
     <string name="add_artist">Add Artist</string>
@@ -23,11 +24,13 @@ file 'LICENSE.txt', which is part of this source code package.
     <string name="checking_in">Checking in ...</string>
     <string name="choose_genre">Choose a genre</string>
     <string name="contact">contact</string>
+    <string name="contact_eyekabob">contact eyekabob</string>
     <string name="description">Description</string>
     <string name="distance">DISTANCE:</string>
     <string name="event_activity">Event</string>
     <string name="event_img_desc">Image for an event</string>
     <string name="event_list">Events</string>
+    <string name="find_live_music">find live music</string>
     <string name="find_music">Find music</string>
     <string name="find_music_button_desc">Find music button</string>
     <string name="genre">Genre</string>
