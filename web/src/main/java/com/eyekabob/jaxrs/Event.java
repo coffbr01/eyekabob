@@ -1,5 +1,6 @@
 package com.eyekabob.jaxrs;
 
+import com.eyekabob.db.DBUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,6 +9,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * © Copyright 2012 Brien Coffield
@@ -18,7 +23,7 @@ import javax.ws.rs.QueryParam;
  */
 @Path("/event")
 public class Event {
-    private static final String DEFAULT_SEARCH_LIMIT = "50";
+    private static final int DEFAULT_SEARCH_LIMIT = 50;
 
     /**
      * Either id or search is required. If both are provided, id will be used.
@@ -31,7 +36,7 @@ public class Event {
      * @param id The unique ID of an event.
      * @param search A search term to use against the events table.
      * @param limit The maximum number of event records to return. Use in conjunction with the search parameter.
-     * @return
+     * @return response
      */
     @GET
     @Produces("application/json")
@@ -48,41 +53,109 @@ public class Event {
     }
 
     protected String getResponseByID(String id) {
+        JSONObject response = new JSONObject();
+
+        if (id == null) {
+            return getJSONError("Error", "ID was [" + id + "]");
+        }
+
+        int intId;
         try {
+            intId = Integer.parseInt(id);
+        }
+        catch (NumberFormatException e) {
+            return getJSONError("Error", "ID [" + id + "] was not an int");
+        }
+
+        Connection conn = null;
+        try {
+            String query = "SELECT id,name FROM event WHERE id='?'";
+            conn = DBUtils.getConn();
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setInt(1, intId);
+            ResultSet resultSet = statement.executeQuery();
+
             JSONObject event = new JSONObject();
-            event.put("id", id);
+            if (resultSet.next()) {
+                event.put("id", resultSet.getInt("id"));
+                event.put("name", resultSet.getString("name"));
+            }
 
-            JSONObject response = new JSONObject();
             response.put("event", event);
-
-            return response.toString();
+        }
+        catch (SQLException e) {
+            return getJSONError(SQLException.class.getSimpleName(), e.getMessage());
         }
         catch (JSONException e) {
-            return "{error:\"Unable to get event with ID [" + id + "]\"}";
+            return getJSONError(JSONException.class.getSimpleName(), e.getMessage());
         }
+        finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                }
+                catch (SQLException e) {
+                    return getJSONError(SQLException.class.getSimpleName(), e.getMessage());
+                }
+            }
+        }
+
+        return response.toString();
     }
 
     protected String getResponseBySearchTerm(String search, String limit) {
-        if (limit == null) {
-            limit = DEFAULT_SEARCH_LIMIT;
+        JSONObject response = new JSONObject();
+
+        int intLimit;
+        try {
+            intLimit = Integer.parseInt(limit);
+        }
+        catch (NumberFormatException e) {
+            intLimit = DEFAULT_SEARCH_LIMIT;
         }
 
+        Connection conn = null;
         try {
-            JSONObject response = new JSONObject();
             response.put("search", search);
 
+            conn = DBUtils.getConn();
+            String query = "SELECT id,name FROM event WHERE name LIKE '%?%' LIMIT ?";
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, search);
+            statement.setInt(2, intLimit);
+            ResultSet resultSet = statement.executeQuery();
+
             JSONArray events = new JSONArray();
-            if (events.length() < Integer.parseInt(limit)) {
+            while (resultSet.next()) {
                 JSONObject event = new JSONObject();
-                event.put("title", "some " + search + " name");
+                event.put("id", resultSet.getInt("id"));
+                event.put("name", resultSet.getString("name"));
                 events.put(event);
             }
-            response.put("events", events);
 
-            return response.toString();
+            response.put("events", events);
+        }
+        catch (SQLException e) {
+            return getJSONError(SQLException.class.getSimpleName(), e.getMessage());
         }
         catch (JSONException e) {
-            return "{error:\"Unable to get event with search term [" + search + "]\"}";
+            return getJSONError(JSONException.class.getSimpleName(), e.getMessage());
         }
+        finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                }
+                catch (SQLException e) {
+                    return getJSONError(SQLException.class.getSimpleName(), e.getMessage());
+                }
+            }
+        }
+
+        return response.toString();
+    }
+
+    private String getJSONError(String title, String message) {
+        return "{error:\"" + title + ": " + message + "\"}";
     }
 }
