@@ -29,6 +29,7 @@ public class DBUtils {
     public static List<Map<String, Object>> query(String preparedStatementStr, Object... preparedArgs) throws SQLException {
         Connection conn = getConn();
         PreparedStatement preparedStatement = conn.prepareStatement(preparedStatementStr);
+        // Prepared statement args are 1-based, so start at 1.
         int argCount = 1;
         for (Object arg : preparedArgs) {
             if (arg instanceof Integer) {

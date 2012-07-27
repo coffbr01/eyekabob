@@ -10,13 +10,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-
-import static com.eyekabob.db.DBUtils.*;
 
 /**
  * © Copyright 2012 Brien Coffield
@@ -75,13 +71,13 @@ public class Event {
         String error = null;
         try {
             String query = "SELECT id,name FROM event WHERE id='?'";
-            List<Map<String, Object>> eventResults = query(query, intId);
+            JSONObject event = new JSONObject();
+            List<Map<String, Object>> eventResults = DBUtils.query(query, intId);
 
-            List<Map<String, Object>> eventResults =
-            while (resul tSet.next()) {
-                // There will only be one row for an event ID query, so the while loop means nothing.
-                event.put("id", resultSet.getInt("id"));
-                event.put("name", resultSet.getString("name"));
+            for (Map<String, Object> row : eventResults) {
+                // There should only be one row.
+                event.put("id", row.get("id"));
+                event.put("name", row.get("name"));
             }
 
             response.put("event", event);
@@ -126,18 +122,14 @@ public class Event {
         try {
             response.put("search", search);
 
-            conn = getConn();
             String query = "SELECT id,name FROM event WHERE name LIKE '%?%' LIMIT ?";
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, search);
-            statement.setInt(2, intLimit);
-            ResultSet resultSet = statement.executeQuery();
+            List<Map<String, Object>> eventResult = DBUtils.query(query, search, intLimit);
 
             JSONArray events = new JSONArray();
-            while (resultSet.next()) {
+            for (Map<String, Object> row : eventResult) {
                 JSONObject event = new JSONObject();
-                event.put("id", resultSet.getInt("id"));
-                event.put("name", resultSet.getString("name"));
+                event.put("id", row.get("id"));
+                event.put("name", row.get("name"));
                 events.put(event);
             }
 
