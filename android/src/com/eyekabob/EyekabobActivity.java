@@ -39,11 +39,16 @@ public class EyekabobActivity extends Activity {
     }
 
     protected void showDialog() {
+        if (alertDialog == null) {
+            createDialog(R.string.loading);
+        }
         alertDialog.show();
     }
 
     protected void dismissDialog() {
-        alertDialog.dismiss();
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
     }
 
     public void adHandler(View v) {

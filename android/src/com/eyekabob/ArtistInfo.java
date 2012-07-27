@@ -276,6 +276,9 @@ public class ArtistInfo extends EyekabobActivity {
 
     // Handles the asynchronous request, away from the UI thread.
     private class ArtistRequestTask extends JSONTask {
+        protected void onPreExecute() {
+            ArtistInfo.this.showDialog();
+        }
         protected void onPostExecute(JSONObject result) {
             ArtistInfo.this.handleArtistResponse(result);
         }
