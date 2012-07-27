@@ -36,8 +36,6 @@ import com.eyekabob.models.Artist;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
 
-import static android.graphics.Bitmap.createScaledBitmap;
-
 public class ArtistInfo extends EyekabobActivity {
     private Artist artist;
     private ArrayList<Event> futureEvents = new ArrayList<Event>(){};
@@ -130,10 +128,24 @@ public class ArtistInfo extends EyekabobActivity {
             Log.e(getClass().getName(), "", e);
         }
 
-        artistInfoReturned = true;
-        if (futureEventsInfoReturned) {
-            render();
+        TextView artistNameView = (TextView)findViewById(R.id.infoMainHeader);
+        artistNameView.setText(artist.getName());
+
+        if (!artist.getSummary().equals("")) {
+            TextView bioHeaderView = (TextView)findViewById(R.id.infoBioHeader);
+            // TODO: I18N
+            bioHeaderView.setText("Bio");
         }
+        if (!artist.getContent().equals("")) {
+            ToggleButton tb = (ToggleButton)findViewById(R.id.infoBioToggleButton);
+            tb.setVisibility(View.VISIBLE);
+        }
+
+        WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
+        String contentHtml = artist.getSummary();
+        contentWebView.loadData(contentHtml, "text/html", "UTF8");
+
+        artistInfoReturned = true;
         dismissDialogIfReady();
     }
 
@@ -147,9 +159,6 @@ public class ArtistInfo extends EyekabobActivity {
             if (jsonEvents == null || !jsonEvents.has("event")) {
                 Toast.makeText(this, R.string.no_results, Toast.LENGTH_SHORT).show();
                 futureEventsInfoReturned = true;
-                if (artistInfoReturned)  {
-                    render();
-                }
                 return;
             }
 
@@ -185,71 +194,46 @@ public class ArtistInfo extends EyekabobActivity {
             Log.e(getClass().getName(), "", e);
         }
 
-        futureEventsInfoReturned = true;
-        if (artistInfoReturned)  {
-            render();
-        }
-        dismissDialogIfReady();
-    }
-
-    /**
-     * Puts attributes from the Artist object into the views.
-     */
-    private void render() {
-        TextView artistNameView = (TextView)findViewById(R.id.infoMainHeader);
-        artistNameView.setText(artist.getName());
-
         TextView nextConcertDateView = (TextView)findViewById(R.id.infoSubHeaderOne);
         TextView nextConcertLocationView = (TextView)findViewById(R.id.infoSubHeaderTwo);
         Event nextEvent;
         if (futureEvents.size() > 0) {
             nextEvent = futureEvents.get(0);
+            // TODO: I18N
             nextConcertDateView.setText("Next Concert: " + nextEvent.getDate() + " @");
             nextConcertLocationView.setText(nextEvent.getVenue().getName() + " in " + nextEvent.getVenue().getCity());
-        } else {
-            nextConcertDateView.setText("Next Concert: UNKNOWN");
-        }
-
-        View topLine = findViewById(R.id.infoDividerLineTop);
-        topLine.setVisibility(View.VISIBLE);
-        View bottomLine = findViewById(R.id.infoDividerLineBottom);
-        bottomLine.setVisibility(View.VISIBLE);
-
-        if (!artist.getSummary().equals("")) {
-            TextView bioHeaderView = (TextView)findViewById(R.id.infoBioHeader);
-            bioHeaderView.setText("Bio");
-        }
-        if (!artist.getContent().equals("")) {
-            ToggleButton tb = (ToggleButton)findViewById(R.id.infoBioToggleButton);
-            tb.setVisibility(View.VISIBLE);
-        }
-
-        WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
-        String contentHtml = artist.getSummary();
-        contentWebView.loadData(contentHtml, "text/html", "UTF8");
-
-        if (futureEvents.size() > 0) {
             TextView futureEventsHeaderView = (TextView)findViewById(R.id.infoFutureEventsHeader);
+            // TODO: I18N
             futureEventsHeaderView.setText("Future Events");
             String futureText = "";
             int i;
             for (i = 0; i < futureEvents.size(); i++) {
                 Event event = futureEvents.get(i);
                 futureText += event.getDate() + "\n";
+                // TODO: I18N
                 futureText += "@ " + event.getVenue().getName() + " in " + event.getVenue().getCity() + "\n\n";
             }
             TextView futureEventsContentView = (TextView)findViewById(R.id.infoFutureEventsContent);
             futureEventsContentView.setText(futureText);
+        } else {
+            // TODO: I18N
+            nextConcertDateView.setText("Next Concert: UNKNOWN");
         }
+
+        futureEventsInfoReturned = true;
+        dismissDialogIfReady();
     }
 
     private void handleImageResponse(Bitmap img) {
+        View bottomLine = findViewById(R.id.infoDividerLineBottom);
+        bottomLine.setVisibility(View.VISIBLE);
+
         // Get the image and re-size it to fit the screen
         ImageView iv = (ImageView)findViewById(R.id.infoImageView);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int ratio = metrics.widthPixels / img.getWidth();
-        Bitmap rescaledImg = createScaledBitmap(img, img.getWidth() * ratio, img.getHeight() * ratio, false);
+        Bitmap rescaledImg = Bitmap.createScaledBitmap(img, img.getWidth() * ratio, img.getHeight() * ratio, false);
         iv.setImageBitmap(rescaledImg);
         imageInfoReturned = true;
         dismissDialogIfReady();
