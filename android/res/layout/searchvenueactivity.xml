@@ -17,6 +17,7 @@ file 'LICENSE.txt', which is part of this source code package.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/search_live_music"
+        android:textSize="24dp"
         android:textColor="#8d0000"
         android:textStyle="bold" />
 

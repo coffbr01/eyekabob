@@ -139,19 +139,22 @@ public class ArtistInfo extends EyekabobActivity {
 
     /**
      * This method is called after the last.fm response is received. It will
-     * parse the XML document response and put attributes on the Artist object.
+     * parse the JSON response and put attributes on the Artist object.
      */
     protected void handleFutureEventsResponse(JSONObject response) {
         try {
             JSONObject jsonEvents = response.optJSONObject("events");
-            if (jsonEvents == null) {
+            if (jsonEvents == null || !jsonEvents.has("event")) {
                 Toast.makeText(this, R.string.no_results, Toast.LENGTH_SHORT).show();
                 futureEventsInfoReturned = true;
+                if (artistInfoReturned)  {
+                    render();
+                }
                 return;
             }
 
             JSONArray jsonEventsArray = jsonEvents.getJSONArray("event");
-            for (int i = 0; i < jsonEventsArray.length() && i < 10; i++) {
+            for (int i = 0; i < jsonEventsArray.length(); i++) {
                 Event event = new Event();
                 Venue venue = new Venue();
                 event.setVenue(venue);
