@@ -108,26 +108,31 @@ public class EyekabobHelper {
 
         public static JSONObject getLargestJSONImage(JSONArray images) throws JSONException {
             JSONObject image = getJSONImage("mega", images);
-            if (image != null) {
+            if (!image.getString("#text").equals("")) {
                 return image;
             }
 
             image = getJSONImage("extralarge", images);
-            if (image != null) {
+            if (!image.getString("#text").equals("")) {
                 return image;
             }
 
             image = getJSONImage("large", images);
-            if (image != null) {
+            if (!image.getString("#text").equals("")) {
                 return image;
             }
 
             image = getJSONImage("medium", images);
-            if (image != null) {
+            if (!image.getString("#text").equals("")) {
                 return image;
             }
 
-            return getJSONImage("small", images);
+            image = getJSONImage("small", images);
+            if (!image.getString("#text").equals("")) {
+                return image;
+            }
+
+            return null;
         }
     }
 

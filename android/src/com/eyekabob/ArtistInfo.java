@@ -40,16 +40,7 @@ public class ArtistInfo extends EyekabobActivity {
     private boolean artistInfoReturned = false;
     private boolean futureEventsInfoReturned = false;
     private boolean imageInfoReturned = false;
-    private ImgSize largestImgSize = ImgSize.MEGA;
-    private JSONArray imgArray;
 
-    private enum ImgSize {
-        MEGA,
-        X_LARGE,
-        LARGE,
-        MEDIUM,
-        SMALL
-    }
     private View.OnClickListener linksListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -114,16 +105,21 @@ public class ArtistInfo extends EyekabobActivity {
             if (jsonArtist == null) {
                 Toast.makeText(this, R.string.no_results, Toast.LENGTH_SHORT).show();
                 artistInfoReturned = true;
+                dismissDialogIfReady();
                 return;
             }
             artist.setName(jsonArtist.getString("name"));
             artist.setMbid(jsonArtist.getString("mbid"));
             artist.setUrl(jsonArtist.getString("url"));
-            imgArray = jsonArtist.getJSONArray("image");
-            JSONObject jsonImage = EyekabobHelper.LastFM.getJSONImage("mega", imgArray);
+            JSONObject jsonImage = EyekabobHelper.LastFM.getLargestJSONImage(jsonArtist.getJSONArray("image"));
 
-            // Get artist image.
-            new ArtistImageTask().execute(new URL(jsonImage.getString("#text")));
+            // Get artist image, if one exists.
+            if (null != jsonImage) {
+                new ArtistImageTask().execute(new URL(jsonImage.getString("#text")));
+            } else {
+                imageInfoReturned = true;
+                dismissDialogIfReady();
+            }
 
             JSONObject bio = jsonArtist.getJSONObject("bio");
             artist.setSummary(bio.getString("summary"));
@@ -139,19 +135,18 @@ public class ArtistInfo extends EyekabobActivity {
         TextView artistNameView = (TextView)findViewById(R.id.infoMainHeader);
         artistNameView.setText(artist.getName());
 
-        if (!artist.getSummary().equals("")) {
+        if (!(artist.getSummary() == null) && !artist.getSummary().equals("")) {
             TextView bioHeaderView = (TextView)findViewById(R.id.infoBioHeader);
             // TODO: I18N
             bioHeaderView.setText("Bio");
+            WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
+            String contentHtml = artist.getSummary();
+            contentWebView.loadData(contentHtml, "text/html", "UTF8");
         }
-        if (!artist.getContent().equals("")) {
+        if (!(artist.getContent() == null) && !artist.getContent().equals("")) {
             ToggleButton tb = (ToggleButton)findViewById(R.id.infoBioToggleButton);
             tb.setVisibility(View.VISIBLE);
         }
-
-        WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
-        String contentHtml = artist.getSummary();
-        contentWebView.loadData(contentHtml, "text/html", "UTF8");
 
         artistInfoReturned = true;
         dismissDialogIfReady();
@@ -165,8 +160,8 @@ public class ArtistInfo extends EyekabobActivity {
         try {
             JSONObject jsonEvents = response.optJSONObject("events");
             if (jsonEvents == null || !jsonEvents.has("event")) {
-                Toast.makeText(this, R.string.no_results, Toast.LENGTH_SHORT).show();
                 futureEventsInfoReturned = true;
+                dismissDialogIfReady();
                 return;
             }
 
@@ -236,49 +231,18 @@ public class ArtistInfo extends EyekabobActivity {
     private void handleImageResponse(Bitmap img) {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int ratio = metrics.widthPixels / img.getWidth();
-        if ((img.getWidth() * ratio) <= 0 || (img.getHeight() * ratio <= 0)) {
-            String imageText;
-            switch (largestImgSize) {
-                case MEGA:
-                    imageText = "extralarge";
-                    largestImgSize = ImgSize.X_LARGE;
-                    break;
-                case X_LARGE:
-                    imageText = "large";
-                    largestImgSize = ImgSize.LARGE;
-                    break;
-                case LARGE:
-                    imageText = "medium";
-                    largestImgSize = ImgSize.MEDIUM;
-                    break;
-                default:
-                    imageText = "small";
-                    largestImgSize = ImgSize.SMALL;
-                    break;
-            }
-            try {
-                JSONObject jsonImage = EyekabobHelper.LastFM.getJSONImage(imageText, imgArray);
-                // Get artist image.
-                new ArtistImageTask().execute(new URL(jsonImage.getString("#text")));
-            }
-            catch (JSONException e) {
-                Log.e(getClass().getName(), "", e);
-            }
-            catch (MalformedURLException e) {
-                Log.e(getClass().getName(), "", e);
-            }
-        } else {
-            View bottomLine = findViewById(R.id.infoDividerLineBottom);
-            bottomLine.setVisibility(View.VISIBLE);
+        float metWidth = new Float(metrics.widthPixels);
+        float imgWidth = new Float(img.getWidth());
+        float ratio = metWidth / imgWidth;
+        // Add a little buffer room
+        int newWidth = (int) Math.floor(img.getWidth() * ratio) - 50;
+        int newHeight = (int) Math.floor(img.getHeight() * ratio) - 50;
 
-            // Get the image and re-size it to fit the screen
-            ImageView iv = (ImageView)findViewById(R.id.infoImageView);
-            Bitmap rescaledImg = Bitmap.createScaledBitmap(img, img.getWidth() * ratio, img.getHeight() * ratio, false);
-            iv.setImageBitmap(rescaledImg);
-            imageInfoReturned = true;
-            dismissDialogIfReady();
-        }
+        ImageView iv = (ImageView)findViewById(R.id.infoImageView);
+        Bitmap rescaledImg = Bitmap.createScaledBitmap(img, newWidth, newHeight, false);
+        iv.setImageBitmap(rescaledImg);
+        imageInfoReturned = true;
+        dismissDialogIfReady();
     }
 
     private void dismissDialogIfReady() {

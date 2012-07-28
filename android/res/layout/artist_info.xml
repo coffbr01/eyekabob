@@ -131,7 +131,6 @@ file 'LICENSE.txt', which is part of this source code package.
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
                 android:layout_margin="2dp"
-                android:visibility="gone"
                 android:background="@android:color/darker_gray"
                 android:layout_below="@+id/infoImageView"/>
 
