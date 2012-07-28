@@ -20,15 +20,22 @@ public class CachedImageTask extends ImageTask {
 
     @Override
     protected Bitmap doInBackground(URL... urls) {
+        Bitmap result;
         URL url = urls[0];
         if (cache.containsKey(url)) {
-            Bitmap result = cache.get(url).get();
+            result = cache.get(url).get();
             if (result != null) {
+                // Image was in cache, so return it.
                 return result;
             }
         }
 
-        return super.doInBackground(urls);
+        // Make request.
+        result = super.doInBackground(urls);
+
+        // Store image in cache.
+        cache.put(url, new SoftReference<Bitmap>(result));
+        return result;
     }
 
     @Override
