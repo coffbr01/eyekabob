@@ -6,35 +6,33 @@
  */
 package com.eyekabob;
 
-import java.io.IOException;
-import java.io.InputStream;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+import com.eyekabob.models.Artist;
+import com.eyekabob.models.Event;
+import com.eyekabob.models.Venue;
+import com.eyekabob.util.EyekabobHelper;
+import com.eyekabob.util.ImageTask;
+import com.eyekabob.util.JSONTask;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.widget.*;
-import com.eyekabob.models.Event;
-import com.eyekabob.models.Venue;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
-import android.webkit.WebView;
-
-import com.eyekabob.models.Artist;
-import com.eyekabob.util.EyekabobHelper;
-import com.eyekabob.util.JSONTask;
 
 public class ArtistInfo extends EyekabobActivity {
     private Artist artist;
@@ -125,7 +123,7 @@ public class ArtistInfo extends EyekabobActivity {
             JSONObject jsonImage = EyekabobHelper.LastFM.getJSONImage("mega", imgArray);
 
             // Get artist image.
-            new ImageRequestTask().execute(new URL(jsonImage.getString("#text")));
+            new ArtistImageTask().execute(new URL(jsonImage.getString("#text")));
 
             JSONObject bio = jsonArtist.getJSONObject("bio");
             artist.setSummary(bio.getString("summary"));
@@ -217,6 +215,7 @@ public class ArtistInfo extends EyekabobActivity {
             futureEventsHeaderView.setText("Future Events");
             String futureText = "";
             int i;
+            // TODO: events should be a list with an adapter, not a newline rendered text blob.
             for (i = 0; i < futureEvents.size(); i++) {
                 Event event = futureEvents.get(i);
                 futureText += event.getDate() + "\n";
@@ -235,11 +234,11 @@ public class ArtistInfo extends EyekabobActivity {
     }
 
     private void handleImageResponse(Bitmap img) {
-            DisplayMetrics metrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(metrics);
-            int ratio = metrics.widthPixels / img.getWidth();
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int ratio = metrics.widthPixels / img.getWidth();
         if ((img.getWidth() * ratio) <= 0 || (img.getHeight() * ratio <= 0)) {
-            String imageText = "";
+            String imageText;
             switch (largestImgSize) {
                 case MEGA:
                     imageText = "extralarge";
@@ -261,7 +260,7 @@ public class ArtistInfo extends EyekabobActivity {
             try {
                 JSONObject jsonImage = EyekabobHelper.LastFM.getJSONImage(imageText, imgArray);
                 // Get artist image.
-                new ImageRequestTask().execute(new URL(jsonImage.getString("#text")));
+                new ArtistImageTask().execute(new URL(jsonImage.getString("#text")));
             }
             catch (JSONException e) {
                 Log.e(getClass().getName(), "", e);
@@ -321,21 +320,7 @@ public class ArtistInfo extends EyekabobActivity {
         }
     }
 
-    private class ImageRequestTask extends AsyncTask<URL, Void, Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(URL... urls) {
-            InputStream is = null;
-            try {
-                is = (InputStream) urls[0].getContent();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return BitmapFactory.decodeStream(is);
-        }
-
+    private class ArtistImageTask extends ImageTask {
         protected void onPostExecute(Bitmap img) {
             ArtistInfo.this.handleImageResponse(img);
         }

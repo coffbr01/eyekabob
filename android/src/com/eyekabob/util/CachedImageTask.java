@@ -8,15 +8,21 @@ package com.eyekabob.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
-public class ImageTask extends AsyncTask<URL, Void, Bitmap> {
+public class CachedImageTask extends ImageTask {
+    private ImageView iv;
+    private Map<URL, SoftReference<Bitmap>> cache;
+
     @Override
     protected Bitmap doInBackground(URL... urls) {
         HttpURLConnection connection = null;
@@ -24,8 +30,15 @@ public class ImageTask extends AsyncTask<URL, Void, Bitmap> {
         Bitmap result = null;
         try {
             URL url = urls[0];
+            if (cache.containsKey(url)) {
+                result = cache.get(url).get();
+                if (result != null) {
+                    return result;
+                }
+            }
             is = (InputStream)url.getContent();
             result = BitmapFactory.decodeStream(is);
+            cache.put(url, new SoftReference<Bitmap>(result));
             is.close();
         }
         catch (Exception e) {
@@ -45,5 +58,24 @@ public class ImageTask extends AsyncTask<URL, Void, Bitmap> {
         }
 
         return result;
+    }
+
+    @Override
+    protected void onPostExecute(Bitmap result) {
+        iv.setImageBitmap(result);
+
+        // TODO: this height/width doesn't belong here.
+        ViewGroup.LayoutParams params = iv.getLayoutParams();
+        params.width = 200;
+        params.height = 200;
+        iv.setLayoutParams(params);
+    }
+
+    public void setCache(Map<URL, SoftReference<Bitmap>> cache) {
+        this.cache = cache;
+    }
+
+    public void setImageView(ImageView iv) {
+        this.iv = iv;
     }
 }

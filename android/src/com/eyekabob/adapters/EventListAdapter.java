@@ -6,14 +6,8 @@
  */
 package com.eyekabob.adapters;
 
-import java.lang.ref.SoftReference;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +15,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.eyekabob.R;
 import com.eyekabob.models.Event;
 import com.eyekabob.models.Venue;
+import com.eyekabob.util.CachedImageTask;
 import com.eyekabob.util.EyekabobHelper;
-import com.eyekabob.util.ImageTask;
+
+import java.lang.ref.SoftReference;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EventListAdapter extends ArrayAdapter<Event> {
-    private Map<URL, SoftReference<Drawable>> cache = new HashMap<URL, SoftReference<Drawable>>();
+    private Map<URL, SoftReference<Bitmap>> cache = new HashMap<URL, SoftReference<Bitmap>>();
 
     public EventListAdapter(Context context) {
         super(context, R.layout.image_text_list_item, new ArrayList<Event>());
@@ -84,7 +83,7 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         if (imageUrl != null) {
             Log.d(getClass().getName(), "Adding image [" + imageUrl + "] to row [" + eventRow.getName() + "]");
             ImageView iv = (ImageView)convertView.findViewById(R.id.rowImage);
-            ImageTask task = new ImageTask();
+            CachedImageTask task = new CachedImageTask();
             task.setCache(cache);
             task.setImageView(iv);
             task.execute(imageUrl);
