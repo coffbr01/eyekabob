@@ -13,13 +13,11 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ImageTask extends AsyncTask<URL, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(URL... urls) {
-        HttpURLConnection connection = null;
         InputStream is = null;
         Bitmap result = null;
         try {
@@ -35,9 +33,6 @@ public class ImageTask extends AsyncTask<URL, Void, Bitmap> {
             try {
                 if (is != null) {
                     is.close();
-                }
-                if (connection != null) {
-                    connection.disconnect();
                 }
             } catch (IOException e) {
                 Log.e(getClass().getName(), "Either unable to close input stream or stop connection", e);
