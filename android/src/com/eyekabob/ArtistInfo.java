@@ -42,7 +42,16 @@ public class ArtistInfo extends EyekabobActivity {
     private boolean artistInfoReturned = false;
     private boolean futureEventsInfoReturned = false;
     private boolean imageInfoReturned = false;
+    private ImgSize largestImgSize = ImgSize.MEGA;
+    private JSONArray imgArray;
 
+    private enum ImgSize {
+        MEGA,
+        X_LARGE,
+        LARGE,
+        MEDIUM,
+        SMALL
+    }
     private View.OnClickListener linksListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -112,10 +121,11 @@ public class ArtistInfo extends EyekabobActivity {
             artist.setName(jsonArtist.getString("name"));
             artist.setMbid(jsonArtist.getString("mbid"));
             artist.setUrl(jsonArtist.getString("url"));
-            JSONObject image = EyekabobHelper.LastFM.getLargestJSONImage(jsonArtist.getJSONArray("image"));
+            imgArray = jsonArtist.getJSONArray("image");
+            JSONObject jsonImage = EyekabobHelper.LastFM.getJSONImage("mega", imgArray);
 
             // Get artist image.
-            new ImageRequestTask().execute(new URL(image.getString("#text")));
+            new ImageRequestTask().execute(new URL(jsonImage.getString("#text")));
 
             JSONObject bio = jsonArtist.getJSONObject("bio");
             artist.setSummary(bio.getString("summary"));
@@ -225,18 +235,51 @@ public class ArtistInfo extends EyekabobActivity {
     }
 
     private void handleImageResponse(Bitmap img) {
-        View bottomLine = findViewById(R.id.infoDividerLineBottom);
-        bottomLine.setVisibility(View.VISIBLE);
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            int ratio = metrics.widthPixels / img.getWidth();
+        if ((img.getWidth() * ratio) <= 0 || (img.getHeight() * ratio <= 0)) {
+            String imageText = "";
+            switch (largestImgSize) {
+                case MEGA:
+                    imageText = "extralarge";
+                    largestImgSize = ImgSize.X_LARGE;
+                    break;
+                case X_LARGE:
+                    imageText = "large";
+                    largestImgSize = ImgSize.LARGE;
+                    break;
+                case LARGE:
+                    imageText = "medium";
+                    largestImgSize = ImgSize.MEDIUM;
+                    break;
+                default:
+                    imageText = "small";
+                    largestImgSize = ImgSize.SMALL;
+                    break;
+            }
+            try {
+                JSONObject jsonImage = EyekabobHelper.LastFM.getJSONImage(imageText, imgArray);
+                // Get artist image.
+                new ImageRequestTask().execute(new URL(jsonImage.getString("#text")));
+            }
+            catch (JSONException e) {
+                Log.e(getClass().getName(), "", e);
+            }
+            catch (MalformedURLException e) {
+                Log.e(getClass().getName(), "", e);
+            }
+        } else {
+            View bottomLine = findViewById(R.id.infoDividerLineBottom);
+            bottomLine.setVisibility(View.VISIBLE);
 
-        // Get the image and re-size it to fit the screen
-        ImageView iv = (ImageView)findViewById(R.id.infoImageView);
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int ratio = metrics.widthPixels / img.getWidth();
-        Bitmap rescaledImg = Bitmap.createScaledBitmap(img, img.getWidth() * ratio, img.getHeight() * ratio, false);
-        iv.setImageBitmap(rescaledImg);
-        imageInfoReturned = true;
-        dismissDialogIfReady();
+            // Get the image and re-size it to fit the screen
+            ImageView iv = (ImageView)findViewById(R.id.infoImageView);
+            Bitmap rescaledImg = Bitmap.createScaledBitmap(img, img.getWidth() * ratio, img.getHeight() * ratio, false);
+            iv.setImageBitmap(rescaledImg);
+            imageInfoReturned = true;
+            dismissDialogIfReady();
+        }
     }
 
     private void dismissDialogIfReady() {
