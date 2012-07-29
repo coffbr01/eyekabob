@@ -231,8 +231,8 @@ public class ArtistInfo extends EyekabobActivity {
     private void handleImageResponse(Bitmap img) {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        float metWidth = new Float(metrics.widthPixels);
-        float imgWidth = new Float(img.getWidth());
+        float metWidth = metrics.widthPixels;
+        float imgWidth = img.getWidth();
         float ratio = metWidth / imgWidth;
         // Add a little buffer room
         int newWidth = (int) Math.floor(img.getWidth() * ratio) - 50;
