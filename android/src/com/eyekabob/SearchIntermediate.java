@@ -10,6 +10,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * This view contains buttons that navigate the user to a specific
+ * type of search. For example, one button may navigate to a
+ * "search by location" view. Another button may navigate to a
+ * "search by venue" view.
+ */
 public class SearchIntermediate extends EyekabobActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
