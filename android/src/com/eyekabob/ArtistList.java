@@ -92,7 +92,7 @@ public class ArtistList extends EyekabobActivity {
                 JSONArray images = artistNode.getJSONArray("image");
                 for (int j = 0; j < images.length(); j++) {
                     JSONObject imageJson = images.getJSONObject(j);
-                    if ("large".equals(imageJson.getString("size"))) {
+                    if ("medium".equals(imageJson.getString("size"))) {
                         image = imageJson.getString("#text");
                     }
                 }
