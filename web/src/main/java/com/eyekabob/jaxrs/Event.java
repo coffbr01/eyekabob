@@ -122,8 +122,9 @@ public class Event {
         try {
             response.put("search", search);
 
-            String query = "SELECT id,name FROM event WHERE name LIKE '%?%' LIMIT ?";
-            List<Map<String, Object>> eventResult = DBUtils.query(query, search, intLimit);
+            String query = "SELECT id,name FROM event WHERE name LIKE ? LIMIT ?";
+            String wildcardSearch = "%" + search + "%";
+            List<Map<String, Object>> eventResult = DBUtils.query(query, wildcardSearch, intLimit);
 
             JSONArray events = new JSONArray();
             for (Map<String, Object> row : eventResult) {
