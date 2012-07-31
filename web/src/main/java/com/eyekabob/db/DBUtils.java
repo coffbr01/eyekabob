@@ -31,14 +31,37 @@ public class DBUtils {
         return DriverManager.getConnection(CONNECTION, USER, PASS);
     }
 
+    /**
+     * Query for a prepared statement given an array of arguments to the statement.
+     * The preparedStatementStr should look something like:
+     * "SELECT * FROM MY_TABLE WHERE ID=?"
+     *
+     * Given the above example and assuming ID is an int, the preparedArgs should be an
+     * array containing one int:
+     * [12345]
+     *
+     * @param preparedStatementStr
+     * @param preparedArgs
+     * @return A list of rows, represented as maps. Each row has a column name key and an Object value.
+     * @throws SQLException
+     */
     public static List<Map<String, Object>> query(String preparedStatementStr, Object... preparedArgs) throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
         Connection conn = getConn();
         PreparedStatement preparedStatement = conn.prepareStatement(preparedStatementStr);
-        // Prepared statement args are 1-based, so start at 1.
         int argCount = 1;
         for (Object arg : preparedArgs) {
             if (arg instanceof Integer) {
                 preparedStatement.setInt(argCount, (Integer)arg);
+            }
+            else if (arg instanceof String) {
+                preparedStatement.setString(argCount, (String)arg);
             }
             argCount++;
         }
@@ -49,7 +72,7 @@ public class DBUtils {
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
         while (resultSet.next()) {
             Map<String, Object> row = new HashMap<String, Object>();
-            for (int colIndex = 0; colIndex < columnCount; colIndex++) {
+            for (int colIndex = 1; colIndex < columnCount + 1; colIndex++) {
                 String columnName = metaData.getColumnName(colIndex);
                 row.put(columnName, resultSet.getObject(colIndex));
             }

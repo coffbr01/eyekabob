@@ -70,7 +70,7 @@ public class Event {
         Connection conn = null;
         String error = null;
         try {
-            String query = "SELECT id,name FROM event WHERE id='?'";
+            String query = "SELECT id,name FROM event WHERE id=?";
             JSONObject event = new JSONObject();
             List<Map<String, Object>> eventResults = DBUtils.query(query, intId);
 
