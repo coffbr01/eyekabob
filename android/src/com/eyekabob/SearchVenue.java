@@ -29,7 +29,11 @@ public class SearchVenue extends EyekabobActivity {
     public void findByVenueHandler(View v) {
         EditText findByVenue = (EditText)findViewById(R.id.findByVenueInput);
         Map<String, String> params = new HashMap<String, String>();
-        params.put("venue", findByVenue.getText().toString());
+        String venue = findByVenue.getText().toString();
+        if (venue != null) {
+            venue = venue.trim();
+        }
+        params.put("venue", venue);
         Uri uri = EyekabobHelper.LastFM.getUri("venue.search", params);
         Intent intent = new Intent(getApplicationContext(), VenueList.class);
         intent.setData(uri);

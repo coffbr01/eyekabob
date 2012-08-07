@@ -6,10 +6,14 @@
  */
 package com.eyekabob;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.eyekabob.util.EyekabobHelper;
@@ -20,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SearchLocation extends EyekabobActivity {
+    private static final int DEFAULT_SEARCH_RADIUS = 10; // miles
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +34,12 @@ public class SearchLocation extends EyekabobActivity {
         findByLocation.requestFocus();
 
         SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
-        distance.setProgress(10);
+        TextView miles = (TextView)findViewById(R.id.milesTextView);
+        distance.setProgress(DEFAULT_SEARCH_RADIUS);
+        miles.setText(String.valueOf(DEFAULT_SEARCH_RADIUS));
         distance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStopTrackingTouch(SeekBar seekBar) {}
+
             public void onStartTrackingTouch(SeekBar seekBar) {}
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -46,14 +54,43 @@ public class SearchLocation extends EyekabobActivity {
                 miles.setText(Integer.toString(progress));
             }
         });
+
+        toggleGPSWarning();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        toggleGPSWarning();
+    }
+
+    /**
+     * Enable or disable GPS warning depending on whether GPS is enabled
+     * and whether the "use current location" checkbox is checked.
+     */
+    private void toggleGPSWarning() {
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LinearLayout gpsWarning = (LinearLayout)findViewById(R.id.gpsWarning);
+        boolean gpsEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        CheckBox useCurrentLocationCheckbox = (CheckBox)findViewById(R.id.useCurrentLocationCheckBox);
+        boolean isChecked = useCurrentLocationCheckbox.isChecked();
+
+        boolean shouldShowCheckbox = isChecked && !gpsEnabled;
+        gpsWarning.setVisibility(shouldShowCheckbox ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @SuppressWarnings("unused")
     public void findByLocationHandler(View v) {
+        findByLocationHandler();
+    }
+
+    private void findByLocationHandler() {
         Map<String, String> params = new HashMap<String, String>();
 
         SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
         int miles = distance.getProgress();
-        int km = (int)(miles * 1.609344);
+        int km = getSearchRadiusInKilometers(miles);
         params.put("distance", Integer.toString(km));
 
         Location location = EyekabobHelper.getLocation(this);
@@ -65,11 +102,20 @@ public class SearchLocation extends EyekabobActivity {
         find("geo.getEvents", EventList.class, params);
     }
 
+    private int getSearchRadiusInKilometers(int miles) {
+        return (int)(miles * 1.609344);
+    }
+
+    @SuppressWarnings("unused")
     public void findByZipHandler(View v) {
+        findByZipHandler();
+    }
+
+    private void findByZipHandler() {
         EditText locationInput = (EditText)findViewById(R.id.findByLocationInput);
         if ("".equals(locationInput.getText().toString().trim())) {
             // Nothing entered and not using current location.
-            Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -81,51 +127,48 @@ public class SearchLocation extends EyekabobActivity {
             findByZip(criterion);
         }
         else {
-            Toast.makeText(getApplicationContext(), R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
         }
-
-        return;
     }
 
     public void useCurrentLocationHandler(View v) {
-        // When the checkbox is checked, the slider should be visible and the text input should be invisible.
-        // When the checkbox is unchecked, the slider should be invisible and the text input should be visible.
-        LinearLayout distanceSeekLayout = (LinearLayout)findViewById(R.id.findSeekBarLayout);
-        LinearLayout distanceTextLayout = (LinearLayout)findViewById(R.id.findByDistanceLayout);
+        // When the checkbox is checked the text input should be invisible.
+        // When the checkbox is unchecked the text input should be visible.
         LinearLayout zipLayout = (LinearLayout)findViewById(R.id.findByZipLayout);
+        ImageButton findByLocationButton = (ImageButton)findViewById(R.id.findByLocationButton);
         boolean isChecked = ((CheckBox)v).isChecked();
-        distanceSeekLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-        distanceTextLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         zipLayout.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+        findByLocationButton.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        toggleGPSWarning();
     }
 
     private void findByZip(String zip) {
         Uri uri = EyekabobHelper.GeoNames.getUri(zip);
-        Intent intent = new Intent(getApplicationContext(), EventList.class);
+        Intent intent = new Intent(this, EventList.class);
         intent.setData(uri);
+
+        SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
+        int miles = distance.getProgress();
+        int km = getSearchRadiusInKilometers(miles);
+        intent.putExtra("distance", Integer.toString(km));
         intent.putExtra("zip", zip);
         startActivity(intent);
     }
 
     private void find(String restAPI, Class<?> intentClass, Map<String, String> params) {
         Uri uri = EyekabobHelper.LastFM.getUri(restAPI, params);
-        Intent intent = new Intent(getApplicationContext(), intentClass);
+        Intent intent = new Intent(this, intentClass);
         intent.setData(uri);
         startActivity(intent);
     }
 
-    private void find(String restAPI, Class<?> intentClass, String paramKey, String paramValue) {
-        if ("".equals(paramValue)) {
-            return;
-        }
+    @SuppressWarnings("unused")
+    public void handleGPSSettingsClick(View v) {
+        handleGPSSettingsClick();
+    }
 
-        Map<String, String> params = null;
-        if (paramKey != null) {
-            params = new HashMap<String, String>();
-            // paramValue will be encoded in LastFM.getUri.
-            params.put(paramKey, paramValue);
-        }
-
-        find(restAPI, intentClass, params);
+    private void handleGPSSettingsClick() {
+        Log.d(getClass().getName(), "GPS settings button clicked");
+        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
     }
 }

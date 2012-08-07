@@ -6,6 +6,7 @@
  */
 package com.eyekabob;
 
+import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,10 +49,18 @@ public class VenueList extends EyekabobActivity {
 
     protected void loadVenues(JSONObject response) {
         try {
-            // TODO: jsonVenue is not an Array - it is an Object
             JSONObject venues = response.getJSONObject("results");
             JSONObject matches = venues.getJSONObject("venuematches");
-            JSONArray jsonVenue = matches.getJSONArray("venue");
+            Object jsonVenueObj = matches.get("venue");
+            JSONArray jsonVenue;
+            if (jsonVenueObj instanceof JSONObject) {
+                // Only one venue result was returned. So wrap it in an array.
+                jsonVenue = new JSONArray();
+                jsonVenue.put(jsonVenueObj);
+            }
+            else {
+                jsonVenue = (JSONArray) jsonVenueObj;
+            }
 
             if (jsonVenue.length() == 0) {
                 Toast.makeText(getApplicationContext(), R.string.no_results, Toast.LENGTH_LONG).show();
@@ -81,7 +90,8 @@ public class VenueList extends EyekabobActivity {
             }
         }
         catch (JSONException e) {
-            throw new RuntimeException(e);
+            Log.e(getClass().getName(), "Unable to load venue list", e);
+            Toast.makeText(this, R.string.venue_list_error, Toast.LENGTH_LONG).show();
         }
     }
 

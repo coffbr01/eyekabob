@@ -10,29 +10,11 @@ file 'LICENSE.txt', which is part of this source code package.
     xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-    <LinearLayout
-        android:id="@+id/noResults"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:visibility="invisible">
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:padding="5dp"
-            android:text="Can't find the band you're looking for."/>
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:text="Add band"
-            android:onClick="addBand"/>
-    </LinearLayout>
 
     <ListView
         android:id="@+id/adList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_marginBottom="65dp"
         android:fadingEdge="vertical" >
     </ListView>

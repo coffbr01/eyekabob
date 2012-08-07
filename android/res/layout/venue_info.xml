@@ -5,14 +5,148 @@
 This file is subject to the terms and conditions defined in
 file 'LICENSE.txt', which is part of this source code package.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <TextView
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:textColor="@android:color/white"
-        android:text="Placeholder for venue info. Work still needed here." />
-</LinearLayout>
+        android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:id="@+id/eyekabobLinks"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center">
+
+        <Button
+            android:id="@+id/findLiveMusicButton"
+            android:text="@string/find_live_music"
+            android:textColor="#FFFFFF"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null" />
+
+        <TextView
+            android:text="@string/pipe_char"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+
+        <Button
+            android:id="@+id/aboutButton"
+            android:text="@string/about"
+            android:textColor="#FFFFFF"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null" />
+
+        <TextView
+            android:text="@string/pipe_char"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+
+        <Button
+            android:id="@+id/contactButton"
+            android:text="@string/contact_eyekabob"
+            android:textColor="#FFFFFF"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null" />
+    </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="45dp"
+            android:layout_below="@+id/eyekabobLinks">
+
+            <TextView
+                android:id="@+id/venueNameView"
+                android:textColor="#B0B0B0"
+                android:textStyle="bold"
+                android:textSize="24dp"
+                android:gravity="left"
+                android:layout_marginLeft="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/venueInfoView"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:gravity="left"
+                android:layout_marginLeft="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/venueNameView"/>
+
+            <TextView
+                android:id="@+id/venueMoreInfoView"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:gravity="left"
+                android:layout_marginLeft="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/venueInfoView"/>
+
+            <TextView
+                android:id="@+id/venueInfoUpcomingHeader"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:text="@string/upcoming_events"
+                android:gravity="left"
+                android:layout_marginLeft="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:layout_below="@id/venueMoreInfoView"/>
+
+            <LinearLayout
+                android:id="@+id/venuList"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/venueInfoUpcomingHeader">
+
+            <ListView
+                android:id="@+id/venueInfoUpcomingEvents"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/venueInfoUpcomingHeader"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="bottom"
+            android:orientation="vertical" >
+        <com.google.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                ads:adUnitId="a1500dd36468af5"
+                ads:adSize="BANNER"
+                ads:loadAdOnCreate="false"/>
+    </LinearLayout>
+</RelativeLayout>

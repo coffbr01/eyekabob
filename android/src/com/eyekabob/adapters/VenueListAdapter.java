@@ -40,7 +40,7 @@ public class VenueListAdapter extends ArrayAdapter<Venue> {
         }
 
         if (venueRow.getCity() != null) {
-            if (venueRow.getStreet() != null) {
+            if (venueRow.getStreet() != null && !"".equals(venueRow.getStreet())) {
                 rendered += ", " + venueRow.getCity();
             }
             else {

@@ -13,8 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.eyekabob.adapters.ArtistListAdapter;
 import com.eyekabob.models.Artist;
 import com.eyekabob.util.EyekabobHelper;
@@ -47,6 +47,9 @@ public class ArtistList extends EyekabobActivity {
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(listItemListener);
         String artist = getIntent().getExtras().getString("artist");
+        if (artist != null) {
+            artist = artist.trim();
+        }
 
         // Send last.fm request.
         Map<String, String> lastFMParams = new HashMap<String, String>();
@@ -61,15 +64,10 @@ public class ArtistList extends EyekabobActivity {
         super.onDestroy();
     }
 
-    protected void showNoResultsLabel() {
-        LinearLayout noResultsLayout = (LinearLayout)findViewById(R.id.noResults);
-        noResultsLayout.setVisibility(View.VISIBLE);
-    }
-
     protected void loadLastFMArtists(JSONObject response) {
         try {
             if (response == null || !response.has("results")) {
-                showNoResultsLabel();
+                Toast.makeText(this, R.string.no_results, Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -77,7 +75,7 @@ public class ArtistList extends EyekabobActivity {
             Object artistMatchesObj = results.get("artistmatches");
 
             if (artistMatchesObj instanceof String) {
-                showNoResultsLabel();
+                Toast.makeText(this, R.string.no_results, Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -88,20 +86,13 @@ public class ArtistList extends EyekabobActivity {
                 String mbid = artistNode.getString("mbid");
                 String url = artistNode.getString("url");
 
-                String image = "";
-                JSONArray images = artistNode.getJSONArray("image");
-                for (int j = 0; j < images.length(); j++) {
-                    JSONObject imageJson = images.getJSONObject(j);
-                    if ("medium".equals(imageJson.getString("size"))) {
-                        image = imageJson.getString("#text");
-                    }
-                }
+                JSONObject jsonImage = EyekabobHelper.LastFM.getJSONImage("large", artistNode.getJSONArray("image"));
 
                 Artist artist = new Artist();
                 artist.setName(name);
                 artist.setMbid(mbid);
                 artist.setUrl(url);
-                artist.addImageURL("large", image);
+                artist.addImageURL("large", jsonImage.getString("#text"));
                 adapter.add(artist);
             }
         }

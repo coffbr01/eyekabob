@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/aboutDialog"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:padding="5dp">
+
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="10dp">
+
+        <ImageView android:id="@+id/aboutDialogImage"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginRight="5dp"/>
+
+        <TextView android:id="@+id/aboutDialogText"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#FFF"/>
+    </LinearLayout>
+
+    <Button android:id="@+id/aboutDialogButton"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="100dp"
+              android:layout_marginRight="100dp"
+              android:text="Ok"/>
+</LinearLayout>

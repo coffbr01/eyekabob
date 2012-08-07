@@ -9,6 +9,7 @@ package com.eyekabob;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 public class Home extends EyekabobActivity {
 
@@ -58,5 +59,11 @@ public class Home extends EyekabobActivity {
         Intent calendarIntent = new Intent(Intent.ACTION_VIEW);
         calendarIntent.setType("vnd.android.cursor.item/event");
         startActivity(calendarIntent);
+    }
+
+    public void handleMaskClick(View v) {
+        // This is the handler for the mask that covers the 6 home buttons.
+        Toast.makeText(this, R.string.check_back_often, Toast.LENGTH_SHORT).show();
+        // TODO: implement the 6 home button features.
     }
 }

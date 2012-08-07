@@ -6,6 +6,27 @@
  */
 package com.eyekabob.util;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.eyekabob.CheckinSearchList;
+import com.eyekabob.OAuthWebView;
+import com.eyekabob.R;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.DOMException;
+
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -15,27 +36,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.DOMException;
-
-import com.eyekabob.R;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
-import android.util.Log;
-
-import com.eyekabob.CheckinSearchList;
-import com.eyekabob.OAuthWebView;
-
 public class EyekabobHelper {
-    public static final Map<String, String> zipToNameMap = new HashMap<String, String>();
-
     public static Location getLocation(Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // Gets the last known location from the best service.
@@ -243,6 +244,18 @@ public class EyekabobHelper {
         }
     }
 
+    public static class TicketMaster {
+        private static final String SERVICE_URL = "http://www.ticketmaster.com/search";
+        public static final Uri getURI(Map<String, String> params) {
+            String url = SERVICE_URL + "?";
+            for (String key : params.keySet()) {
+                String value = params.get(key);
+                url += key + "=" + value + "&";
+            }
+            return Uri.parse(url);
+        }
+    }
+
     /**
      * Gets distance from current location to given lat/lon.
      * @param lat
@@ -276,7 +289,7 @@ public class EyekabobHelper {
     public static void launchEmail(Activity activity) {
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
-        String to[] = {"create@philipjordandesign.com", "christopherrobertfarrow@gmail.com", "coffbr01@gmail.com"};
+        String to[] = {"philj21@yahoo.com", "adam.sill01@gmail.com", "coffbr01@gmail.com"};
         emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Eyekabob Advertising");
         String label = activity.getResources().getString(R.string.write_email);
@@ -301,5 +314,40 @@ public class EyekabobHelper {
         }
 
         return imageURLs.get("small");
+    }
+
+    public static Dialog createAboutDialog(Context context) {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.about_dialog);
+        dialog.setTitle(R.string.about_eyekabob_caps);
+
+        ImageView imageView = (ImageView)dialog.findViewById(R.id.aboutDialogImage);
+        imageView.setImageResource(R.drawable.ic_launcher);
+
+        String message = context.getResources().getString(R.string.eyekabob_version);
+        String versionName = "";
+        try {
+            versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(context.getClass().getSimpleName(), e.getMessage());
+        }
+
+        message += versionName;
+        message += "\n\n" + context.getResources().getString(R.string.about_eyekabob_app);
+        message += "\n\n" + context.getResources().getString(R.string.about_last_fm);
+
+        TextView textView = (TextView)dialog.findViewById(R.id.aboutDialogText);
+        textView.setText(message);
+
+        dialog.findViewById(R.id.aboutDialogButton).setOnClickListener(
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                     dialog.dismiss();
+                }
+            }
+        );
+
+        return dialog;
     }
 }

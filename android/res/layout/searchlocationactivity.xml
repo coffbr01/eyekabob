@@ -45,11 +45,11 @@ file 'LICENSE.txt', which is part of this source code package.
             android:orientation="horizontal" >
             <EditText
                 android:id="@+id/findByLocationInput"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
-                android:hint="@string/search_by_location"
+                android:hint="@string/search_by_zip"
                 android:singleLine="true" >
             </EditText>
 
@@ -63,7 +63,7 @@ file 'LICENSE.txt', which is part of this source code package.
                 android:src="@drawable/eye_search_button"
                 android:contentDescription="@string/find_music_button_desc" />
         </LinearLayout>
-    <LinearLayout
+        <LinearLayout
             android:id="@+id/findSeekBarLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@ file 'LICENSE.txt', which is part of this source code package.
             android:orientation="horizontal" >
             <SeekBar
                 android:id="@+id/milesSeekBar"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
@@ -103,8 +103,7 @@ file 'LICENSE.txt', which is part of this source code package.
             <TextView
                 android:id="@+id/milesTextView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10" >
+                android:layout_height="wrap_content" >
             </TextView>
             <TextView
                 android:layout_width="wrap_content"
@@ -113,6 +112,30 @@ file 'LICENSE.txt', which is part of this source code package.
                 android:text="@string/miles" >
             </TextView>
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gpsWarning"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:background="@drawable/warning_border"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal"
+            android:text="@string/gps_warning"
+            android:paddingBottom="10dp">
+        </TextView>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gps_settings"
+            android:onClick="handleGPSSettingsClick"/>
     </LinearLayout>
 
     <LinearLayout

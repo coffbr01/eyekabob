@@ -44,8 +44,8 @@ public class CachedImageTask extends ImageTask {
 
         // TODO: this height/width doesn't belong here.
         ViewGroup.LayoutParams params = iv.getLayoutParams();
-        params.width = 200;
-        params.height = 200;
+        params.width = 150;
+        params.height = 150;
         iv.setLayoutParams(params);
     }
 

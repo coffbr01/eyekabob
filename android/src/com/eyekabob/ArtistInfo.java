@@ -6,17 +6,22 @@
  */
 package com.eyekabob;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.eyekabob.models.Artist;
 import com.eyekabob.models.Event;
@@ -41,7 +46,7 @@ public class ArtistInfo extends EyekabobActivity {
     private boolean futureEventsInfoReturned = false;
     private boolean imageInfoReturned = false;
 
-    private View.OnClickListener linksListener = new View.OnClickListener() {
+    private OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
             if (view.getId() == R.id.findLiveMusicButton) {
@@ -49,8 +54,8 @@ public class ArtistInfo extends EyekabobActivity {
                 startActivity(findMusicIntent);
             }
             else if (view.getId() == R.id.aboutButton) {
-                // TODO: Implement ABOUT page.
-                Toast.makeText(ArtistInfo.this, "We are awesome!", Toast.LENGTH_SHORT).show();
+                Dialog aboutDialog = EyekabobHelper.createAboutDialog(ArtistInfo.this);
+                aboutDialog.show();
             }
             else if (view.getId() == R.id.contactButton) {
                 EyekabobHelper.launchEmail(ArtistInfo.this);
@@ -59,6 +64,14 @@ public class ArtistInfo extends EyekabobActivity {
                 ToggleButton tb = (ToggleButton) findViewById(R.id.infoBioToggleButton);
                 toggleBioText(tb.isChecked());
             }
+            else {
+                // Must be a future event
+                FutureEventView row = (FutureEventView)view;
+                Event event = row.getEvent();
+                Intent intent = new Intent(getApplicationContext(), EventInfo.class);
+                intent.putExtra("event", event);
+                startActivity(intent);
+            }
         }
     };
 
@@ -66,14 +79,12 @@ public class ArtistInfo extends EyekabobActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_info);
-        WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
-        contentWebView.setBackgroundColor(0x00000000);
         artist = (Artist)getIntent().getExtras().get("artist");
         Log.d(getClass().getName(), "Artist name is: " + artist.getName());
-        findViewById(R.id.findLiveMusicButton).setOnClickListener(linksListener);
-        findViewById(R.id.aboutButton).setOnClickListener(linksListener);
-        findViewById(R.id.contactButton).setOnClickListener(linksListener);
-        findViewById(R.id.infoBioToggleButton).setOnClickListener(linksListener);
+        findViewById(R.id.findLiveMusicButton).setOnClickListener(onClickListener);
+        findViewById(R.id.aboutButton).setOnClickListener(onClickListener);
+        findViewById(R.id.contactButton).setOnClickListener(onClickListener);
+        findViewById(R.id.infoBioToggleButton).setOnClickListener(onClickListener);
 
         Map<String, String> params = new HashMap<String, String>();
         if (artist.getMbid() == null) {
@@ -139,9 +150,10 @@ public class ArtistInfo extends EyekabobActivity {
             TextView bioHeaderView = (TextView)findViewById(R.id.infoBioHeader);
             // TODO: I18N
             bioHeaderView.setText("Bio");
-            WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
+            TextView bioView = (TextView)findViewById(R.id.infoBioContent);
             String contentHtml = artist.getSummary();
-            contentWebView.loadData(contentHtml, "text/html", "UTF8");
+            bioView.setText(Html.fromHtml(contentHtml));
+            bioView.setVisibility(View.VISIBLE);
         }
         if (!(artist.getContent() == null) && !artist.getContent().equals("")) {
             ToggleButton tb = (ToggleButton)findViewById(R.id.infoBioToggleButton);
@@ -208,17 +220,21 @@ public class ArtistInfo extends EyekabobActivity {
             TextView futureEventsHeaderView = (TextView)findViewById(R.id.infoFutureEventsHeader);
             // TODO: I18N
             futureEventsHeaderView.setText("Future Events");
-            String futureText = "";
+            LinearLayout futureEventsContentView = (LinearLayout)findViewById(R.id.infoFutureEventsContent);
             int i;
-            // TODO: events should be a list with an adapter, not a newline rendered text blob.
             for (i = 0; i < futureEvents.size(); i++) {
                 Event event = futureEvents.get(i);
-                futureText += event.getDate() + "\n";
+                String futureText = event.getDate() + "\n";
                 // TODO: I18N
-                futureText += "@ " + event.getVenue().getName() + " in " + event.getVenue().getCity() + "\n\n";
+                futureText += "@ " + event.getVenue().getName() + " in " + event.getVenue().getCity();
+                FutureEventView row = new FutureEventView(this);
+                row.setTextColor(Color.WHITE);
+                row.setPadding(0, 0, 0, 20); // Bottom padding
+                row.setText(futureText);
+                row.setEvent(event);
+                row.setOnClickListener(onClickListener);
+                futureEventsContentView.addView(row);
             }
-            TextView futureEventsContentView = (TextView)findViewById(R.id.infoFutureEventsContent);
-            futureEventsContentView.setText(futureText);
         } else {
             // TODO: I18N
             nextConcertDateView.setText("Next Concert: UNKNOWN");
@@ -228,6 +244,8 @@ public class ArtistInfo extends EyekabobActivity {
         dismissDialogIfReady();
     }
 
+    // TODO: this is identical to the handleImageResponse in EventInfo,
+    // and should be refactored.
     private void handleImageResponse(Bitmap img) {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -252,7 +270,7 @@ public class ArtistInfo extends EyekabobActivity {
     }
 
     private void toggleBioText (boolean detailed) {
-        WebView contentWebView = (WebView)findViewById(R.id.infoBioContent);
+        TextView bioView = (TextView)findViewById(R.id.infoBioContent);
 
         String contentHtml = "";
         if (artist != null && !"".equals(artist.getContent())) {
@@ -264,7 +282,7 @@ public class ArtistInfo extends EyekabobActivity {
             }
         }
 
-        contentWebView.loadData(contentHtml, "text/html", "UTF8");
+        bioView.setText(Html.fromHtml(contentHtml));
     }
 
     // Handles the asynchronous request, away from the UI thread.
@@ -274,6 +292,19 @@ public class ArtistInfo extends EyekabobActivity {
         }
         protected void onPostExecute(JSONObject result) {
             ArtistInfo.this.handleArtistResponse(result);
+        }
+    }
+
+    private class FutureEventView extends TextView {
+        private Event event;
+        public FutureEventView(Context context) {
+            super(context);
+        }
+        public void setEvent(Event event) {
+            this.event = event;
+        }
+        public Event getEvent() {
+            return event;
         }
     }
 

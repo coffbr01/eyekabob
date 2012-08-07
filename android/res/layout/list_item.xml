@@ -12,6 +12,5 @@ file 'LICENSE.txt', which is part of this source code package.
     android:paddingBottom="10dp"
     android:paddingRight="10dp"
     android:paddingLeft="5dp"
-    android:textSize="16sp"
-    android:textColor="#000" >
+    android:textSize="16sp">
 </TextView>

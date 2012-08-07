@@ -4,13 +4,6 @@
  */
 package com.eyekabob;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,14 +13,22 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.eyekabob.adapters.EventListAdapter;
 import com.eyekabob.models.Event;
 import com.eyekabob.models.Venue;
 import com.eyekabob.util.EyekabobHelper;
 import com.eyekabob.util.JSONTask;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EventList extends EyekabobActivity {
+    // A map whose keys are zip codes and values are lat/long values delimited by "|"
+    // An example entry would be: {"50210":"42.5239|83.2233"}
+    private static final Map<String, String> zipToGeoMap = new HashMap<String, String>();
     EventListAdapter adapter;
 
     private OnItemClickListener listItemListener = new OnItemClickListener() {
@@ -50,18 +51,19 @@ public class EventList extends EyekabobActivity {
         if (getIntent().hasExtra("zip")) {
             // Search by zip.
             String zip = getIntent().getExtras().getString("zip");
-            if (EyekabobHelper.zipToNameMap.containsKey(zip)) {
+            if (zip != null) {
+                zip = zip.trim();
+            }
+            if (zipToGeoMap.containsKey(zip)) {
                 Log.d(getClass().getName(), "Using cached zip");
-                Uri lastFMURI = getLastFMURI(EyekabobHelper.zipToNameMap.get("zip"));
+                String[] latLong = zipToGeoMap.get(zip).split("\\|");
+                Uri lastFMURI = getLastFMURI(latLong[0], latLong[1]);
                 sendLastFMRequest(lastFMURI.toString());
             }
             else {
                 Log.d(getClass().getName(), "Getting zip from geonames service");
                 sendJSONRequest(uri.toString());
             }
-
-            // Don't show distance for zip search.
-            getIntent().putExtra("showDistance", false);
         }
         else {
             Log.d(getClass().getName(), "Searching for events using current location");
@@ -76,7 +78,7 @@ public class EventList extends EyekabobActivity {
         adapter.clearCache();
         super.onDestroy();
     }
-    
+
     protected void loadEvents(JSONObject response) {
         try {
             JSONObject jsonEvents = response.optJSONObject("events");
@@ -86,7 +88,7 @@ public class EventList extends EyekabobActivity {
             }
 
             Object eventsObj = jsonEvents.get("event");
-            JSONArray events = null;
+            JSONArray events;
             if (eventsObj instanceof JSONArray) {
                 events = (JSONArray)eventsObj;
             }
@@ -96,7 +98,7 @@ public class EventList extends EyekabobActivity {
                 events = new JSONArray();
                 events.put(eventsObj);
             }
-    
+
             for (int i = 0; i < events.length(); i++) {
                 Event event = new Event();
                 Venue venue = new Venue();
@@ -105,21 +107,21 @@ public class EventList extends EyekabobActivity {
                 JSONObject jsonVenue = jsonEvent.getJSONObject("venue");
                 JSONObject jsonLocation = jsonVenue.getJSONObject("location");
                 JSONObject jsonGeo = jsonLocation.optJSONObject("geo:point");
-    
+
                 event.setId(jsonEvent.getString("id"));
                 event.setName(jsonEvent.getString("title"));
                 event.setDate(EyekabobHelper.LastFM.toReadableDate(jsonEvent.getString("startDate")));
                 JSONObject jsonImage = EyekabobHelper.LastFM.getJSONImage("large", jsonEvent.getJSONArray("image"));
                 event.addImageURL("large", jsonImage.getString("#text"));
-    
+
                 venue.setName(jsonVenue.getString("name"));
                 venue.setCity(jsonLocation.getString("city"));
-    
+
                 if (jsonGeo != null) {
                     venue.setLat(jsonGeo.optString("geo:lat"));
                     venue.setLon(jsonGeo.getString("geo:long"));
                 }
-    
+
                 adapter.add(event);
             }
         }
@@ -129,17 +131,21 @@ public class EventList extends EyekabobActivity {
     }
 
     protected void sendJSONRequest(String uri) {
-        new JSONRequestTask().execute(uri);
+        new GeoNamesJSONRequestTask().execute(uri);
     }
 
     protected void sendLastFMRequest(String uri) {
         new LastFMRequestTask().execute(uri);
     }
 
-    protected Uri getLastFMURI(String location) {
+    protected Uri getLastFMURI(String latitude, String longitude) {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("location", location);
-        params.put("distance", getIntent().getExtras().getString("distance"));
+        params.put("lat", latitude);
+        params.put("long", longitude);
+        String distance = getIntent().getExtras().getString("distance");
+        if (distance != null) {
+            params.put("distance", distance);
+        }
         return EyekabobHelper.LastFM.getUri("geo.getEvents", params);
     }
 
@@ -147,23 +153,34 @@ public class EventList extends EyekabobActivity {
         EyekabobHelper.launchEmail(this);
     }
 
-    private class JSONRequestTask extends JSONTask {
+    /**
+     * Sends request to the GeoNames service to get information about
+     * a given ZIP code. The pieces of information this app uses are
+     * latitude and longitude of a given zip.
+     */
+    private class GeoNamesJSONRequestTask extends JSONTask {
         protected void onPreExecute() {
             EventList.this.createDialog(R.string.searching);
             EventList.this.showDialog();
         }
         protected void onPostExecute(JSONObject result) {
-            String location = null;
+            String latitude;
+            String longitude;
             try {
                 JSONArray locations = (JSONArray)result.get("postalcodes");
                 JSONObject jsonLocation = (JSONObject)locations.get(0);
-                location = (String)jsonLocation.get("placeName");
+                latitude = jsonLocation.getString("lat");
+                longitude = jsonLocation.getString("lng");
+                String zip = jsonLocation.getString("postalcode");
+                zipToGeoMap.put(zip, latitude + "|" + longitude);
             }
             catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(getClass().getName(), "Unable to get geo information for zip", e);
+                Toast.makeText(EventList.this, R.string.zip_error, Toast.LENGTH_LONG).show();
+                return;
             }
 
-            Uri uri = EventList.this.getLastFMURI(location);
+            Uri uri = EventList.this.getLastFMURI(latitude, longitude);
             EventList.this.sendLastFMRequest(uri.toString());
         }
     }
