@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="states_array">
+        <!-- TODO: add all states -->
+        <item>CO</item>
+        <item>MN</item>
+    </string-array>
+</resources>

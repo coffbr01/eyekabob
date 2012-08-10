@@ -114,6 +114,30 @@ file 'LICENSE.txt', which is part of this source code package.
         </LinearLayout>
     </LinearLayout>
 
+    <!-- TODO: make the following views into a production UI -->
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="city"/>
+    <EditText
+        android:id="@+id/findByLocationCityInput"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"/>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="state"/>
+    <Spinner
+        android:id="@+id/findByLocationStateInput"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FIND BY CITY/STATE"
+        android:onClick="findByCityHandler"/>
+    <!-- END TODO -->
+
     <LinearLayout
         android:id="@+id/gpsWarning"
         android:layout_width="fill_parent"

@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,6 +66,23 @@ public class EventList extends EyekabobActivity {
                 Log.d(getClass().getName(), "Getting zip from geonames service");
                 sendJSONRequest(uri.toString());
             }
+        }
+        else if (getIntent().hasExtra("city")) {
+            // Search by city/state.
+            String city = getIntent().getExtras().getString("city");
+            String encodedCity;
+            try {
+                encodedCity = URLEncoder.encode(city, "UTF-8");
+            }
+            catch (UnsupportedEncodingException e) {
+                Log.e(getClass().getName(), "Problem with city", e);
+                return;
+            }
+            String state = getIntent().getExtras().getString("state");
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("address", encodedCity + "," + state);
+            Uri googleURI = EyekabobHelper.GoogleMaps.getURI(params);
+            sendMapsRequest(googleURI.toString());
         }
         else {
             Log.d(getClass().getName(), "Searching for events using current location");
@@ -138,6 +157,10 @@ public class EventList extends EyekabobActivity {
         new LastFMRequestTask().execute(uri);
     }
 
+    protected void sendMapsRequest(String uri) {
+        new GoogleRequest().execute(uri);
+    }
+
     protected Uri getLastFMURI(String latitude, String longitude) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("lat", latitude);
@@ -194,6 +217,34 @@ public class EventList extends EyekabobActivity {
         protected void onPostExecute(JSONObject result) {
             EventList.this.dismissDialog();
             EventList.this.loadEvents(result);
+        }
+    }
+
+    private class GoogleRequest extends JSONTask {
+        protected void onPreExecute() {
+            EventList.this.createDialog(R.string.searching);
+            EventList.this.showDialog();
+        }
+        protected void onPostExecute(JSONObject result) {
+            String latitude;
+            String longitude;
+            try {
+                JSONArray results = result.getJSONArray("results");
+                // Assume only one result.
+                JSONObject firstResult = results.getJSONObject(0);
+                JSONObject geometry = firstResult.getJSONObject("geometry");
+                JSONObject location = geometry.getJSONObject("location");
+                latitude = location.getString("lat");
+                longitude = location.getString("lng");
+            }
+            catch (JSONException e) {
+                Log.e(getClass().getName(), "Unable to get lat/lon for city", e);
+                Toast.makeText(EventList.this, R.string.city_error, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            Uri uri = EventList.this.getLastFMURI(latitude, longitude);
+            EventList.this.sendLastFMRequest(uri.toString());
         }
     }
 }

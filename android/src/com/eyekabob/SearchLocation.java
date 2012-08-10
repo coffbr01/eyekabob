@@ -55,6 +55,12 @@ public class SearchLocation extends EyekabobActivity {
             }
         });
 
+        // Set up state spinner.
+        Spinner stateSpinner = (Spinner)findViewById(R.id.findByLocationStateInput);
+        ArrayAdapter<CharSequence> stateAdapter = ArrayAdapter.createFromResource(this, R.array.states_array, android.R.layout.simple_spinner_item);
+        stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        stateSpinner.setAdapter(stateAdapter);
+
         toggleGPSWarning();
     }
 
@@ -78,6 +84,20 @@ public class SearchLocation extends EyekabobActivity {
 
         boolean shouldShowCheckbox = isChecked && !gpsEnabled;
         gpsWarning.setVisibility(shouldShowCheckbox ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @SuppressWarnings("unused")
+    public void findByCityHandler(View v) {
+        findByCityHandler();
+    }
+
+    private void findByCityHandler() {
+        Spinner stateSpinner = (Spinner)findViewById(R.id.findByLocationStateInput);
+        EditText cityInput = (EditText)findViewById(R.id.findByLocationCityInput);
+        Intent intent = new Intent(this, EventList.class);
+        intent.putExtra("state", (String)stateSpinner.getSelectedItem());
+        intent.putExtra("city", cityInput.getText().toString());
+        startActivity(intent);
     }
 
     @SuppressWarnings("unused")

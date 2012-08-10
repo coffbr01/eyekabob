@@ -256,6 +256,20 @@ public class EyekabobHelper {
         }
     }
 
+    public static class GoogleMaps {
+        private static final String SERVICE_URL = "http://maps.googleapis.com/maps/api/geocode/json";
+        public static final Uri getURI(Map<String, String> params) {
+            String url = SERVICE_URL + "?";
+            if (!params.containsKey("sensor")) {
+                params.put("sensor", "true");
+            }
+            for (String key : params.keySet()) {
+                url += "&" + key + "=" + params.get(key);
+            }
+            return Uri.parse(url);
+        }
+    }
+
     /**
      * Gets distance from current location to given lat/lon.
      * @param lat

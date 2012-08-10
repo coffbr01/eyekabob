@@ -28,6 +28,7 @@ file 'LICENSE.txt', which is part of this source code package.
     <string name="checkin_shout_hint">Comments about checkin (not required)</string>
     <string name="checking_in">Checking in …</string>
     <string name="choose_genre">Choose a genre</string>
+    <string name="city_error">Problem with city name</string>
     <string name="contact">contact</string>
     <string name="contact_eyekabob">contact eyekabob</string>
     <string name="description">Description</string>
