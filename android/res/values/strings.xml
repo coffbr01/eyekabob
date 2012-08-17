@@ -28,6 +28,7 @@ file 'LICENSE.txt', which is part of this source code package.
     <string name="checkin_shout_hint">Comments about checkin (not required)</string>
     <string name="checking_in">Checking in …</string>
     <string name="choose_genre">Choose a genre</string>
+    <string name="city">CITY</string>
     <string name="city_error">Problem with city name</string>
     <string name="contact">contact</string>
     <string name="contact_eyekabob">contact eyekabob</string>
@@ -59,6 +60,7 @@ file 'LICENSE.txt', which is part of this source code package.
     <string name="search_live_music">search live music</string>
     <string name="search_live_music_by">search live music by</string>
     <string name="searching">Searching &#8230;</string>
+    <string name="select_search_option">Please select a search option</string>
     <string name="sign_in">Sign In</string>
     <string name="signed_in">Signed In</string>
     <string name="submit">Submit</string>
@@ -70,5 +72,6 @@ file 'LICENSE.txt', which is part of this source code package.
     <string name="view_prototype">View Prototype</string>
     <string name="website_url">Website URL</string>
     <string name="write_email">Write email with:</string>
+    <string name="zip_code">ZIP CODE</string>
     <string name="zip_error">Error getting Geo information for zip</string>
 </resources>

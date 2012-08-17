@@ -8,4 +8,6 @@ file 'LICENSE.txt', which is part of this source code package.
 <resources>
     <color name="background_start">#787878</color>
     <color name="background_stop">#000000</color>
+    <color name="textcolor_white">#FFFFFF</color>
+    <color name="textcolor_grey">#C0C0C0</color>
 </resources>

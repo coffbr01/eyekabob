@@ -15,7 +15,14 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.eyekabob.util.EyekabobHelper;
 
 import java.util.HashMap;
@@ -23,14 +30,65 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.view.View.OnClickListener;
+
 public class SearchLocation extends EyekabobActivity {
     private static final int DEFAULT_SEARCH_RADIUS = 10; // miles
+    private CheckBox currentLocationCheckBox;
+    private CheckBox cityStateCheckbox;
+    private CheckBox zipCheckbox;
+    private EditText cityView;
+    private Spinner stSpinner;
+    private EditText zipView;
+    private SeekBar distanceSeekbar;
+    private TextView currentTextView;
+
+    private OnClickListener checkboxListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == currentLocationCheckBox.getId()) {
+                currentLocationCheckBox.setChecked(true);
+                cityStateCheckbox.setChecked(false);
+                zipCheckbox.setChecked(false);
+                cityView.setEnabled(false);
+                stSpinner.setEnabled(false);
+                zipView.setEnabled(false);
+                distanceSeekbar.setEnabled(true);
+                currentTextView.setTextColor(getResources().getColor(R.color.textcolor_white));
+                currentTextView.setTextSize(20);
+            }
+            else if (view.getId() == cityStateCheckbox.getId()) {
+                cityStateCheckbox.setChecked(true);
+                currentLocationCheckBox.setChecked(false);
+                zipCheckbox.setChecked(false);
+                cityView.setEnabled(true);
+                stSpinner.setEnabled(true);
+                zipView.setEnabled(false);
+                distanceSeekbar.setEnabled(false);
+                currentTextView.setTextColor(getResources().getColor(R.color.textcolor_grey));
+                currentTextView.setTextSize(14);
+            }
+            else if (view.getId() == zipCheckbox.getId()) {
+                zipCheckbox.setChecked(true);
+                currentLocationCheckBox.setChecked(false);
+                cityStateCheckbox.setChecked(false);
+                cityView.setEnabled(false);
+                stSpinner.setEnabled(false);
+                zipView.setEnabled(true);
+                distanceSeekbar.setEnabled(true);
+                currentTextView.setTextColor(getResources().getColor(R.color.textcolor_grey));
+                currentTextView.setTextSize(14);
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searchlocationactivity);
 
-        EditText findByLocation = (EditText)findViewById(R.id.findByLocationInput);
+        EditText findByLocation = (EditText)findViewById(R.id.findByLocationZipInput);
         findByLocation.requestFocus();
 
         SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
@@ -61,6 +119,23 @@ public class SearchLocation extends EyekabobActivity {
         stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         stateSpinner.setAdapter(stateAdapter);
 
+        // Initiate all the Views for toggling purposes
+        cityView = (EditText)findViewById(R.id.findByLocationCityInput);
+        stSpinner = (Spinner)findViewById(R.id.findByLocationStateInput);
+        zipView = (EditText)findViewById(R.id.findByLocationZipInput);
+        currentTextView = (TextView)findViewById(R.id.useCurrentLocationText);
+        currentLocationCheckBox = (CheckBox)findViewById(R.id.useCurrentLocationCheckbox);
+        cityStateCheckbox = (CheckBox)findViewById(R.id.useCityStateCheckbox);
+        zipCheckbox = (CheckBox)findViewById(R.id.useZipCheckbox);
+        distanceSeekbar = (SeekBar)findViewById(R.id.milesSeekBar);
+        currentLocationCheckBox.setOnClickListener(checkboxListener);
+        cityStateCheckbox.setOnClickListener(checkboxListener);
+        zipCheckbox.setOnClickListener(checkboxListener);
+        currentLocationCheckBox.setChecked(true);
+        cityView.setEnabled(false);
+        stSpinner.setEnabled(false);
+        zipView.setEnabled(false);
+
         toggleGPSWarning();
     }
 
@@ -79,25 +154,10 @@ public class SearchLocation extends EyekabobActivity {
         LinearLayout gpsWarning = (LinearLayout)findViewById(R.id.gpsWarning);
         boolean gpsEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        CheckBox useCurrentLocationCheckbox = (CheckBox)findViewById(R.id.useCurrentLocationCheckBox);
-        boolean isChecked = useCurrentLocationCheckbox.isChecked();
+        boolean isChecked = currentLocationCheckBox.isChecked();
 
         boolean shouldShowCheckbox = isChecked && !gpsEnabled;
         gpsWarning.setVisibility(shouldShowCheckbox ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    @SuppressWarnings("unused")
-    public void findByCityHandler(View v) {
-        findByCityHandler();
-    }
-
-    private void findByCityHandler() {
-        Spinner stateSpinner = (Spinner)findViewById(R.id.findByLocationStateInput);
-        EditText cityInput = (EditText)findViewById(R.id.findByLocationCityInput);
-        Intent intent = new Intent(this, EventList.class);
-        intent.putExtra("state", (String)stateSpinner.getSelectedItem());
-        intent.putExtra("city", cityInput.getText().toString());
-        startActivity(intent);
     }
 
     @SuppressWarnings("unused")
@@ -106,60 +166,55 @@ public class SearchLocation extends EyekabobActivity {
     }
 
     private void findByLocationHandler() {
-        Map<String, String> params = new HashMap<String, String>();
+        // Determine which mode of search was selected
+        if (currentLocationCheckBox.isChecked()) {
+            Map<String, String> params = new HashMap<String, String>();
 
-        SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
-        int miles = distance.getProgress();
-        int km = getSearchRadiusInKilometers(miles);
-        params.put("distance", Integer.toString(km));
+            SeekBar distance = (SeekBar)findViewById(R.id.milesSeekBar);
+            int miles = distance.getProgress();
+            int km = getSearchRadiusInKilometers(miles);
+            params.put("distance", Integer.toString(km));
 
-        Location location = EyekabobHelper.getLocation(this);
-        if (location != null) {
-            params.put("lat", Double.toString(location.getLatitude()));
-            params.put("long", Double.toString(location.getLongitude()));
+            Location location = EyekabobHelper.getLocation(this);
+            if (location != null) {
+                params.put("lat", Double.toString(location.getLatitude()));
+                params.put("long", Double.toString(location.getLongitude()));
+            }
+
+            find("geo.getEvents", EventList.class, params);
+        } else if (zipCheckbox.isChecked()) {
+            EditText locationInput = (EditText)findViewById(R.id.findByLocationZipInput);
+            if ("".equals(locationInput.getText().toString().trim())) {
+                // Nothing entered and not using current location.
+                Toast.makeText(this, R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String criterion = locationInput.getText().toString().trim();
+            Pattern pattern = Pattern.compile("^\\d{5}(-\\d{4})?$");
+            Matcher matcher = pattern.matcher(criterion);
+
+            if (matcher.find()) {
+                findByZip(criterion);
+            }
+            else {
+                Toast.makeText(this, R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
+            }
+        } else if (cityStateCheckbox.isChecked()) {
+            Spinner stateSpinner = (Spinner)findViewById(R.id.findByLocationStateInput);
+            EditText cityInput = (EditText)findViewById(R.id.findByLocationCityInput);
+            Intent intent = new Intent(this, EventList.class);
+            intent.putExtra("state", (String)stateSpinner.getSelectedItem());
+            intent.putExtra("city", cityInput.getText().toString());
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, R.string.select_search_option, Toast.LENGTH_SHORT).show();
+            return;
         }
-
-        find("geo.getEvents", EventList.class, params);
     }
 
     private int getSearchRadiusInKilometers(int miles) {
         return (int)(miles * 1.609344);
-    }
-
-    @SuppressWarnings("unused")
-    public void findByZipHandler(View v) {
-        findByZipHandler();
-    }
-
-    private void findByZipHandler() {
-        EditText locationInput = (EditText)findViewById(R.id.findByLocationInput);
-        if ("".equals(locationInput.getText().toString().trim())) {
-            // Nothing entered and not using current location.
-            Toast.makeText(this, R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String criterion = locationInput.getText().toString().trim();
-        Pattern pattern = Pattern.compile("^\\d{5}(-\\d{4})?$");
-        Matcher matcher = pattern.matcher(criterion);
-
-        if (matcher.find()) {
-            findByZip(criterion);
-        }
-        else {
-            Toast.makeText(this, R.string.no_zip_entered, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void useCurrentLocationHandler(View v) {
-        // When the checkbox is checked the text input should be invisible.
-        // When the checkbox is unchecked the text input should be visible.
-        LinearLayout zipLayout = (LinearLayout)findViewById(R.id.findByZipLayout);
-        ImageButton findByLocationButton = (ImageButton)findViewById(R.id.findByLocationButton);
-        boolean isChecked = ((CheckBox)v).isChecked();
-        zipLayout.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-        findByLocationButton.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-        toggleGPSWarning();
     }
 
     private void findByZip(String zip) {
