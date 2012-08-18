@@ -70,7 +70,7 @@ file 'LICENSE.txt', which is part of this source code package.
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="45dp"
+        android:layout_marginBottom="65dp"
         android:layout_below="@+id/eyekabobLinks">
 
         <RelativeLayout
@@ -235,6 +235,16 @@ file 'LICENSE.txt', which is part of this source code package.
         android:layout_height="fill_parent"
         android:gravity="bottom"
         android:orientation="vertical" >
+        <ImageView
+            android:id="@+id/logoView"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/eyekabob_logo_small" />
         <com.google.ads.AdView
             android:id="@+id/adView"
             android:layout_width="fill_parent"
