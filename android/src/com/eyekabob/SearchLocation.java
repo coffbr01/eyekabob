@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -42,6 +43,7 @@ public class SearchLocation extends EyekabobActivity {
     private EditText zipView;
     private SeekBar distanceSeekbar;
     private TextView currentTextView;
+    InputMethodManager imm;
 
     private OnClickListener checkboxListener = new OnClickListener() {
 
@@ -52,8 +54,10 @@ public class SearchLocation extends EyekabobActivity {
                 cityStateCheckbox.setChecked(false);
                 zipCheckbox.setChecked(false);
                 cityView.setEnabled(false);
+                imm.hideSoftInputFromWindow(cityView.getWindowToken(), 0);
                 stSpinner.setEnabled(false);
                 zipView.setEnabled(false);
+                imm.hideSoftInputFromWindow(zipView.getWindowToken(), 0);
                 distanceSeekbar.setEnabled(true);
                 currentTextView.setTextColor(getResources().getColor(R.color.textcolor_white));
                 currentTextView.setTextSize(20);
@@ -64,16 +68,21 @@ public class SearchLocation extends EyekabobActivity {
                 zipCheckbox.setChecked(false);
                 cityView.setEnabled(true);
                 stSpinner.setEnabled(true);
+                // Disable the zip view and close the keyboard if it's open
                 zipView.setEnabled(false);
+                imm.hideSoftInputFromWindow(zipView.getWindowToken(), 0);
                 distanceSeekbar.setEnabled(false);
                 currentTextView.setTextColor(getResources().getColor(R.color.textcolor_grey));
                 currentTextView.setTextSize(14);
+                imm.hideSoftInputFromWindow(zipView.getWindowToken(), 0);
             }
             else if (view.getId() == zipCheckbox.getId()) {
                 zipCheckbox.setChecked(true);
                 currentLocationCheckBox.setChecked(false);
                 cityStateCheckbox.setChecked(false);
+                // Disable the city view and close the keyboard if it's open
                 cityView.setEnabled(false);
+                imm.hideSoftInputFromWindow(cityView.getWindowToken(), 0);
                 stSpinner.setEnabled(false);
                 zipView.setEnabled(true);
                 distanceSeekbar.setEnabled(true);
@@ -118,6 +127,8 @@ public class SearchLocation extends EyekabobActivity {
         ArrayAdapter<CharSequence> stateAdapter = ArrayAdapter.createFromResource(this, R.array.states_array, android.R.layout.simple_spinner_item);
         stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         stateSpinner.setAdapter(stateAdapter);
+
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
         // Initiate all the Views for toggling purposes
         cityView = (EditText)findViewById(R.id.findByLocationCityInput);

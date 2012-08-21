@@ -54,7 +54,6 @@ file 'LICENSE.txt', which is part of this source code package.
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:orientation="horizontal"
-                android:layout_marginBottom="15dp"
                 android:background="@drawable/find_form_bg_layout">
             <CheckBox
                 android:id="@+id/useZipCheckbox"
@@ -68,6 +67,8 @@ file 'LICENSE.txt', which is part of this source code package.
                 android:layout_width="120dp"
                 android:layout_marginLeft="8dp"
                 android:hint="@string/zip_code"
+                android:inputType="number"
+                android:maxLength="5"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
         <LinearLayout
@@ -152,8 +153,6 @@ file 'LICENSE.txt', which is part of this source code package.
         android:id="@+id/gpsWarning"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
         android:background="@drawable/warning_border"
         android:gravity="center_horizontal"
         android:orientation="vertical"
@@ -162,8 +161,7 @@ file 'LICENSE.txt', which is part of this source code package.
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:gravity="center_horizontal"
-            android:text="@string/gps_warning"
-            android:paddingBottom="10dp">
+            android:text="@string/gps_warning">
         </TextView>
         <Button
             android:layout_width="wrap_content"
@@ -174,7 +172,7 @@ file 'LICENSE.txt', which is part of this source code package.
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:gravity="bottom"
         android:orientation="vertical" >
         <ImageView
