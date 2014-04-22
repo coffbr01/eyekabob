@@ -5,11 +5,11 @@ import org.junit.Test;
 import static junit.framework.Assert.*;
 
 /**
- * © Copyright 2012 Brien Coffield
+ * © Copyright 2014 Brien Coffield
  * All rights reserved
  * <p/>
  * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
+ * file 'LICENSE', which is part of this source code package.
  */
 public class RootTest {
     @Test
